@@ -81,7 +81,8 @@ def _dati_lega(con, lega, stagione, prev, esclusi, verdetto, verdetto_costruzion
     for r in p.itertuples(index=False):
         g = giocatori.setdefault(int(r.giocatore_id), {"nome": nomi.get(r.giocatore_id, "?"), "ruolo": r.ruolo, "tpi": None})
         g["squadra_prima"] = squadra_base.get(r.giocatore_id)
-        g["previsione"] = {"pred": r.pred, "lo": max(0.0, r.lo), "hi": r.hi,   # un rendimento sotto zero non esiste "prima": r.out90, "minuti_prima": int(r.minuti),
+        # la forbice parte da 0: un rendimento sotto zero non esiste
+        g["previsione"] = {"pred": r.pred, "lo": max(0.0, r.lo), "hi": r.hi, "prima": r.out90, "minuti_prima": int(r.minuti),
                            "eta": r.eta, "motivi": list(r.motivi), "sottovalutato": r.giocatore_id in sotto,
                            "sfortuna90": sfortuna.get(r.giocatore_id), "pos_ruolo": int(r.posizione_ruolo)}
     # previsto contro reale: quanto sta facendo nella stagione prevista, fino a oggi (F10)
