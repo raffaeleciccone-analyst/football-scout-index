@@ -12,15 +12,12 @@
 <body data-pagina="{{ pagina }}">
 <header class="top"><div class="wrap">
   <a class="marchio" href="{{ '../home/index.html' if d else 'index.html' }}">{{ t("nome_progetto") }}</a>
+  {% if d %}{{ t("lega_" ~ d.lega, "h1") }}<a class="indietro" href="../home/index.html">{{ t("indietro") }}</a>{% endif %}
   <div class="lingua" role="group" aria-label="IT / EN"><button type="button" data-lingua="it">IT</button><button type="button" data-lingua="en">EN</button></div>
 </div></header>
 {% if d %}
-<div class="testata-lega"><div class="wrap">
-  {{ t("lega_" ~ d.lega, "h1") }}
-  <a class="indietro" href="../home/index.html">{{ t("indietro") }}</a>
-</div></div>
 <nav class="sezioni" aria-label="sezioni"><div class="wrap">
-  {% set voci = [("index.html", "previsione", '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>'),
+  {% set voci = [("index.html", "previsione", '<circle cx="6.5" cy="15.5" r="3.5"/><circle cx="17.5" cy="15.5" r="3.5"/><path d="M10 15.5h4M5 12l2-6h3l1 4M19 12l-2-6h-3l-1 4"/>'),
                  ("classifica.html", "classifica", '<path d="M3 21h18"/><path d="M5 21v-8h4v8M10 21V7h4v14M15 21v-5h4v5"/>'),
                  ("giocatore.html", "cerca", '<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>'),
                  ("metodo.html", "metodo", '<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16.5 9"/>')] %}

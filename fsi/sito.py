@@ -176,11 +176,11 @@ def genera(con, cartella, stagioni_tpi, prev, esclusi, verdetto, verdetto_costru
     if vetrina["sv"]:
         G = tutti[vetrina["sv"]]
         schede["sv"] = sorted([dict(g, id=i, lega=vetrina["sv"]) for i, g in G.items() if g.get("previsione", {}).get("sottovalutato")],
-                              key=lambda g: -g["previsione"]["pred"])[:3]
+                              key=lambda g: -g["previsione"]["pred"])[:4]
     if vetrina["top"]:
         G = tutti[vetrina["top"]]
         schede["top"] = sorted([dict(g, id=i, lega=vetrina["top"]) for i, g in G.items() if g.get("previsione")],
-                               key=lambda g: -g["previsione"]["pred"])[:3]
+                               key=lambda g: -g["previsione"]["pred"])[:4]
     ricerca = [{"n": g["nome"], "id": i, "lega": l} for l, G in tutti.items() for i, g in G.items()]
     _scrivi_js(home / "dati.js", "DATI", {"leghe": riassunto, "schede": schede, "ricerca": ricerca})
     for f in FISSI:

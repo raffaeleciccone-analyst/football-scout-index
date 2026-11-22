@@ -71,7 +71,8 @@ def test_c17_le_pagine_non_hanno_testo_fuori_da_testi_json(costruito):
     varianti = {"dim_": tpi.DIMENSIONI, "ruolo_": list(config.PESO_RUOLO), "ctx_": config.CONTESTI,
                 "motivo_": previsione.INGREDIENTI_MOTIVO, "rivale_": ["grezzo", "minuti", "tpi", "tpi_pro"],
                 "ruolo_breve_": list(config.PESO_RUOLO), "sez_": [f"{s}_{x}" for s in ("previsione", "classifica", "cerca", "metodo") for x in "ts"],
-                "lega_": list(config.LEGHE), "escluso_": ["storia insufficiente", "nessun dato nel campionato"]}
+                "lega_": list(config.LEGHE), "escluso_": ["storia insufficiente", "nessun dato nel campionato"],
+                "card_liv_": ["oro", "argento", "bronzo"]}
     assert prefissi <= set(varianti), prefissi - set(varianti)
     mancanti = [p + v for p in prefissi for v in varianti[p] if p + v not in TESTI]
     assert not mancanti, f"varianti mancanti in testi.json: {mancanti}"

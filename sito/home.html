@@ -1,30 +1,27 @@
 {% extends "base.html" %}
 {% block contenuto %}
-<section class="home-hero"><div class="wrap">
-  {{ t("home_titolo", "h1") }}
-  {{ t("home_sottotitolo", "p") }}
-  <div class="cerca grande">
-    <label for="cerca">{{ t("home_cerca_label") }}</label>
-    <input id="cerca" type="search" list="nomi" autocomplete="off" data-tp="cerca_segnaposto">
-    <datalist id="nomi"></datalist>
+<section class="home-hero"><div class="wrap due-col">
+  <div>
+    {{ t("home_titolo", "h1") }}
+    {{ t("home_sottotitolo", "p", "sotto") }}
+    <div class="cerca">
+      <label for="cerca" class="nascosto">{{ t("home_cerca_label") }}</label>
+      <input id="cerca" type="search" list="nomi" autocomplete="off" data-tp="cerca_segnaposto">
+      <datalist id="nomi"></datalist>
+    </div>
   </div>
-</div></section>
-
-<div class="wrap"><div class="porte">
+  <div class="porte">
   {% for lega, v in leghe.items() %}
   {% set g = v.rivali.grezzo %}
   <article class="porta {{ '' if v.mostra_previsione else 'no' }}">
     {{ t("lega_" ~ lega, "h2") }}
-    <div class="mini">
-      <span><span class="m">{{ g.rho_modello | n }}</span>{{ t("lab_previsione", "small") }}</span>
-      <span class="t">–</span>
-      <span><span class="t">{{ g.rho_rivale | n }}</span>{{ t("lab_semplice", "small") }}</span>
-    </div>
+    <div class="mini"><span class="m">{{ g.rho_modello | n }}</span> <span class="t">– {{ g.rho_rivale | n }}</span>{{ t("lab_mini", "small") }}</div>
     <p class="esito-porta">{{ t("tag_vince" if v.mostra_previsione else "tag_non_ancora", "span", "tag") }} {{ t("porta_mostra" if v.mostra_previsione else "porta_non_mostra") }}{% if v.mostra_sottovalutati %}, {{ t("porta_con_giovani") }}{% endif %}</p>
     <a class="entra" href="../{{ lega }}/index.html">{{ t("entra", lega=nomi[lega]) }}</a>
   </article>
   {% endfor %}
-</div></div>
+  </div>
+</div></section>
 
 {% if vetrina.sv %}
 <section class="home-blocco chiaro"><div class="wrap">

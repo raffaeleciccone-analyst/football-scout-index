@@ -8,8 +8,8 @@
   "en": "Data: Understat (matches) and Transfermarkt (injuries). Every number on this site is computed from the data; none is typed in by hand."
  },
  "indietro": {
-  "it": "← Tutti i campionati",
-  "en": "← All leagues"
+  "it": "Tutti i campionati",
+  "en": "All leagues"
  },
  "lega_serie_a": {
   "it": "Serie A",
@@ -52,16 +52,16 @@
   "en": "the test and its limits"
  },
  "home_titolo": {
-  "it": "Chi farà bene l'anno prossimo?",
-  "en": "Who will do well next season?"
+  "it": "Il tuo osservatore per Serie A e Premier League.",
+  "en": "Your scout for Serie A and the Premier League."
  },
  "home_sottotitolo": {
-  "it": "Una previsione per la stagione dopo, mostrata solo dove batte la statistica semplice. Scegli il campionato.",
-  "en": "A forecast for next season, shown only where it beats the simple statistic. Pick a league."
+  "it": "Chi sta andando forte ora, chi andrà forte dopo, e i giovani che quasi nessuno guarda.",
+  "en": "Who is doing well now, who will do well next, and the young players almost nobody watches."
  },
  "home_cerca_label": {
-  "it": "Cerca un giocatore in Serie A e Premier League",
-  "en": "Search a player in Serie A and the Premier League"
+  "it": "Cerca un giocatore",
+  "en": "Search a player"
  },
  "lab_previsione": {
   "it": "previsione",
@@ -662,5 +662,41 @@
  "chiedi_risposta": {
   "it": "Risposta dai dati",
   "en": "Answer from the data"
+ },
+ "azioni_titolo": {
+  "it": "Cosa vuoi fare",
+  "en": "What do you want to do"
+ },
+ "partita_etic": {
+  "it": "La partita: previsione contro statistica semplice",
+  "en": "The match: forecast against the simple statistic"
+ },
+ "card_forza": {
+  "it": "Punto di forza",
+  "en": "Strength"
+ },
+ "card_debole": {
+  "it": "Punto debole",
+  "en": "Weakness"
+ },
+ "card_liv_oro": {
+  "it": "oro",
+  "en": "gold"
+ },
+ "card_liv_argento": {
+  "it": "argento",
+  "en": "silver"
+ },
+ "card_liv_bronzo": {
+  "it": "bronzo",
+  "en": "bronze"
+ },
+ "card_min_prima": {
+  "it": "minuti l'anno scorso",
+  "en": "minutes last season"
+ },
+ "lab_mini": {
+  "it": "previsione – statistica semplice",
+  "en": "forecast – simple statistic"
  }
 }

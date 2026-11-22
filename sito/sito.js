@@ -42,20 +42,40 @@
     return s;
   }
 
-  // ---- la scheda di un giocatore (dossier) ----
-  function carta(g, opz) {
-    var p = g.previsione, mostra = opz.mostra;
-    var info = [g.squadra || g.squadra_prima, p && p.eta ? t("card_anni", { n: Math.floor(p.eta) }) : "", p ? t("card_minuti", { n: p.minuti_prima }) : ""].filter(Boolean).join(" · ");
-    var figli = [el("span", { "class": "ru " + g.ruolo, testo: t("ruolo_breve_" + g.ruolo) }), el("h4", { testo: g.nome }), el("div", { "class": "info", testo: info })];
+  // ---- il poligono delle dimensioni del TPI, come nei manageriali ----
+  var DIM = ["output", "buildup", "centralita", "boost", "consistenza", "finishing", "form"];
+  function radar(z) {
+    var ns = "http://www.w3.org/2000/svg", s = document.createElementNS(ns, "svg"), n = DIM.length, c = 44, R = 38;
+    s.setAttribute("viewBox", "0 0 88 88"); s.setAttribute("class", "radar"); s.setAttribute("aria-hidden", "true");
+    function punti(r) { return DIM.map(function (d, i) { var a = -Math.PI / 2 + i * 2 * Math.PI / n, v = r(d); return (c + v * Math.cos(a)).toFixed(1) + "," + (c + v * Math.sin(a)).toFixed(1); }).join(" "); }
+    function poli(cl, pt) { var p = document.createElementNS(ns, "polygon"); p.setAttribute("class", cl); p.setAttribute("points", pt); s.appendChild(p); }
+    poli("asse", punti(function () { return R; })); poli("asse", punti(function () { return R / 2; }));
+    poli("area", punti(function (d) { return z[d] === null || z[d] === undefined ? 0 : R * Math.min(1, Math.max(0, (z[d] + 3) / 6)); }));
+    return s;
+  }
+  function livello(i) { return i < 2 ? "oro" : i < 5 ? "argento" : "bronzo"; }   // segue l'ordine della lista
+
+  // ---- la carta di un giocatore ----
+  function carta(g, opz, i) {
+    var p = g.previsione, mostra = opz.mostra, liv = livello(i);
+    var info = [g.squadra || g.squadra_prima, p && p.eta ? t("card_anni", { n: Math.floor(p.eta) }) : ""].filter(Boolean).join(" · ");
+    var figli = [el("div", { "class": "badge" }, [el("span", { "class": "pos", testo: "#" + (i + 1) + " " + t("ruolo_breve_" + g.ruolo) }), el("span", { "class": "liv", testo: t("card_liv_" + liv) })]),
+      el("h4", { testo: g.nome }), el("div", { "class": "info", testo: info })];
+    if (mostra) figli.push(el("div", { "class": "cifra" }, [el("b", { testo: num(p.pred) }), el("span", { testo: t("card_previsti") })]));
+    else figli.push(el("div", { "class": "cifra" }, [el("b", { testo: num(p.prima) }), el("span", { testo: t("card_per90_prima") })]));
+    var z = g.z, ha_z = z && DIM.some(function (d) { return z[d] !== null && z[d] !== undefined; });
+    figli.push(el("div", { "class": "lato" }, [ha_z ? radar(z) : el("div", { "class": "alt" }, [el("b", { testo: num(p.minuti_prima, 0) + "′" }), t("card_min_prima")])]));
     if (mostra) {
-      figli.push(el("div", { "class": "cifra" }, [el("b", { testo: num(p.pred) }), el("span", {}, [t("card_previsti"), el("br"), t("card_anno_scorso", { v: num(p.prima) })])]));
       figli.push(forbice(p, opz.max, opz.banda));
       figli.push(el("p", { "class": "perche" }, [t("perche_label") + " ", el("em", { testo: p.motivi.slice(0, 2).map(function (m) { return t("motivo_" + m); }).join(", ") })]));
-    } else {
-      figli.push(el("div", { "class": "cifra" }, [el("b", { testo: num(p.prima) }), el("span", { testo: t("card_per90_prima") })]));
+    }
+    if (ha_z) {
+      var ord = DIM.filter(function (d) { return z[d] !== null && z[d] !== undefined; }).sort(function (a, b) { return z[b] - z[a]; });
+      figli.push(el("div", { "class": "pc" }, [el("span", { "class": "su" }, [t("card_forza") + ": ", el("b", { testo: t("dim_" + ord[0]) })]),
+        el("span", { "class": "giu" }, [t("card_debole") + ": ", el("b", { testo: t("dim_" + ord[ord.length - 1]) })])]));
     }
     figli.push(el("a", { "class": "apri", href: scheda_url(g), testo: t("apri") }));
-    var c = el("article", { "class": "carta" + (opz.sv ? " sv" : "") }, figli);
+    var c = el("article", { "class": "carta " + liv }, figli);
     c.addEventListener("click", function (e) { if (!e.target.closest("a")) location.href = scheda_url(g); });
     return c;
   }
@@ -63,7 +83,7 @@
     var tutte = gioc.filter(function (g) { return g.previsione; });
     opz.max = Math.max.apply(null, tutte.map(function (g) { return Math.max(g.previsione.hi, g.previsione.prima); }).concat([0.1]));
     var f = document.createDocumentFragment();
-    gioc.forEach(function (g) { f.appendChild(carta(g, opz)); });
+    gioc.forEach(function (g, i) { f.appendChild(carta(g, opz, i)); });
     return f;
   }
 
