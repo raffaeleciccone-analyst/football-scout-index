@@ -1,0 +1,20 @@
+{
+ "env": {
+  "PROVIDER": "groq",
+  "MODEL": "openai/gpt-oss-120b"
+ },
+ "ok": 1,
+ "totale": 1,
+ "esiti": [
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "Qual è la previsione di Lautaro Martínez per la prossima stagione?",
+   "risposta": "La previsione di Lautaro Martínez per la prossima stagione è **0,75** (forbice 0,62 – 0,89). Questa previsione non ha ancora passato la prova.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  }
+ ]
+}

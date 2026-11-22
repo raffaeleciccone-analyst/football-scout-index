@@ -10,7 +10,8 @@ const parti = (nome) => normalizza(nome).split(/[\s-]+/).filter((p) => p.length 
 const nominati = (dati, testo) => { const q = normalizza(testo || ""); return dati.giocatori.filter((g) => parti(g.nome).some((p) => q.includes(p))); };
 export function scegliGiocatori(dati, domanda, perRuolo = 10) {
   const migliori = ["ATT", "CEN", "DIF"].flatMap((r) => dati.giocatori.filter((g) => g.ruolo === r).sort((a, b) => b.pred - a.pred).slice(0, perRuolo));
-  return [...new Set([...nominati(dati, domanda), ...migliori, ...dati.giocatori.filter((g) => g.sottovalutato)])];
+  const giovani = dati.giocatori.filter((g) => g.sottovalutato).sort((a, b) => b.pred - a.pred).slice(0, perRuolo);
+  return [...new Set([...nominati(dati, domanda), ...migliori, ...giovani])];
 }
 
 // ---- il prompt di sistema: regole (F19) + i giocatori scelti per la domanda (F20) ----
@@ -31,7 +32,7 @@ export function costruisciSistema(dati, domanda) {
     "",
     "Campi: nome, squadra, ruolo (ATT/CEN/DIF), eta, tpi (stagione in corso), pred (previsione per 90'), lo/hi (forbice all'80%),",
     "prima (rendimento per 90' la stagione prima), minuti (la stagione prima), sottovalutato (giovane con pochi minuti, previsione alta).",
-    `Dati del campionato (${dati.lega}): i giocatori nominati nella domanda, i primi 10 per ruolo e i giovani sottovalutati`,
+    `Dati del campionato (${dati.lega}): i giocatori nominati nella domanda, i primi 10 per ruolo e i 10 migliori giovani sottovalutati`,
     "(se chiedono di un giocatore che non è qui sotto, di' che non è fra quelli con una previsione).",
     righe,
   ].join("\n");
@@ -72,7 +73,7 @@ export function verificaNumeri(testo, dati) {
 // ---- C23: un adattatore per fornitore, scelto con l'impostazione PROVIDER ----
 async function postJson(fetchFn, url, headers, corpo) {
   const r = await fetchFn(url, { method: "POST", headers: { "content-type": "application/json", ...headers }, body: JSON.stringify(corpo) });
-  if (!r.ok) throw new Error(`fornitore: risposta ${r.status}`);
+  if (!r.ok) throw new Error(`fornitore: risposta ${r.status} ${(await r.text()).slice(0, 600)}`);
   return r.json();
 }
 const ADATTATORI = {
@@ -93,7 +94,8 @@ const ADATTATORI = {
   async openai(env, sistema, domanda, deps) {
     const r = await postJson(deps.fetch, `${env.BASE_URL || "https://api.openai.com/v1"}/chat/completions`,
       { authorization: `Bearer ${env.API_KEY}` },
-      { model: env.MODEL, messages: [{ role: "system", content: sistema }, { role: "user", content: domanda }] });
+      { model: env.MODEL, max_tokens: parseInt(env.MAX_TOKENS || "1500", 10),   // una risposta breve; i piani gratuiti contano anche questo
+        messages: [{ role: "system", content: sistema }, { role: "user", content: domanda }] });
     return r.choices[0].message.content;
   },
   // Groq: il suo formato nativo è Chat Completions (lo stesso di OpenAI), con il suo indirizzo
@@ -130,7 +132,7 @@ export async function rispondi(richiesta, env, deps) {
     await env.QUOTA.put(chiave, String(usate + 1), { expirationTtl: 172800 });
   }
   const dati = await deps.dati(richiesta.lega);
-  const risposta = await chiamaModello(env, costruisciSistema(dati), domanda, deps);
+  const risposta = await chiamaModello(env, costruisciSistema(dati, domanda), domanda, deps);
   const controllo = verificaNumeri(risposta, dati);
   return { stato: 200, corpo: { risposta, numeri_ok: controllo.ok, numeri_non_trovati: controllo.inventati } };
 }

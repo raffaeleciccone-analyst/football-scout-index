@@ -44,6 +44,16 @@ test("C21 stagioni e numeri del metodo non contano come inventati", () => {
 });
 
 // ---- C22: le regole sono nel prompt ----
+test("F20 la risposta manda al modello solo i giocatori scelti, non tutti", async () => {
+  const molti = { ...DATI, giocatori: Array.from({ length: 100 }, (_, i) => ({ nome: `Giocatore${i} Cognome${i}`, ruolo: "ATT", pred: i / 100 })) };
+  const reg = [];
+  await rispondi({ domanda: "chi è il migliore?", lega: "serie_a" }, { PROVIDER: "openai", MODEL: "m", API_KEY: "k" },
+    { dati: async () => molti, fetch: fetchFinto(reg, { choices: [{ message: { content: "ok" } }] }) });
+  const sistema = reg[0].corpo.messages[0].content;
+  assert.match(sistema, /Giocatore99 /);          // tra i primi per ruolo
+  assert.doesNotMatch(sistema, /Giocatore5 /);    // non tra i primi: non si manda
+});
+
 test("C22 il prompt vieta notizie e numeri non nei dati, e segna la conoscenza generale", () => {
   const s = costruisciSistema(DATI);
   assert.match(s, /non è nei miei dati/);
