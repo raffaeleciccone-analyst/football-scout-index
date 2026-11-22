@@ -19,7 +19,7 @@ from fsi import config as C
 from fsi import db, tpi
 
 RIVALI_TPI_PRO = Path(__file__).resolve().parent.parent / "tests" / "fixtures" / "rivali_2024-25.csv"
-INGREDIENTI_MOTIVO = ["rendimento", "minuti", "eta", "tendenza", "contesti", "infortuni"]
+INGREDIENTI_MOTIVO = ["rendimento", "minuti", "eta", "tendenza", "contesti", "infortuni", "stagione_prima"]
 # shortcut: niente valore di mercato, servono foto datate ad agosto; se le si salva per 2 stagioni, riprovare.
 
 
@@ -122,7 +122,22 @@ def _reale(con, stagione):
                          "y_buildup": g["xg_buildup"].sum() / m * 90})
 
 
-def tabella(con, base, dopo, fino_a_giornata=None, misura="output") -> pd.DataFrame:
+def _stagione_prima(stagione):
+    a = int(stagione[:4]) - 1
+    return f"{a}-{str(a + 1)[2:]}"
+
+
+def _prima(con, stagione):
+    """xG+xA per 90 e minuti della stagione intera prima (tutte e due le leghe; vince quella con più minuti)."""
+    parti = [ingredienti(con, lega, _stagione_prima(stagione)) for lega in C.LEGHE]
+    parti = [x for x in parti if len(x)]
+    if not parti:
+        return pd.DataFrame(columns=["giocatore_id", "prima_xgxa90", "prima_minuti"])
+    t = pd.concat(parti).sort_values("minuti").drop_duplicates("giocatore_id", keep="last")
+    return t[["giocatore_id", "xgxa90", "minuti"]].rename(columns={"xgxa90": "prima_xgxa90", "minuti": "prima_minuti"})
+
+
+def tabella(con, base, dopo, fino_a_giornata=None, misura="output", con_prima=False) -> pd.DataFrame:
     parti = []
     for lega in C.LEGHE:
         ingr = ingredienti(con, lega, base, fino_a_giornata)
@@ -133,17 +148,20 @@ def tabella(con, base, dopo, fino_a_giornata=None, misura="output") -> pd.DataFr
     t = pd.concat(parti, ignore_index=True).merge(_reale(con, dopo), left_on="giocatore_id", right_index=True,
                                                   how="left")
     t["y"] = t[f"y_{misura}"]
+    if con_prima:
+        t = t.merge(_prima(con, base), on="giocatore_id", how="left")
     if misura == "buildup":
         t = t[t["ruolo"].isin(["DIF", "CEN"])].reset_index(drop=True)
     return t
 
 
 # ---------------------------------------------------------------- il modello
-def _gruppi(misura, contesti, infortuni=False):
+def _gruppi(misura, contesti, infortuni=False, prima=False):
     g = {"rendimento": ["out_t", "xgxa_t"] if misura == "output" else ["build_t"],
          "minuti": ["log_minuti"], "eta": ["eta", "eta2", "eta_manca"], "tendenza": ["tendenza"],
          "contesti": ["ctx_top6", "ctx_casa"] if contesti else [],
-         "infortuni": ["log_giorni_inf", "inf_manca"] if infortuni else []}
+         "infortuni": ["log_giorni_inf", "inf_manca"] if infortuni else [],
+         "stagione_prima": ["prima_t", "prima_manca"] if prima else []}
     return g, [c for cols in g.values() for c in cols] + ["ruolo_CEN", "ruolo_DIF", "premier"]
 
 
@@ -167,13 +185,16 @@ def _matrice(mod, t):
     X["tendenza"] = t["tendenza"]
     X["ctx_top6"], X["ctx_casa"] = t["ctx_top6"], t["ctx_casa"]
     X["log_giorni_inf"], X["inf_manca"] = np.log1p(t["giorni_inf"]), t["inf_manca"]
+    if "prima_t" in mod["colonne"]:   # stagione intera prima: chi non c'era vale la media del ruolo
+        X["prima_manca"] = t["prima_minuti"].isna().astype(float)
+        X["prima_t"] = _tirato(t["prima_xgxa90"].fillna(0.0), t["prima_minuti"].fillna(0.0), chiave, mod["medie"]["xgxa90"], mod["K"])
     X["ruolo_CEN"] = (t["ruolo"] == "CEN").astype(float)
     X["ruolo_DIF"] = (t["ruolo"] == "DIF").astype(float)
     X["premier"] = (t["lega"] == "premier").astype(float)
     return X[mod["colonne"]], chiave
 
 
-def stima(tab, misura="output", contesti=True, infortuni=False):
+def stima(tab, misura="output", contesti=True, infortuni=False, prima=False):
     """Stima i pesi su chi ha il rendimento reale misurabile (≥ 900' nella stagione dopo)."""
     tr = tab[(tab["min_dopo"] >= C.MINUTI_METRO) & tab["y"].notna()]
     base = "out90" if misura == "output" else "buildup90"
@@ -181,7 +202,7 @@ def stima(tab, misura="output", contesti=True, infortuni=False):
     medie = {c: tr.groupby(chiave)[c].mean() for c in ("out90", "xgxa90", "buildup90")}
     # K della regressione verso la media: quello che, da solo, prevede meglio (è anche il rivale di C10)
     errori = {k: ((_tirato(tr[base], tr["minuti"], chiave, medie[base], k) - tr["y"]) ** 2).mean() for k in C.GRIGLIA_K}
-    gruppi, colonne = _gruppi(misura, contesti, infortuni)
+    gruppi, colonne = _gruppi(misura, contesti, infortuni, prima)
     mod = {"misura": misura, "K": min(errori, key=errori.get), "medie": medie, "eta_media": tr["eta"].mean(),
            "gruppi": gruppi, "colonne": colonne}
     X, chiave = _matrice(mod, tr)
@@ -422,9 +443,36 @@ def giornata_valida(prove: dict, giornata):
     return raggiunti[-1] if raggiunti and prove[raggiunti[-1]] else None
 
 
+def aggiornata(con, lega, stagione, giornata, prove: dict):
+    """Previsione per la stagione dopo `stagione`, con i dati fino a `giornata` (F10, C14).
+
+    Si mostra solo se l'ultimo punto di controllo raggiunto ha passato la prova (`prove`: {giornata: batte}).
+    Il modello si stima sulla coppia 2024-25 -> 2025-26 tagliata alla stessa giornata (l'unica con le partite),
+    con in più la stagione intera prima (2023-24, dall'archivio): senza, chi ha poche giornate finiva tutto sulla media.
+    shortcut: una coppia sola per la stima; quando Understat torna, aggiungere 2023-24 partita per partita.
+    """
+    if giornata_valida(prove, giornata) is None:
+        return None
+    mod = stima(tabella(con, "2024-25", "2025-26", fino_a_giornata=giornata, con_prima=True), contesti=False, prima=True)
+    ingr = ingredienti(con, lega, stagione, fino_a_giornata=giornata)
+    ok, _ = ammessi(ingr, _soglia(con, lega, stagione, giornata))
+    ok = ok.merge(_prima(con, stagione), on="giocatore_id", how="left")
+    return ok[["giocatore_id"]].join(applica(mod, ok)[["pred", "lo", "hi"]]).reset_index(drop=True)
+
+
 def prove_aggiornata(con, base, dopo) -> dict:
-    """La previsione aggiornata provata a ogni punto di controllo: {giornata: verdetto} (F10, C14)."""
-    return {k: prova(con, base, dopo, fino_a_giornata=k) for k in C.CONTROLLI_AGGIORNATA}
+    """La previsione aggiornata provata a ogni punto di controllo: {giornata: verdetto} (F10, C14). Prova a gruppi."""
+    out = {}
+    for k in C.CONTROLLI_AGGIORNATA:
+        tab = tabella(con, base, dopo, fino_a_giornata=k, con_prima=True)
+        ids = tab["giocatore_id"].unique()
+        parti = []
+        for dentro, fuori in KFold(5, shuffle=True, random_state=0).split(ids):
+            prova_ = tab["giocatore_id"].isin(ids[fuori])
+            parti.append(applica(stima(tab[~prova_], contesti=False, prima=True), tab[prova_]))
+        out[k] = {"giornata": k, "stato": "prototipo, non verificato",
+                  "leghe": _valuta(tab, pd.concat(parti).loc[tab.index], base, "output", k)}
+    return out
 
 
 if __name__ == "__main__":

@@ -52,7 +52,7 @@ def _ambiente(testi):
     return env
 
 
-def _dati_lega(con, lega, stagione, prev, esclusi, verdetto, verdetto_costruzione, stagione_prevista):
+def _dati_lega(con, lega, stagione, prev, esclusi, verdetto, verdetto_costruzione, stagione_prevista, agg=None):
     classifica, ctx = tpi._calcola(con, lega, stagione)
     nomi = dict(con.execute("SELECT giocatore_id, nome FROM giocatori"))
     righe = db.righe(con, lega, stagione)
@@ -84,12 +84,26 @@ def _dati_lega(con, lega, stagione, prev, esclusi, verdetto, verdetto_costruzion
         g["previsione"] = {"pred": r.pred, "lo": r.lo, "hi": r.hi, "prima": r.out90, "minuti_prima": int(r.minuti),
                            "eta": r.eta, "motivi": list(r.motivi), "sottovalutato": r.giocatore_id in sotto,
                            "sfortuna90": sfortuna.get(r.giocatore_id), "pos_ruolo": int(r.posizione_ruolo)}
+    # previsto contro reale: quanto sta facendo nella stagione prevista, fino a oggi (F10)
+    ora = db.righe(con, lega, stagione_prevista)
+    if len(ora):
+        g_ora = ora[ora["minuti"] >= 1].groupby("giocatore_id")
+        finora = pd.DataFrame({"minuti": g_ora["minuti"].sum(),
+                               "out90": (g_ora["gol_senza_rigori"].sum() + g_ora["xa"].sum()) / g_ora["minuti"].sum() * 90})
+        for gid, f in finora.iterrows():
+            if int(gid) in giocatori and "previsione" in giocatori[int(gid)]:
+                giocatori[int(gid)]["finora"] = {"out90": f["out90"], "minuti": int(f["minuti"])}
+    if agg and agg.get("prev") is not None:
+        for r in agg["prev"].itertuples(index=False):
+            if int(r.giocatore_id) in giocatori:
+                giocatori[int(r.giocatore_id)]["aggiornata"] = {"pred": r.pred, "lo": r.lo, "hi": r.hi}
     for r in esclusi[esclusi["lega"] == lega].itertuples(index=False):
         giocatori.setdefault(int(r.giocatore_id), {"nome": nomi.get(r.giocatore_id, "?"), "tpi": None})["motivo"] = r.motivo
     v = verdetto["leghe"][lega]
     pesi = {d: C.PESI_TPI[d] / sum(C.PESI_TPI.values()) for d in C.PESI_TPI}   # pesi effettivi (sommano a 1)
     return _pulito({
         "lega": lega, "stagione": stagione, "stagione_prevista": stagione_prevista, "giocatori": giocatori,
+        "aggiornata": {k: agg[k] for k in ("giornata", "valida", "stagione")} if agg else None,
         "verdetto": {"stato": verdetto["stato"], "verificata": verdetto["stato"].startswith("verificata"),
                      "mostra_previsione": v["mostra_previsione"], "mostra_sottovalutati": v["mostra_sottovalutati"],
                      "mostra_forbice": v["forbice"]["mostra"], "copertura": v["forbice"]["copertura"],
@@ -108,7 +122,7 @@ def _scrivi_js(percorso, nome, dati):
 
 
 def genera(con, cartella, stagioni_tpi, prev, esclusi, verdetto, verdetto_costruzione=None,
-           stagione_prevista=None):
+           stagione_prevista=None, aggiornate=None):
     cartella = Path(cartella).resolve()
     if any(cartella == v or cartella.is_relative_to(v) for v in VIETATE):
         raise ValueError(f"{cartella} è la cartella di un sito: fino al cambio si scrive solo altrove (V8)")
@@ -118,7 +132,8 @@ def genera(con, cartella, stagioni_tpi, prev, esclusi, verdetto, verdetto_costru
     for lega, stagione in stagioni_tpi.items():
         uscita = cartella / lega
         uscita.mkdir(parents=True, exist_ok=True)
-        dati = _dati_lega(con, lega, stagione, prev, esclusi, verdetto, verdetto_costruzione, stagione_prevista)
+        dati = _dati_lega(con, lega, stagione, prev, esclusi, verdetto, verdetto_costruzione, stagione_prevista,
+                          (aggiornate or {}).get(lega))
         riassunto[lega] = dati["verdetto"]
         tutti[lega] = dati["giocatori"]
         _scrivi_js(uscita / "dati.js", "DATI", dati)
@@ -162,5 +177,13 @@ if __name__ == "__main__":
     # la previsione di agosto si scrive una volta (C14): se c'è già, vince il file
     agosto = P.salva_agosto(prev, "2026-27", C.RADICE / "previsioni")
     prev = pd.read_json(agosto, orient="records")
+    # previsione aggiornata: vale la prova dell'ultimo punto di controllo raggiunto (prototipo, PIANO §2c)
+    prove = json.loads((C.RADICE / "prove" / "prototipo_2024-25_2025-26.json").read_text(encoding="utf-8"))["aggiornata"]
+    aggiornate = {}
+    for lega in C.LEGHE:
+        giornata = con.execute("SELECT MAX(giornata) FROM partite WHERE lega = ? AND stagione = '2026-27'", (lega,)).fetchone()[0]
+        esiti = {int(k): x["leghe"][lega]["rivali"]["grezzo"]["batte"] for k, x in prove.items()}
+        aggiornate[lega] = {"giornata": giornata, "valida": P.giornata_valida(esiti, giornata), "stagione": "2027-28",
+                            "prev": P.aggiornata(con, lega, "2026-27", giornata, esiti)}
     print(genera(con, C.USCITA, {"serie_a": "2026-27", "premier": "2026-27"}, prev, esclusi, verdetto["output"],
-                 verdetto.get("buildup"), stagione_prevista="2026-27"), file=sys.stderr)
+                 verdetto.get("buildup"), stagione_prevista="2026-27", aggiornate=aggiornate), file=sys.stderr)

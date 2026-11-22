@@ -138,8 +138,18 @@
         sez.appendChild(forbice(p, Math.max(p.hi, p.prima, 0.1) * 1.15, V.mostra_forbice));
         sez.appendChild(el("p", { "class": "perche" }, [t("scheda_motivi") + ": ", el("em", { testo: p.motivi.map(function (m) { return t("motivo_" + m); }).join(", ") })]));
         if (p.sottovalutato && V.mostra_sottovalutati) sez.appendChild(el("p", { "class": "segno", testo: t("sottovalutato_si") }));
+        if (g.finora) sez.appendChild(el("p", { testo: t("scheda_finora", { prev: num(p.pred), stagione: D.stagione_prevista, v: num(g.finora.out90), min: g.finora.minuti }) }));
       }
       box.appendChild(sez);
+    }
+    var A = D.aggiornata;
+    if (A && (g.previsione || g.aggiornata)) {
+      var agg = el("section", { "class": "previsto" }, [el("h3", { testo: t("scheda_aggiornata_t", { stagione: A.stagione }) })]);
+      if (A.valida && g.aggiornata) {
+        agg.appendChild(el("p", { testo: t("scheda_aggiornata_v", { pred: num(g.aggiornata.pred), lo: num(g.aggiornata.lo), hi: num(g.aggiornata.hi), k: A.giornata }) }));
+        agg.appendChild(el("p", { "class": "sotto", testo: t("stato_prototipo") }));
+      } else agg.appendChild(el("p", { testo: t("troppo_presto") }));
+      box.appendChild(agg);
     }
     if (g.z) {
       box.appendChild(el("h3", { testo: t("scheda_dimensioni") }));

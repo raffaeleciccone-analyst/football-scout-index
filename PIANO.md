@@ -108,10 +108,10 @@ Tabelle (una riga = un fatto, la stagione è **sempre** una colonna, mai dedotta
     come nella V23. Fra gli ingredienti del modello c'è anche xG senza rigori + xA per 90 (più stabile dei gol).
   - **Il rendimento reale** della stagione dopo si somma su Serie A e Premier (chi cambia campionato fra le due resta
     nella prova: la chiave è l'id Understat).
-  - **Previsione aggiornata, finché manca la 2023-24**: alla giornata k gli ingredienti vengono dalla stagione in corso
-    tagliata a k (non c'è ancora la "stagione prima" completa da affiancare). La soglia dei 450' si riduce in
-    proporzione (450 × k / giornate) — `shortcut:` con la 2023-24 si affianca la stagione prima completa e la soglia
-    torna 450'.
+  - **Previsione aggiornata** *(corretta il 22/11)*: alla giornata k gli ingredienti sono la stagione in corso tagliata
+    a k **più la stagione intera prima** (per la stima: 2024-25 tagliata + 2023-24 dall'archivio). Senza la stagione
+    prima il modello schiacciava tutti sulla media (Haaland 0,57 per il 2027-28 mentre ne fa 1,36): trovato guardando
+    i nomi, prima di pubblicare. La soglia dei 450' si riduce in proporzione (450 × k / giornate).
   - **Infortuni** *(22/11, dopo il download da Transfermarkt: 1.074 storie, stagioni 2021-22…2026-27)*: ingrediente
     candidato = log(1 + giorni fuori nella stagione) + "storia mancante". **Regola fissata prima di vedere il risultato:**
     entrano solo se, nella prova vera a finestra mobile, la ρ del modello migliora in **tutti e due** i campionati.

@@ -221,41 +221,35 @@
  },
  "aggiornata": {
   "5": {
-   "base": "2024-25",
-   "dopo": "2025-26",
-   "misura": "output",
    "giornata": 5,
    "stato": "prototipo, non verificato",
-   "contesti_tenuti": false,
-   "rho_con_contesti": 0.665071146708383,
-   "rho_senza_contesti": 0.670868131111361,
    "leghe": {
     "premier": {
      "n": 182,
      "rivali": {
       "grezzo": {
        "n": 182,
-       "rho_modello": 0.6990239178446769,
+       "rho_modello": 0.765678574663268,
        "rho_rivale": 0.544720506097302,
-       "diff_lo": 0.08043330406279932,
-       "diff_hi": 0.22916669873752973,
+       "diff_lo": 0.1409601653997078,
+       "diff_hi": 0.3026530829737602,
        "batte": true
       },
       "minuti": {
        "n": 182,
-       "rho_modello": 0.6990239178446769,
+       "rho_modello": 0.765678574663268,
        "rho_rivale": -0.01691140754079065,
-       "diff_lo": 0.5776617433775587,
-       "diff_hi": 0.843242567730408,
+       "diff_lo": 0.6470394110060487,
+       "diff_hi": 0.9134075458234311,
        "batte": true
       }
      },
      "sottovalutati": {
       "n": 14,
-      "rho_modello": 0.7362637362637363,
+      "rho_modello": 0.7934065934065934,
       "rho_rivale": 0.7395215563173165,
-      "diff_lo": -0.2730067702240308,
-      "diff_hi": 0.2618621334357944,
+      "diff_lo": -0.13788694256606704,
+      "diff_hi": 0.2857151911731005,
       "batte": false,
       "rivale": "output grezzo",
       "gruppo_minuti": [
@@ -265,7 +259,7 @@
       "eta_massima": 25
      },
      "forbice": {
-      "copertura": 0.8076923076923077,
+      "copertura": 0.7967032967032966,
       "mostra": true
      },
      "mostra_previsione": true,
@@ -276,27 +270,27 @@
      "rivali": {
       "grezzo": {
        "n": 178,
-       "rho_modello": 0.6255550289198414,
+       "rho_modello": 0.7196419727671793,
        "rho_rivale": 0.4643682568858892,
-       "diff_lo": 0.06597150916873354,
-       "diff_hi": 0.2591217835348157,
+       "diff_lo": 0.15056390057171992,
+       "diff_hi": 0.3626942967142658,
        "batte": true
       },
       "minuti": {
        "n": 178,
-       "rho_modello": 0.6255550289198414,
+       "rho_modello": 0.7196419727671793,
        "rho_rivale": -0.053524662949733535,
-       "diff_lo": 0.5412143486098691,
-       "diff_hi": 0.8059816327324363,
+       "diff_lo": 0.6347925696340977,
+       "diff_hi": 0.9026412970601686,
        "batte": true
       }
      },
      "sottovalutati": {
       "n": 5,
-      "rho_modello": 0.0,
+      "rho_modello": 0.6,
       "rho_rivale": -0.3,
       "diff_lo": 0.0,
-      "diff_hi": 1.125,
+      "diff_hi": 1.6666666666666665,
       "batte": false,
       "rivale": "output grezzo",
       "gruppo_minuti": [
@@ -306,7 +300,7 @@
       "eta_massima": 25
      },
      "forbice": {
-      "copertura": 0.7584269662921348,
+      "copertura": 0.7696629213483146,
       "mostra": true
      },
      "mostra_previsione": true,
@@ -315,41 +309,35 @@
    }
   },
   "10": {
-   "base": "2024-25",
-   "dopo": "2025-26",
-   "misura": "output",
    "giornata": 10,
    "stato": "prototipo, non verificato",
-   "contesti_tenuti": false,
-   "rho_con_contesti": 0.7043197578973592,
-   "rho_senza_contesti": 0.7053997443053684,
    "leghe": {
     "premier": {
      "n": 187,
      "rivali": {
       "grezzo": {
        "n": 187,
-       "rho_modello": 0.7520195699169417,
+       "rho_modello": 0.7932037480868681,
        "rho_rivale": 0.6388850148189449,
-       "diff_lo": 0.054513596943381155,
-       "diff_hi": 0.1751822172081691,
+       "diff_lo": 0.08448859040570403,
+       "diff_hi": 0.2278051873206142,
        "batte": true
       },
       "minuti": {
        "n": 187,
-       "rho_modello": 0.7520195699169417,
+       "rho_modello": 0.7932037480868681,
        "rho_rivale": -0.06514439010482337,
-       "diff_lo": 0.6838760781305679,
-       "diff_hi": 0.939928852283583,
+       "diff_lo": 0.7277679060653092,
+       "diff_hi": 0.9799420824790191,
        "batte": true
       }
      },
      "sottovalutati": {
       "n": 72,
-      "rho_modello": 0.7416875683323688,
+      "rho_modello": 0.7390507428130427,
       "rho_rivale": 0.5902677846658732,
-      "diff_lo": 0.0609726226185115,
-      "diff_hi": 0.25477215019706645,
+      "diff_lo": 0.027876340728157808,
+      "diff_hi": 0.28390121800364043,
       "batte": true,
       "rivale": "output grezzo",
       "gruppo_minuti": [
@@ -359,7 +347,7 @@
       "eta_massima": 25
      },
      "forbice": {
-      "copertura": 0.8128342245989305,
+      "copertura": 0.8021390374331551,
       "mostra": true
      },
      "mostra_previsione": true,
@@ -370,27 +358,27 @@
      "rivali": {
       "grezzo": {
        "n": 188,
-       "rho_modello": 0.651480228478408,
+       "rho_modello": 0.7226045194501255,
        "rho_rivale": 0.6051755487781993,
-       "diff_lo": -0.0224741452475938,
-       "diff_hi": 0.11046870982761262,
-       "batte": false
+       "diff_lo": 0.04822018527910515,
+       "diff_hi": 0.18675554221205606,
+       "batte": true
       },
       "minuti": {
        "n": 188,
-       "rho_modello": 0.651480228478408,
+       "rho_modello": 0.7226045194501255,
        "rho_rivale": -0.09694626600517837,
-       "diff_lo": 0.6039820141265062,
-       "diff_hi": 0.8852636806459353,
+       "diff_lo": 0.6822272535115904,
+       "diff_hi": 0.9462680334828352,
        "batte": true
       }
      },
      "sottovalutati": {
       "n": 59,
-      "rho_modello": 0.7538281706604326,
+      "rho_modello": 0.7837521917007599,
       "rho_rivale": 0.6103537457364822,
-      "diff_lo": 0.011980247900931777,
-      "diff_hi": 0.28441352375811535,
+      "diff_lo": 0.016189794449936443,
+      "diff_hi": 0.33897645226413853,
       "batte": true,
       "rivale": "output grezzo",
       "gruppo_minuti": [
@@ -400,50 +388,44 @@
       "eta_massima": 25
      },
      "forbice": {
-      "copertura": 0.7606382978723404,
+      "copertura": 0.7819148936170213,
       "mostra": true
      },
-     "mostra_previsione": false,
+     "mostra_previsione": true,
      "mostra_sottovalutati": true
     }
    }
   },
   "15": {
-   "base": "2024-25",
-   "dopo": "2025-26",
-   "misura": "output",
    "giornata": 15,
    "stato": "prototipo, non verificato",
-   "contesti_tenuti": true,
-   "rho_con_contesti": 0.7073374454991281,
-   "rho_senza_contesti": 0.7028482578820804,
    "leghe": {
     "premier": {
      "n": 194,
      "rivali": {
       "grezzo": {
        "n": 194,
-       "rho_modello": 0.7332341714158924,
+       "rho_modello": 0.7630271229758436,
        "rho_rivale": 0.6828545718496108,
-       "diff_lo": 0.0009020254278775234,
-       "diff_hi": 0.1066863266193256,
+       "diff_lo": 0.01821463828546265,
+       "diff_hi": 0.14788262016518686,
        "batte": true
       },
       "minuti": {
        "n": 194,
-       "rho_modello": 0.7332341714158924,
+       "rho_modello": 0.7630271229758436,
        "rho_rivale": -0.023715015496391212,
-       "diff_lo": 0.6246189174954405,
-       "diff_hi": 0.8868542630284687,
+       "diff_lo": 0.65515384020196,
+       "diff_hi": 0.9091353039090605,
        "batte": true
       }
      },
      "sottovalutati": {
       "n": 92,
-      "rho_modello": 0.7390841977097236,
+      "rho_modello": 0.7520459904751629,
       "rho_rivale": 0.7170137015859316,
-      "diff_lo": -0.03263963921635276,
-      "diff_hi": 0.08199718350367645,
+      "diff_lo": -0.04073747314608554,
+      "diff_hi": 0.11296576185070718,
       "batte": false,
       "rivale": "output grezzo",
       "gruppo_minuti": [
@@ -453,7 +435,7 @@
       "eta_massima": 25
      },
      "forbice": {
-      "copertura": 0.7938144329896907,
+      "copertura": 0.788659793814433,
       "mostra": true
      },
      "mostra_previsione": true,
@@ -464,27 +446,27 @@
      "rivali": {
       "grezzo": {
        "n": 190,
-       "rho_modello": 0.6873425655511884,
+       "rho_modello": 0.7127498995088312,
        "rho_rivale": 0.651456599894164,
-       "diff_lo": -0.02366909258457805,
-       "diff_hi": 0.09805435859585335,
+       "diff_lo": -0.002069023313665585,
+       "diff_hi": 0.12541799762226452,
        "batte": false
       },
       "minuti": {
        "n": 190,
-       "rho_modello": 0.6873425655511884,
+       "rho_modello": 0.7127498995088312,
        "rho_rivale": -0.1125295966522669,
-       "diff_lo": 0.6636906112407261,
-       "diff_hi": 0.9335278850273473,
+       "diff_lo": 0.6869684633923483,
+       "diff_hi": 0.9595587479016928,
        "batte": true
       }
      },
      "sottovalutati": {
       "n": 83,
-      "rho_modello": 0.7557617228495864,
+      "rho_modello": 0.7376264640443305,
       "rho_rivale": 0.6001353854632471,
-      "diff_lo": 0.053570916095982225,
-      "diff_hi": 0.2709206109267372,
+      "diff_lo": 0.032024361828937385,
+      "diff_hi": 0.25715177131177447,
       "batte": true,
       "rivale": "output grezzo",
       "gruppo_minuti": [
@@ -494,7 +476,7 @@
       "eta_massima": 25
      },
      "forbice": {
-      "copertura": 0.7631578947368421,
+      "copertura": 0.7684210526315789,
       "mostra": true
      },
      "mostra_previsione": false,
@@ -503,41 +485,35 @@
    }
   },
   "19": {
-   "base": "2024-25",
-   "dopo": "2025-26",
-   "misura": "output",
    "giornata": 19,
    "stato": "prototipo, non verificato",
-   "contesti_tenuti": false,
-   "rho_con_contesti": 0.7293908400358493,
-   "rho_senza_contesti": 0.732989897026062,
    "leghe": {
     "premier": {
      "n": 202,
      "rivali": {
       "grezzo": {
        "n": 202,
-       "rho_modello": 0.7632148480637344,
+       "rho_modello": 0.7793653786377093,
        "rho_rivale": 0.7148913898751783,
-       "diff_lo": 0.004151627142399172,
-       "diff_hi": 0.09523239777081702,
+       "diff_lo": 0.005478393919592862,
+       "diff_hi": 0.1264969910849953,
        "batte": true
       },
       "minuti": {
        "n": 202,
-       "rho_modello": 0.7632148480637344,
+       "rho_modello": 0.7793653786377093,
        "rho_rivale": 0.02101440149642587,
-       "diff_lo": 0.6216138114960963,
-       "diff_hi": 0.8667926877938941,
+       "diff_lo": 0.6390113035328652,
+       "diff_hi": 0.8813612619420494,
        "batte": true
       }
      },
      "sottovalutati": {
       "n": 74,
-      "rho_modello": 0.6967345427619399,
+      "rho_modello": 0.698393187708256,
       "rho_rivale": 0.6851439107474816,
-      "diff_lo": -0.05185501063024409,
-      "diff_hi": 0.07691428344497656,
+      "diff_lo": -0.060234062110267404,
+      "diff_hi": 0.09798654160762577,
       "batte": false,
       "rivale": "output grezzo",
       "gruppo_minuti": [
@@ -547,7 +523,7 @@
       "eta_massima": 25
      },
      "forbice": {
-      "copertura": 0.8118811881188119,
+      "copertura": 0.7722772277227723,
       "mostra": true
      },
      "mostra_previsione": true,
@@ -558,80 +534,27 @@
      "rivali": {
       "grezzo": {
        "n": 193,
-       "rho_modello": 0.7240217887090113,
+       "rho_modello": 0.7479713406616801,
        "rho_rivale": 0.6858798043847152,
-       "diff_lo": -0.015088737757794783,
-       "diff_hi": 0.0937290476876863,
-       "batte": false
+       "diff_lo": 0.0032950574789633383,
+       "diff_hi": 0.12219250991340204,
+       "batte": true
       },
       "minuti": {
        "n": 193,
-       "rho_modello": 0.7240217887090113,
+       "rho_modello": 0.7479713406616801,
        "rho_rivale": -0.07225259362931878,
-       "diff_lo": 0.6616171632768701,
-       "diff_hi": 0.9224187352808227,
+       "diff_lo": 0.6851203373755343,
+       "diff_hi": 0.9459399602589932,
        "batte": true
       }
      },
      "sottovalutati": {
       "n": 77,
-      "rho_modello": 0.7526158052473841,
+      "rho_modello": 0.7378673957621324,
       "rho_rivale": 0.6492717808507282,
-      "diff_lo": 0.01880795029731568,
-      "diff_hi": 0.19008839022488486,
-      "batte": true,
-      "rivale": "output grezzo",
-      "gruppo_minuti": [
-       450,
-       1500
-      ],
-      "eta_massima": 25
-     },
-     "forbice": {
-      "copertura": 0.7512953367875648,
-      "mostra": true
-     },
-     "mostra_previsione": false,
-     "mostra_sottovalutati": true
-    }
-   }
-  },
-  "25": {
-   "base": "2024-25",
-   "dopo": "2025-26",
-   "misura": "output",
-   "giornata": 25,
-   "stato": "prototipo, non verificato",
-   "contesti_tenuti": false,
-   "rho_con_contesti": 0.7382294176308541,
-   "rho_senza_contesti": 0.7390840465661086,
-   "leghe": {
-    "premier": {
-     "n": 206,
-     "rivali": {
-      "grezzo": {
-       "n": 206,
-       "rho_modello": 0.7781726707094001,
-       "rho_rivale": 0.7678108487409214,
-       "diff_lo": -0.03187340012936944,
-       "diff_hi": 0.054857524932345116,
-       "batte": false
-      },
-      "minuti": {
-       "n": 206,
-       "rho_modello": 0.7781726707094001,
-       "rho_rivale": 0.03311438964385494,
-       "diff_lo": 0.6223587183263506,
-       "diff_hi": 0.861143056780053,
-       "batte": true
-      }
-     },
-     "sottovalutati": {
-      "n": 53,
-      "rho_modello": 0.688034188034188,
-      "rho_rivale": 0.754535926975436,
-      "diff_lo": -0.18507121914785227,
-      "diff_hi": 0.04730384604988562,
+      "diff_lo": -0.005957081562657367,
+      "diff_hi": 0.18748219497109234,
       "batte": false,
       "rivale": "output grezzo",
       "gruppo_minuti": [
@@ -641,7 +564,54 @@
       "eta_massima": 25
      },
      "forbice": {
-      "copertura": 0.8252427184466019,
+      "copertura": 0.7772020725388601,
+      "mostra": true
+     },
+     "mostra_previsione": true,
+     "mostra_sottovalutati": false
+    }
+   }
+  },
+  "25": {
+   "giornata": 25,
+   "stato": "prototipo, non verificato",
+   "leghe": {
+    "premier": {
+     "n": 206,
+     "rivali": {
+      "grezzo": {
+       "n": 206,
+       "rho_modello": 0.7923023333230377,
+       "rho_rivale": 0.7678108487409214,
+       "diff_lo": -0.025104750758407048,
+       "diff_hi": 0.07545623751282635,
+       "batte": false
+      },
+      "minuti": {
+       "n": 206,
+       "rho_modello": 0.7923023333230377,
+       "rho_rivale": 0.03311438964385494,
+       "diff_lo": 0.6329893132299418,
+       "diff_hi": 0.8762796377389198,
+       "batte": true
+      }
+     },
+     "sottovalutati": {
+      "n": 53,
+      "rho_modello": 0.7351233671988389,
+      "rho_rivale": 0.754535926975436,
+      "diff_lo": -0.1437062725558064,
+      "diff_hi": 0.10291561951238565,
+      "batte": false,
+      "rivale": "output grezzo",
+      "gruppo_minuti": [
+       450,
+       1500
+      ],
+      "eta_massima": 25
+     },
+     "forbice": {
+      "copertura": 0.7864077669902912,
       "mostra": true
      },
      "mostra_previsione": false,
@@ -652,80 +622,27 @@
      "rivali": {
       "grezzo": {
        "n": 201,
-       "rho_modello": 0.7025131899339884,
+       "rho_modello": 0.7362312458369225,
        "rho_rivale": 0.6754356993022752,
-       "diff_lo": -0.01796890061130495,
-       "diff_hi": 0.07403278792761235,
-       "batte": false
+       "diff_lo": 0.0134214415842565,
+       "diff_hi": 0.10889302140531096,
+       "batte": true
       },
       "minuti": {
        "n": 201,
-       "rho_modello": 0.7025131899339884,
+       "rho_modello": 0.7362312458369225,
        "rho_rivale": -0.05064713734465907,
-       "diff_lo": 0.625962741934673,
-       "diff_hi": 0.8780784748731763,
+       "diff_lo": 0.6579547253156524,
+       "diff_hi": 0.9124654330527531,
        "batte": true
       }
      },
      "sottovalutati": {
       "n": 62,
-      "rho_modello": 0.7091485986250661,
+      "rho_modello": 0.6956510790461081,
       "rho_rivale": 0.6115937649517766,
-      "diff_lo": 0.010689403524645452,
-      "diff_hi": 0.18720547341669894,
-      "batte": true,
-      "rivale": "output grezzo",
-      "gruppo_minuti": [
-       450,
-       1500
-      ],
-      "eta_massima": 25
-     },
-     "forbice": {
-      "copertura": 0.7562189054726368,
-      "mostra": true
-     },
-     "mostra_previsione": false,
-     "mostra_sottovalutati": true
-    }
-   }
-  },
-  "30": {
-   "base": "2024-25",
-   "dopo": "2025-26",
-   "misura": "output",
-   "giornata": 30,
-   "stato": "prototipo, non verificato",
-   "contesti_tenuti": false,
-   "rho_con_contesti": 0.754792645061238,
-   "rho_senza_contesti": 0.7561897889375075,
-   "leghe": {
-    "premier": {
-     "n": 208,
-     "rivali": {
-      "grezzo": {
-       "n": 208,
-       "rho_modello": 0.7933622441631594,
-       "rho_rivale": 0.7518839505319246,
-       "diff_lo": 0.005278708896484319,
-       "diff_hi": 0.0820209014386691,
-       "batte": true
-      },
-      "minuti": {
-       "n": 208,
-       "rho_modello": 0.7933622441631594,
-       "rho_rivale": 0.03663279161974266,
-       "diff_lo": 0.6370020573930962,
-       "diff_hi": 0.8688227165011474,
-       "batte": true
-      }
-     },
-     "sottovalutati": {
-      "n": 41,
-      "rho_modello": 0.6541811846689897,
-      "rho_rivale": 0.627727689083611,
-      "diff_lo": -0.15536736053338673,
-      "diff_hi": 0.2195779704454829,
+      "diff_lo": -0.012157677852210651,
+      "diff_hi": 0.18312126180278443,
       "batte": false,
       "rivale": "output grezzo",
       "gruppo_minuti": [
@@ -735,7 +652,54 @@
       "eta_massima": 25
      },
      "forbice": {
-      "copertura": 0.8028846153846154,
+      "copertura": 0.7661691542288557,
+      "mostra": true
+     },
+     "mostra_previsione": true,
+     "mostra_sottovalutati": false
+    }
+   }
+  },
+  "30": {
+   "giornata": 30,
+   "stato": "prototipo, non verificato",
+   "leghe": {
+    "premier": {
+     "n": 208,
+     "rivali": {
+      "grezzo": {
+       "n": 208,
+       "rho_modello": 0.8046038629562657,
+       "rho_rivale": 0.7518839505319246,
+       "diff_lo": 0.010805863491099778,
+       "diff_hi": 0.10026818465114767,
+       "batte": true
+      },
+      "minuti": {
+       "n": 208,
+       "rho_modello": 0.8046038629562657,
+       "rho_rivale": 0.03663279161974266,
+       "diff_lo": 0.6484768224717515,
+       "diff_hi": 0.8789104481181685,
+       "batte": true
+      }
+     },
+     "sottovalutati": {
+      "n": 41,
+      "rho_modello": 0.703658536585366,
+      "rho_rivale": 0.627727689083611,
+      "diff_lo": -0.11383533373435456,
+      "diff_hi": 0.27296164421176417,
+      "batte": false,
+      "rivale": "output grezzo",
+      "gruppo_minuti": [
+       450,
+       1500
+      ],
+      "eta_massima": 25
+     },
+     "forbice": {
+      "copertura": 0.7932692307692307,
       "mostra": true
      },
      "mostra_previsione": true,
@@ -746,27 +710,27 @@
      "rivali": {
       "grezzo": {
        "n": 207,
-       "rho_modello": 0.7249693980506491,
+       "rho_modello": 0.7390934787660607,
        "rho_rivale": 0.7024708549653593,
-       "diff_lo": -0.0159017949217625,
-       "diff_hi": 0.060279963837371886,
+       "diff_lo": -0.005438579786896191,
+       "diff_hi": 0.07897383483812243,
        "batte": false
       },
       "minuti": {
        "n": 207,
-       "rho_modello": 0.7249693980506491,
+       "rho_modello": 0.7390934787660607,
        "rho_rivale": -0.03641542989824319,
-       "diff_lo": 0.6364106964638312,
-       "diff_hi": 0.8828701076061636,
+       "diff_lo": 0.6496125535813985,
+       "diff_hi": 0.8966072240817875,
        "batte": true
       }
      },
      "sottovalutati": {
       "n": 53,
-      "rho_modello": 0.7277858409933882,
+      "rho_modello": 0.7015803902596356,
       "rho_rivale": 0.6590872439929044,
-      "diff_lo": -0.026016298230729838,
-      "diff_hi": 0.1603874482717956,
+      "diff_lo": -0.05908956064705052,
+      "diff_hi": 0.14164504756157495,
       "batte": false,
       "rivale": "output grezzo",
       "gruppo_minuti": [
@@ -776,7 +740,7 @@
       "eta_massima": 25
      },
      "forbice": {
-      "copertura": 0.7439613526570048,
+      "copertura": 0.748792270531401,
       "mostra": true
      },
      "mostra_previsione": false,

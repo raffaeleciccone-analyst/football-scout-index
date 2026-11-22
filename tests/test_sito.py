@@ -125,3 +125,17 @@ def test_c28_non_scrive_nelle_cartelle_dei_siti(con):
     for vietata in (Path(r"C:\dev\serie-a-index"), Path(r"C:\dev\premier-league-index") / "sotto"):
         with pytest.raises(ValueError, match="cartella di un sito"):
             sito.genera(con, vietata, {"serie_a": "2025-26"}, prev, esclusi, _verdetto(), stagione_prevista="2026-27")
+
+
+def test_c14_nel_sito_aggiornata_solo_se_provata_e_previsto_contro_reale(con, tmp_path):
+    prev, esclusi = _previsione(con)
+    agg = prev[["giocatore_id", "pred", "lo", "hi"]].assign(pred=0.5)
+    sito.genera(con, tmp_path / "si", {"serie_a": "2025-26"}, prev, esclusi, _verdetto(), stagione_prevista="2026-27",
+                aggiornate={"serie_a": {"giornata": 9, "valida": 5, "stagione": "2027-28", "prev": agg}})
+    d = _dati(tmp_path / "si")
+    g = d["giocatori"][str(int(agg.iloc[0]["giocatore_id"]))]
+    assert d["aggiornata"]["valida"] == 5 and g["aggiornata"]["pred"] == 0.5
+    sito.genera(con, tmp_path / "no", {"serie_a": "2025-26"}, prev, esclusi, _verdetto(), stagione_prevista="2026-27",
+                aggiornate={"serie_a": {"giornata": 4, "valida": None, "stagione": "2027-28", "prev": None}})
+    d = _dati(tmp_path / "no")
+    assert d["aggiornata"]["valida"] is None and not any("aggiornata" in g for g in d["giocatori"].values())

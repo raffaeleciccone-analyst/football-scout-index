@@ -235,3 +235,20 @@ def test_c13_la_prova_vera_e_a_finestra_mobile(riassunta):
     assert set(v["per_stagione"]) >= {"2023-24 -> 2024-25", "2024-25 -> 2025-26"}
     for x in v["leghe"].values():
         assert x["mostra_previsione"] == x["rivali"]["grezzo"]["batte"]
+
+
+# ---- C14: la previsione aggiornata nel sito ----
+def test_c14_aggiornata_solo_se_il_punto_di_controllo_ha_passato(vero):
+    assert P.aggiornata(vero, "serie_a", "2026-27", 9, {5: False, 10: True}) is None      # a 9 vale il 5: non passato
+    agg = P.aggiornata(vero, "serie_a", "2026-27", 9, {5: True, 10: False})
+    assert agg is not None and len(agg) > 50 and {"giocatore_id", "pred", "lo", "hi"} <= set(agg.columns)
+
+
+def test_c14_aggiornata_non_vede_le_giornate_dopo(vero):
+    prima = P.aggiornata(vero, "serie_a", "2026-27", 5, {5: True})
+    vero.execute("SAVEPOINT s")
+    vero.execute("UPDATE righe SET xa = xa + 1 WHERE stagione = '2026-27' AND partita_id IN "
+                 "(SELECT partita_id FROM partite WHERE stagione = '2026-27' AND giornata > 5)")
+    dopo = P.aggiornata(vero, "serie_a", "2026-27", 5, {5: True})
+    vero.execute("ROLLBACK TO s")
+    pd.testing.assert_frame_equal(prima, dopo)
