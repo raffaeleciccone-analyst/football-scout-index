@@ -64,3 +64,10 @@ CONTESTO_PICCOLO = 8                      # C3c: sotto le 8 partite un contesto 
 # ---- Assistente (SPEC F17) ----
 import os as _os
 ASSISTENTE_URL = _os.environ.get("FSI_ASSISTENTE_URL", "")   # vuoto: la chat non compare (es. finché il Worker non c'è)
+
+# ---- Pubblicazione (SPEC F21, F24) ----
+ARCHIVIO = RADICE / "archivio"
+STATO_PUBBLICAZIONE = RADICE / "dati" / "stato_pubblicazione.json"
+# lega (o "home") -> cartella del repository del sito. VUOTA fino al cambio: si riempie solo con il via libera
+# dell'utente (F24, V5, C28). Finché è vuota la pubblicazione si ferma prima di andare online.
+DESTINAZIONE_SITI = {}

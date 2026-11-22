@@ -245,7 +245,11 @@ football-scout-index/
         Da provare dal vivo quando Understat torna: `scarica` (soccerdata) e la **giornata** (oggi ricavata
         dall'ordine delle partite della squadra di casa: `shortcut`, il vecchio usava il calendario ufficiale).
       - C27: il ponte fa solo SELECT sul MySQL vecchio (test sul codice).
-- [ ] **6. Pubblicazione** (C28-C29), spenta fino al cambio.
+- [x] **6. Pubblicazione** (C28-C29) 22/11, 19 test. `fsi/pubblica.py` + `sentinella.bat`, **spenta fino al cambio**:
+      non è registrata come attività pianificata e `DESTINAZIONE_SITI` è vuota (il giro si ferma prima di andare online).
+      Passi: raccolta → dati → archivio → calcolo → sito → verifica → online. Regole A1-A15 riscritte come funzioni
+      piccole, ognuna con il suo test. Telegram dalle variabili `TELEGRAM_TOKEN` / `TELEGRAM_CHAT` (da copiare a mano
+      dal motore vecchio al cambio). Prova dal vivo `python -m fsi.pubblica --stato`: "Understat manutenzione" per tutte e due.
 - [ ] **7. Quando Understat torna**: raccolta dal vivo, scarico 2023-24, prova vera, Juventus-Parma reimportata,
       confronto finale (F24) → **tuo via libera** → cambio.
 

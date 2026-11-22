@@ -106,7 +106,7 @@ const ADATTATORI = {
     const r = await postJson(deps.fetch, `${env.BASE_URL || "http://127.0.0.1:11434"}/api/chat`, {},
       { model: env.MODEL, stream: false, options: { num_ctx: parseInt(env.CONTESTO || "8192", 10) },   // i dati non entrano nei 2.048 di serie
         messages: [{ role: "system", content: sistema }, { role: "user", content: domanda }] });
-    return r.message.content;
+    return r.message.content.replace(/<think>[\s\S]*?<\/think>/g, "").trim();   // i modelli che "ragionano" (deepseek-r1)
   },
 };
 export async function chiamaModello(env, sistema, domanda, deps = {}) {

@@ -190,22 +190,32 @@ def genera(con, cartella, stagioni_tpi, prev, esclusi, verdetto, verdetto_costru
     return cartella
 
 
-if __name__ == "__main__":
-    import sys
-    con = db.apri()
+def costruisci(con, stagione_tpi="2026-27", stagione_prevista="2026-27"):
+    """Il sito vero: TPI della stagione in corso, previsione di agosto (scritta una volta), previsione aggiornata."""
     verdetto = json.loads((C.RADICE / "prove" / "vera_2024-25_2025-26.json").read_text(encoding="utf-8"))
+    a = int(stagione_prevista[:4]) - 1
+    base = f"{a}-{str(a + 1)[2:]}"
     mod = P.stima(pd.concat([P.tabella(con, *c) for c in P.COPPIE], ignore_index=True), contesti=False)
-    prev, esclusi = P.prevedi(con, mod, "2025-26")
+    prev, esclusi = P.prevedi(con, mod, base)
     # la previsione di agosto si scrive una volta (C14): se c'è già, vince il file
-    agosto = P.salva_agosto(prev, "2026-27", C.RADICE / "previsioni")
+    agosto = P.salva_agosto(prev, stagione_prevista, C.RADICE / "previsioni")
     prev = pd.read_json(agosto, orient="records")
     # previsione aggiornata: vale la prova dell'ultimo punto di controllo raggiunto (prototipo, PIANO §2c)
     prove = json.loads((C.RADICE / "prove" / "prototipo_2024-25_2025-26.json").read_text(encoding="utf-8"))["aggiornata"]
+    dopo = P._stagione_dopo(stagione_prevista)
     aggiornate = {}
     for lega in C.LEGHE:
-        giornata = con.execute("SELECT MAX(giornata) FROM partite WHERE lega = ? AND stagione = '2026-27'", (lega,)).fetchone()[0]
+        giornata = con.execute("SELECT MAX(giornata) FROM partite WHERE lega = ? AND stagione = ?",
+                               (lega, stagione_prevista)).fetchone()[0]
+        if not giornata:
+            continue
         esiti = {int(k): x["leghe"][lega]["rivali"]["grezzo"]["batte"] for k, x in prove.items()}
-        aggiornate[lega] = {"giornata": giornata, "valida": P.giornata_valida(esiti, giornata), "stagione": "2027-28",
-                            "prev": P.aggiornata(con, lega, "2026-27", giornata, esiti)}
-    print(genera(con, C.USCITA, {"serie_a": "2026-27", "premier": "2026-27"}, prev, esclusi, verdetto["output"],
-                 verdetto.get("buildup"), stagione_prevista="2026-27", aggiornate=aggiornate), file=sys.stderr)
+        aggiornate[lega] = {"giornata": giornata, "valida": P.giornata_valida(esiti, giornata), "stagione": dopo,
+                            "prev": P.aggiornata(con, lega, stagione_prevista, giornata, esiti)}
+    return genera(con, C.USCITA, {lega: stagione_tpi for lega in C.LEGHE}, prev, esclusi, verdetto["output"],
+                  verdetto.get("buildup"), stagione_prevista=stagione_prevista, aggiornate=aggiornate)
+
+
+if __name__ == "__main__":
+    import sys
+    print(costruisci(db.apri()), file=sys.stderr)
