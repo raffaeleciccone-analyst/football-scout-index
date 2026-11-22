@@ -5,9 +5,9 @@ compatibility_date = "2026-10-01"
 compatibility_flags = ["nodejs_compat"]
 
 [vars]
-# Fornitore: anthropic | openai | gemini | ollama  — cambiarlo non richiede di toccare il codice (C23)
-PROVIDER = "anthropic"
-MODEL = "claude-opus-5-5"
+# Fornitore: anthropic | openai | groq | gemini | ollama  — cambiarlo non richiede di toccare il codice (C23)
+PROVIDER = "groq"                    # provato il 22/11: 30 domande su 30 nelle regole (prove/assistente_groq_*.json)
+MODEL = "openai/gpt-oss-120b"        # lo stesso di NLDA; piano gratuito: 8.000 token al minuto (circa 2 domande al minuto)
 # BASE_URL = ""                     # solo per indirizzi diversi da quello del fornitore (es. Ollama o OpenRouter)
 DATI_URL = "https://raffaeleciccone-analyst.github.io/football-scout-index"   # dove stanno i file assistente.json
 LIMITE_GIORNALIERO = "200"           # tetto di domande al giorno per tutto il sito (C24)

@@ -3,14 +3,304 @@
   "PROVIDER": "groq",
   "MODEL": "openai/gpt-oss-120b"
  },
- "ok": 1,
- "totale": 1,
+ "ok": 30,
+ "totale": 30,
  "esiti": [
   {
    "lega": "serie_a",
    "tipo": "numeri",
    "domanda": "Qual è la previsione di Lautaro Martínez per la prossima stagione?",
-   "risposta": "La previsione di Lautaro Martínez per la prossima stagione è **0,75** (forbice 0,62 – 0,89). Questa previsione non ha ancora passato la prova.",
+   "risposta": "La previsione per Lautaro Martínez è **0,75** (la previsione non ha ancora passato la prova).",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "Chi sono i giovani sottovalutati tra gli attaccanti?",
+   "risposta": "Ecco i giovani attaccanti indicati come **sottovalutati** (campo *sottovalutato*: true):\n\n| Nome | Squadra | Età | pred (previsione per 90') |\n|------|---------|-----|---------------------------|\n| Ange‑Yoan Bonny | Inter | 22 | 0.47 |\n| Alisson Santos | Napoli | 23 | 0.41 |\n| Thijs Dallinga | Bologna | 25 | 0.41 |\n| Jayden Addai | Como | 20 | 0.41 |\n| Kamaldeen Sulemana | Atalanta | 24 | 0.41 |\n| Cristian Volpato | Sassuolo | 22 | 0.39 |\n| Assane Diao | Como | 20 | 0.38 |\n| Jeff Ekhator | Genoa | 19 | 0.38 |\n| Daniel Maldini | Cagliari | 24 | 0.37 |\n\n**Nota:** le previsioni (colonna *pred*) **non hanno ancora passato la prova** (es. pred 0.47 contro statistica semplice 0.46). (conoscenza generale, non verificata)",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "Quanti minuti ha giocato Bonny la stagione scorsa?",
+   "risposta": "Bonny ha giocato 1112 minuti la stagione scorsa.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "Chi ha il TPI più alto tra i centrocampisti?",
+   "risposta": "Il centrocampista con il TPI più alto è **Adrien Rabiot** (AC Milan) con un TPI di **1.2**.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "Confronta Malen e Krstovic.",
+   "risposta": "**Confronto – Donyell Malen vs. Nikola Krstovic (Serie A)**  \n\n| Campo | Donyell Malen | Nikola Krstovic |\n|-------|---------------|-----------------|\n| Squadra | Roma | Atalanta |\n| Ruolo | ATT | ATT |\n| Età | 27 | 26 |\n| TPI (stagione in corso) | 1.36 | 1.34 |\n| Predizione per 90′ (2026‑27) | 0.62 * (non ancora superata) | 0.67 * (non ancora superata) |\n| Forbice 80 % (lo – hi) | 0.48 – 0.77 | 0.54 – 0.82 |\n| Rendimento per 90′ stagione precedente | 0.75 | 0.67 |\n| Minuti (stagione precedente) | 1 499 | 1 781 |\n\n\\* La previsione non ha ancora superato la prova (es. predizione 0.62 contro statistica semplice 0.75).  \n\n**Osservazioni brevi**  \n- Malen ha un TPI leggermente più alto (1.36 vs 1.34) ma la sua previsione è inferiore a quella di Krstovic.  \n- Krstovic ha giocato più minuti nella stagione precedente (1 781 vs 1 499) e la sua previsione è la più alta dei due, sebbene non ancora validata.  \n- Entrambi hanno mostrato buone prestazioni la scorsa stagione (0.75 per Malen, 0.67 per Krstovic).  ",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "Quanti anni ha Samardzic e che previsione ha?",
+   "risposta": "Lazar Samardzic ha 24 anni e la sua previsione è 0.42 (questa previsione non ha ancora passato la prova).",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "La previsione in Serie A è affidabile?",
+   "risposta": "Le previsioni per la Serie A non hanno ancora superato la prova, quindi non sono ancora completamente affidabili. (La lista dei giovani sottovalutati, invece, ha già superato la prova.)",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "Dammi tre difensori con la previsione più alta.",
+   "risposta": "Ecco i tre difensori con la previsione più alta (la previsione non ha ancora superato la prova):\n\n| Nome | Squadra | Ruolo | Età | Pred (previsione) | Forbice 80 % (lo‑hi) |\n|------|---------|-------|-----|-------------------|----------------------|\n| Federico Dimarco | Inter | DIF | 28 | 0.60 | 0.47 ‑ 0.74 |\n| Mergim Vojvoda | Udinese | DIF | 31 | 0.31 | 0.18 ‑ 0.46 |\n| Wesley | Roma | DIF | 22 | 0.26 | 0.13 ‑ 0.40 |",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "notizia",
+   "domanda": "Yildiz rinnova con la Juventus?",
+   "risposta": "Questo non è nei miei dati.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "notizia",
+   "domanda": "Chi comprerà il Milan a gennaio?",
+   "risposta": "Questo non è nei miei dati.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "generale",
+   "domanda": "Chi è più forte tra Barella e Pedri?",
+   "risposta": "Nicolò Barella (Inter) ha un TPI di 0.81, una previsione per 90′ di 0.35 (la previsione non ha ancora passato la prova) e nella stagione precedente ha registrato 0.39 con 2 561 minuti giocati. Pedri non è presente nei dati forniti, quindi non è possibile confrontarlo con Barella.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "What is Thuram's forecast?",
+   "risposta": "Marcus Thuram (Inter) – previsione per 90’ : **0.62** (forbice 80 % : 0.49 – 0.77).  \n*Questa previsione non ha ancora superato la prova.*",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "Which young players should a scout watch?",
+   "risposta": "Ecco i giovani segnalati come **sottovalutati** (hanno già superato il test di validazione):\n\n- **Lazar Samardzic** – Atalanta, CEN, 24 anni, pred 0.42 (forbice 0.28‑0.59)  \n- **Medon Berisha** – Lecce, CEN, 22 anni, pred 0.33 (forbice 0.18‑0.49)  \n- **Ange‑Yoan Bonny** – Inter, ATT, 22 anni, pred 0.47 (forbice 0.33‑0.63)  \n- **Alisson Santos** – Napoli, ATT, 23 anni, pred 0.41 (forbice 0.27‑0.58)  \n- **Thijs Dallinga** – Bologna, ATT, 25 anni, pred 0.41 (forbice 0.27‑0.58)  \n- **Jayden Addai** – Como, ATT, 20 anni, pred 0.41 (forbice 0.26‑0.58)  \n- **Kamaldeen Sulemana** – Atalanta, ATT, 24 anni, pred 0.41 (forbice 0.27‑0.57)  \n- **Cristian Volpato** – Sassuolo, ATT, 22 anni, pred 0.39 (forbice 0.26‑0.55)  \n- **Assane Diao** – Como, ATT, 20 anni, pred 0.38 (forbice 0.25‑0.55)  \n- **Jeff Ekhator** – Genoa, ATT, 19 anni, pred 0.38 (forbice 0.24‑0.54)  \n- **Daniel Maldini** – Cagliari, ATT, 24 anni, pred 0.37 (forbice 0.23‑0.54)  \n- **Devyne Rensch** – Roma, DIF, 23 anni, pred 0.20 (forbice 0.07‑0.36)  \n- **Alberto Moreno** – Como, DIF, 22 anni, pred 0.20 (forbice 0.07‑0.36)  ",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 2
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "notizia",
+   "domanda": "Is Lautaro injured right now?",
+   "risposta": "This is not in my data.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "Quale squadra ha più giocatori sottovalutati?",
+   "risposta": "Il club con il maggior numero di giocatori contrassegnati come **sottovalutati** è il **Como**, con tre giovani evidenziati.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "Qual è la previsione di Haaland?",
+   "risposta": "La previsione di Erling Haaland è **0.77**.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "Chi sono i tre attaccanti con la previsione più alta?",
+   "risposta": "I tre attaccanti con la previsione più alta sono:\n\n1. **Erling Haaland** – pred 0.77  \n2. **Bruno Fernandes** – pred 0.64  \n3. **Mathis Cherki** – pred 0.63",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "Quanto ha fatto Saka per 90 minuti la stagione scorsa?",
+   "risposta": "La sua prestazione per 90 minuti nella stagione scorsa è stata **0,58**.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "Bruno Fernandes migliorerà?",
+   "risposta": "**Bruno Fernandes** (Manchester United, ATT, 31 anni)  \n- **TPI**: 0.14  \n- **Previsione per 90’ (2026‑27)**: 0.64 ( intervallo 0.52 – 0.78 )  \n- **Rendimento stagione precedente**: 0.66 per 90’ (3 082 minuti)\n\nLa previsione è leggermente inferiore al valore della stagione scorsa, quindi non è atteso un miglioramento netto. (conoscenza generale, non verificata)",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 2
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "Qual è la forbice di Cherki?",
+   "risposta": "La forbice di Mathis Cherki è 0,50 – 0,78.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "Chi è il centrocampista con il TPI più alto?",
+   "risposta": "Il centrocampista con il TPI più alto è **Dominik Szoboszlai** (Liverpool), **tpi = 0.68**.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "La lista dei sottovalutati in Premier è affidabile?",
+   "risposta": "No, la lista dei giovani sottovalutati non è considerata affidabile.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 0
+  },
+  {
+   "lega": "premier",
+   "tipo": "notizia",
+   "domanda": "Salah lascia il Liverpool?",
+   "risposta": "Questo non è nei miei dati.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "premier",
+   "tipo": "notizia",
+   "domanda": "Who will Arsenal sign in January?",
+   "risposta": "Questo non è nei miei dati.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 0
+  },
+  {
+   "lega": "premier",
+   "tipo": "generale",
+   "domanda": "Is Haaland better than Mbappé?",
+   "risposta": "Questo non è nei miei dati.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "What is Haaland's forecast range?",
+   "risposta": "Haaland’s forecast range is 0.65 – 0.92.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 0
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "Give me two defenders with a high forecast.",
+   "risposta": "Here are two defenders with the highest forecasts in the data:\n\n| Player | Club | Forecast (pred) | 80 % range (lo – hi) |\n|--------|------|----------------|----------------------|\n| Pedro Neto | Chelsea | 0.43 | 0.31 – 0.58 |\n| Patrick Dorgu | Manchester United | 0.29 | 0.16 – 0.44 |",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "How old is Cherki and how many minutes did he play?",
+   "risposta": "Mathis Cherki ha 22 anni e ha giocato 1 792 minuti.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "Chi gioca nel Chelsea con la previsione più alta?",
+   "risposta": "Il giocatore del Chelsea con la previsione più alta è **João Pedro** (pred 0.59).",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 1
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "Quanto vale la previsione contro la statistica semplice in Premier?",
+   "risposta": "La previsione ha ottenuto 0,82, contro 0,78 per la statistica semplice.",
    "numeri_ok": true,
    "numeri_non_trovati": [],
    "notizia_ok": true,

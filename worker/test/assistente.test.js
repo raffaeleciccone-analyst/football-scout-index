@@ -32,6 +32,10 @@ test("C21 elenchi, conteggi e numeri nei nomi delle squadre non sono dati", () =
   assert.equal(verificaNumeri("Ecco tre attaccanti:\n1. Lautaro Martínez: 0,62\n2. Bonny: 0,47\nValenti gioca nel Parma Calcio 1913.", d).ok, true);
   assert.equal(verificaNumeri("Lautaro Martínez ha giocato 3087 minuti.", d).ok, false);   // minuti inventati
 });
+test("C21 migliaia con lo spazio e trattini tipografici", () => {
+  assert.equal(verificaNumeri("Lautaro Martínez ha giocato 2 600 minuti nella stagione 2026‑27.", DATI).ok, true);
+  assert.equal(verificaNumeri("Lautaro Martínez ha giocato 2 601 minuti.", DATI).ok, false);
+});
 test("F20 si mandano i nominati, i primi per ruolo e i giovani, non tutto", () => {
   const molti = { ...DATI, giocatori: Array.from({ length: 100 }, (_, i) => ({ nome: `Giocatore${i} Cognome${i}`, ruolo: "ATT", pred: i / 100 })) };
   molti.giocatori.push({ nome: "Zeta Rarissimo", ruolo: "DIF", pred: 0.01 });

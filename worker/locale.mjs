@@ -3,10 +3,13 @@
 // Poi rigenera il sito con FSI_ASSISTENTE_URL=http://127.0.0.1:8792/chat
 import { createServer } from "node:http";
 import { readFileSync } from "node:fs";
+import { homedir } from "node:os";
 import { rispondi } from "./src/assistente.js";
 
+// la chiave: dalla variabile API_KEY o da un file fuori dal progetto (CHIAVE_FILE), mai scritta qui
+const chiave = process.env.API_KEY || (process.env.CHIAVE_FILE ? readFileSync(process.env.CHIAVE_FILE.replace("~", homedir()), "utf8").trim() : undefined);
 const env = { PROVIDER: process.env.PROVIDER || "ollama", MODEL: process.env.MODEL || "qwen2.5:3b",
-              BASE_URL: process.env.BASE_URL, API_KEY: process.env.API_KEY };
+              BASE_URL: process.env.BASE_URL, API_KEY: chiave };
 const dati = async (lega) => JSON.parse(readFileSync(new URL(`../uscita/${lega}/assistente.json`, import.meta.url), "utf8"));
 const LEGHE = new Set(["serie_a", "premier"]);
 

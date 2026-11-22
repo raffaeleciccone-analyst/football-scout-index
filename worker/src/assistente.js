@@ -28,7 +28,7 @@ export function costruisciSistema(dati, domanda) {
     "3. Niente notizie: rinnovi, mercato, infortuni di oggi, voci. Rispondi: \"Questo non è nei miei dati.\"",
     `4. In questo campionato la previsione ${v.mostra_previsione ? "ha passato la prova" : "NON ha ancora passato la prova: dillo sempre quando citi una previsione"}`
       + ` (previsione ${v.mod} contro statistica semplice ${v.grezzo}). La lista dei giovani sottovalutati ${v.mostra_sottovalutati ? "ha passato la prova" : "non ha passato la prova: non presentarla come affidabile"}.`,
-    "5. Rispondi nella lingua della domanda, in modo breve e semplice.",
+    "5. Rispondi nella lingua della domanda, in modo breve e semplice, in testo normale: niente tabelle, grassetti o simboli di formattazione (la chat del sito li mostrerebbe come sono).",
     "",
     "Campi: nome, squadra, ruolo (ATT/CEN/DIF), eta, tpi (stagione in corso), pred (previsione per 90'), lo/hi (forbice all'80%),",
     "prima (rendimento per 90' la stagione prima), minuti (la stagione prima), sottovalutato (giovane con pochi minuti, previsione alta).",
@@ -48,23 +48,28 @@ const squadre = (dati) => [...new Set(dati.giocatori.map((g) => g.squadra).filte
   .map((s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
 const CONTEGGI = Array.from({ length: 10 }, (_, i) => i + 1);   // "tre difensori", "i primi 5": conteggi, non dati
 
-// Frase per frase: se la frase nomina dei giocatori, i suoi numeri devono essere i loro (o del verdetto, o del
-// metodo); se non ne nomina, basta che esistano nei dati. Così un numero attribuito al giocatore sbagliato si vede.
+// Se una frase nomina dei giocatori, i suoi numeri devono essere di giocatori nominati nella risposta (o del verdetto,
+// o del metodo); se non ne nomina, basta che esistano nei dati. Il numero di un giocatore mai nominato si vede.
 export function verificaNumeri(testo, dati) {
   const comuni = valori(dati.verdetto || {}).concat(NUMERI_DEL_METODO, CONTEGGI);
   const tutti = valori(dati).concat(NUMERI_DEL_METODO, CONTEGGI);
   const inventati = [];
-  for (const frase of testo.split(/(?<=[.!?;\n])\s+/)) {
-    const chi = nominati(dati, frase);
-    const ammessi = chi.length ? valori(chi).concat(comuni) : tutti;
+  const normale = testo
+    .replace(/[‐-―−]/g, "-")                            // trattini tipografici (2026‑27) come trattino normale
+    .replace(/(\d)[    ](?=\d{3}\b)/g, "$1");            // migliaia con lo spazio (2 561 minuti) come 2561
+  // i giocatori nominati nella risposta: nei confronti ("1 781 vs 1 499") una frase cita i numeri di un altro già nominato
+  const nellaRisposta = valori(nominati(dati, normale)).concat(comuni);
+  for (const frase of normale.split(/(?<=[.!?;\n])\s+/)) {
+    const ammessi = nominati(dati, frase).length ? nellaRisposta : tutti;
     const pulita = frase
       .replace(/\b\d{4}[-/]\d{2,4}\b/g, " ")                          // le stagioni (2026-27) non sono dati da verificare
       .replace(/(^|\n)\s*\d{1,2}[.)]\s/g, "$1 ")                       // i numeri degli elenchi (1. 2. 3.)
       .replace(new RegExp(squadre(dati).join("|") || "$^", "g"), " ");  // numeri dentro i nomi (Parma Calcio 1913)
-    for (const m of pulita.matchAll(/-?\d+(?:[.,]\d+)?/g)) {
+    // senza segno: in "0,47 - 0,59" il trattino è una forbice, non un meno
+    for (const m of pulita.matchAll(/\d+(?:[.,]\d+)?/g)) {
       const scritto = m[0], x = parseFloat(scritto.replace(",", ".")), dec = (scritto.split(/[.,]/)[1] || "").length;
       const c = 10 ** dec;
-      if (!ammessi.some((v) => Math.round(v * c) / c === x || (dec === 0 && Math.floor(v) === x))) inventati.push(scritto);
+      if (!ammessi.some((v) => Math.round(Math.abs(v) * c) / c === x || (dec === 0 && Math.floor(Math.abs(v)) === x))) inventati.push(scritto);
     }
   }
   return { ok: inventati.length === 0, inventati };
