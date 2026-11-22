@@ -228,7 +228,16 @@ football-scout-index/
       - Rapporto leggibile: `test.bat` → `uscita/rapporto_test.txt` nel Blocco note.
 - [ ] **3. Sito** (C17-C20) in `uscita/`, te lo apro in locale.
 - [ ] **4. Assistente** (C21-C24).
-- [ ] **5. Controlli e raccolta** (C25-C27) sulle partite salvate.
+- [x] **5. Controlli e raccolta** (C25-C27) 22/11, 10 test.
+      - `controlli.py`: D1-D11 riscritte sullo schema nuovo (D3, D12 le garantiscono le chiavi; D8 non esiste più).
+        Nei dati veri l'unico difetto è quello noto, **Juventus-Parma 2026-27** (D10). **D13 precisata**: con la storia
+        di Transfermarkt un infortunio della stagione scorsa può essere ancora in corso (Fabianski 430 giorni,
+        Zinchenko 282): è un difetto solo se il giocatore ha giocato dopo l'inizio.
+      - `raccolta.py`: legge i JSON di Understat salvati da soccerdata; rigori tolti dai tiri. Sulle 170 partite
+        salvate ridà le righe del database di oggi (5.293 righe; scarti solo da arrotondamento del vecchio).
+        Da provare dal vivo quando Understat torna: `scarica` (soccerdata) e la **giornata** (oggi ricavata
+        dall'ordine delle partite della squadra di casa: `shortcut`, il vecchio usava il calendario ufficiale).
+      - C27: il ponte fa solo SELECT sul MySQL vecchio (test sul codice).
 - [ ] **6. Pubblicazione** (C28-C29), spenta fino al cambio.
 - [ ] **7. Quando Understat torna**: raccolta dal vivo, scarico 2023-24, prova vera, Juventus-Parma reimportata,
       confronto finale (F24) → **tuo via libera** → cambio.
