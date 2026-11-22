@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title data-t="nome_progetto" data-v="{}">Football Scout Index</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="stile.css">
+</head>
+<body data-pagina="home">
+<header class="top"><div class="wrap">
+  <a class="marchio" href="index.html"><span data-t="nome_progetto" data-v="{}">Football Scout Index</span></a>
+  
+  <div class="lingua" role="group" aria-label="IT / EN"><button type="button" data-lingua="it">IT</button><button type="button" data-lingua="en">EN</button></div>
+</div></header>
+
+<main>
+
+<section class="home-hero"><div class="wrap due-col">
+  <div>
+    <h1 data-t="home_titolo" data-v="{}">Il tuo osservatore per Serie A e Premier League.</h1>
+    <p class="sotto" data-t="home_sottotitolo" data-v="{}">Chi sta andando forte ora, chi andrà forte dopo, e i giovani che quasi nessuno guarda.</p>
+    <div class="cerca">
+      <label for="cerca" class="nascosto"><span data-t="home_cerca_label" data-v="{}">Cerca un giocatore</span></label>
+      <input id="cerca" type="search" list="nomi" autocomplete="off" data-tp="cerca_segnaposto">
+      <datalist id="nomi"></datalist>
+    </div>
+  </div>
+  <div class="porte">
+  
+  
+  <article class="porta no">
+    <h2 data-t="lega_serie_a" data-v="{}">Serie A</h2>
+    <div class="mini"><span class="m"><span data-n="0.754" data-dec="2">0,75</span></span> <span class="t">– <span data-n="0.738" data-dec="2">0,74</span></span><small data-t="lab_mini" data-v="{}">previsione – statistica semplice</small></div>
+    <p class="esito-porta"><span class="tag" data-t="tag_non_ancora" data-v="{}">NON ANCORA</span> <span data-t="porta_non_mostra" data-v="{}">si mostra la statistica semplice</span>, <span data-t="porta_con_giovani" data-v="{}">con i giovani da seguire</span></p>
+    <a class="entra" href="../serie_a/index.html"><span data-t="entra" data-v="{&#34;lega&#34;: &#34;Serie A&#34;}">Entra nella Serie A</span></a>
+  </article>
+  
+  
+  <article class="porta ">
+    <h2 data-t="lega_premier" data-v="{}">Premier League</h2>
+    <div class="mini"><span class="m"><span data-n="0.818" data-dec="2">0,82</span></span> <span class="t">– <span data-n="0.775" data-dec="2">0,78</span></span><small data-t="lab_mini" data-v="{}">previsione – statistica semplice</small></div>
+    <p class="esito-porta"><span class="tag" data-t="tag_vince" data-v="{}">VINCE</span> <span data-t="porta_mostra" data-v="{}">la previsione si mostra</span></p>
+    <a class="entra" href="../premier/index.html"><span data-t="entra" data-v="{&#34;lega&#34;: &#34;Premier League&#34;}">Entra nella Premier League</span></a>
+  </article>
+  
+  </div>
+</div></section>
+
+
+<section class="home-blocco chiaro"><div class="wrap">
+  <h2 data-t="home_sv_titolo" data-v="{&#34;lega&#34;: &#34;Serie A&#34;}">Da seguire in Serie A</h2>
+  <p data-t="home_sv_spiega" data-v="{&#34;eta&#34;: 25}">Giovani fino a 25 anni che hanno giocato poco ma che la previsione dà alti. Qui la lista ha passato la prova.</p>
+  <div class="carte" id="home-sv" data-lega="serie_a"></div>
+  <a class="entra" href="../serie_a/index.html#da-seguire"><span data-t="home_sv_tutti" data-v="{&#34;lega&#34;: &#34;Serie A&#34;}">Tutti i giovani da seguire in Serie A</span></a>
+</div></section>
+
+
+<section class="home-blocco"><div class="wrap">
+  <h2 data-t="home_top_titolo" data-v="{&#34;lega&#34;: &#34;Premier League&#34;}">I più alti previsti in Premier League</h2>
+  <p data-t="home_top_spiega" data-v="{&#34;stagione&#34;: &#34;2026-27&#34;}">Gol senza rigori + assist attesi ogni 90 minuti previsti per la stagione 2026-27.</p>
+  <div class="carte" id="home-top" data-lega="premier"></div>
+  <a class="entra" href="../premier/index.html#formazione"><span data-t="home_top_tutti" data-v="{&#34;lega&#34;: &#34;Premier League&#34;}">Tutte le previsioni della Premier League</span></a>
+</div></section>
+
+<section class="home-blocco chiaro"><div class="wrap">
+  <h2 data-t="come_titolo" data-v="{}">Come funziona</h2>
+  <div class="passi">
+    <div class="passo"><h3 data-t="passo1_t" data-v="{}">Descriviamo</h3><p data-t="passo1_s" data-v="{}">Il TPI dice chi sta incidendo di più in attacco in questa stagione, ruolo per ruolo.</p></div>
+    <div class="passo"><h3 data-t="passo2_t" data-v="{}">Prevediamo</h3><p data-t="passo2_s" data-v="{}">La previsione dice quanto renderà ogni giocatore la stagione dopo, con una forbice di incertezza.</p></div>
+    <div class="passo"><h3 data-t="passo3_t" data-v="{}">Mostriamo solo se batte</h3><p data-t="passo3_s" data-v="{}">La proviamo su stagioni che il modello non aveva mai visto: se non batte la statistica semplice, non la mostriamo.</p></div>
+  </div>
+  <a class="entra" href="../serie_a/metodo.html"><span data-t="come_link" data-v="{}">Leggi come facciamo la prova</span></a>
+</div></section>
+
+</main>
+<footer class="piede"><div class="wrap"><p data-t="piede" data-v="{}">Dati: Understat (partite) e Transfermarkt (infortuni). Ogni numero del sito è calcolato dai dati, nessuno è scritto a mano.</p></div></footer>
+<script src="testi.js"></script>
+<script src="dati.js"></script>
+<script src="sito.js"></script>
+</body>
+</html>
