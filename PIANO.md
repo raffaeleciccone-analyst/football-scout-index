@@ -200,7 +200,11 @@ football-scout-index/
       dall'archivio), prova su 2024-25 → 2025-26, mai vista dalla stima.
       - output: **batte l'output grezzo in tutti e due i campionati** — Serie A 0,744 contro 0,705 (intervallo
         +0,016…+0,065), Premier 0,803 contro 0,758 (+0,018…+0,075). Batte minuti, TPI, TPI Pro. Forbice ok (76-79%).
-      - sottovalutati (crescita): **non batte** la regressione verso la media in nessuna lega → la lista non si mostra.
+      - sottovalutati, prima definizione (crescita): non batteva la regressione verso la media → *ridefiniti il 22/11*
+        (SPEC U2, F3, F3b, C10): **forti ma poco considerati** = previsione più alta fra chi ha 450'-1499', provata
+        solo su quel gruppo contro l'output grezzo. Serie A **batte** (62 giocatori: 0,686 contro 0,579, +0,052…+0,166)
+        → lista mostrata; Premier **no** (47 giocatori: 0,709 contro 0,631, intervallo −0,026…+0,199: troppo pochi).
+        La vecchia idea resta come descrizione: "sfortunati sotto porta" (xG − gol per 90).
       - costruzione: **non batte** il grezzo → non si mostra.
       - di cosa è fatto: quasi solo xG+xA e gol+xA "tirati" verso la media del ruolo (K = 1000'); età, minuti,
         ruolo pesano pochissimo; tendenza a zero (la 2023-24 non ce l'ha). Il guadagno viene dall'usare gli xG

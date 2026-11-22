@@ -16,9 +16,9 @@ Si riscrive **tutto da zero**, pulito, in una repository nuova.
 - U1. **Vetrina per i colloqui**: un selezionatore apre il sito e vede un metodo onesto:
   cosa descrivo, cosa prevedo, e la prova che la previsione batte la statistica semplice (o che non la batte).
   Conta il rigore più del numero.
-- U2. **Scouting**: uno scout cerca giocatori **sottovalutati**, cioè quelli che faranno meglio di quanto
-  dicono oggi i loro numeri. (Per questo la regola dura "batti l'output grezzo" è il cuore: se non lo batti,
-  non hai trovato nessun sottovalutato.)
+- U2. **Scouting**: uno scout cerca giocatori **sottovalutati**, cioè **forti ma poco considerati**: la previsione
+  dice che renderanno bene, ma oggi giocano poco. *(precisato il 22/11 dopo la prova vera: prima era "faranno
+  meglio dei loro numeri di oggi", che misura solo il ritorno verso la media.)*
 
 ## Cosa fa
 
@@ -37,9 +37,13 @@ Si riscrive **tutto da zero**, pulito, in una repository nuova.
 - F2. **Previsione del rendimento per 90 della stagione dopo** (obiettivo principale): gol senza rigori + xA
   ogni 90 minuti. Esempio: oggi 0,40 → "l'anno prossimo 0,45". Ingredienti grezzi (output per 90, età, minuti,
   tendenza, infortuni...), **pesi stimati dai dati**, mai scelti a mano.
-- F3. **Crescita prevista** (la lettura per lo scout): previsione F2 meno il rendimento di oggi
-  (0,45 − 0,40 = +0,05). I sottovalutati sono quelli con la crescita prevista più alta. Viene da F2, non è
-  un secondo modello.
+- F3. **Sottovalutati** (la lettura per lo scout, decisione del 22/11): fra chi ha giocato **poco** (da 450' a
+  meno di 1500' ✱ nella stagione di partenza), i giocatori con il **rendimento previsto più alto** (F2), per ruolo.
+  Accanto, l'età (un giovane con pochi minuti è il caso tipico). Viene da F2, non è un secondo modello.
+- F3b. **Sfortunati sotto porta** (solo descrizione, mai previsione): chi ha avuto molti più xG che gol (xG senza
+  rigori − gol senza rigori, per 90). La pagina lo dice: "descrizione della stagione, non una previsione".
+  *(Il 22/11 si è misurato che la vecchia lista "crescita prevista" coincideva con questa idea e non batteva la
+  regressione verso la media: per questo diventa una descrizione.)*
 - F4. **Previsione della costruzione** per difensori e centrocampisti: xG buildup per 90 della stagione dopo
   (e la sua crescita).
 - F5. **Classifiche per ruolo**: un giocatore si confronta solo con quelli del suo ruolo.
@@ -129,8 +133,11 @@ Ogni criterio diventa almeno un test. ✱ = soglie proposte da me.
   reale supera quella del rivale, e l'intervallo bootstrap al 90% della differenza sta tutto sopra zero.
 - C9. **F2 e F4**: rivale = il dato grezzo della stagione prima (output per 90 / buildup per 90). Se un modello
   finto che copia il grezzo viene messo alla prova → "non batte", e la pagina mostra il grezzo con quella scritta.
-- C10. ✱ **F3 (crescita)**: rivale = regressione verso la media del ruolo (quota stimata sui dati). Se non batte →
-  la lista "sottovalutati" non si mostra e la pagina dice perché.
+- C10. **F3 (sottovalutati)**: la prova si fa **solo sul gruppo con pochi minuti** (450'-1499' nella stagione di
+  partenza): lì la previsione deve battere l'output grezzo (come C8). Se non batte → la lista non si mostra e la
+  pagina dice perché. Un giocatore con 1500' non entra mai nella lista.
+- C10b. **F3b**: la lista è ordinata per (xG senza rigori − gol senza rigori) per 90, solo chi ha i 450'; ogni
+  pagina che la mostra ha la scritta "descrizione, non previsione".
 - C11. ✱ **Forbice all'80%**: sulla stagione di prova, fra il 70% e il 90% dei giocatori finisce dentro la sua
   forbice; altrimenti la forbice non si mostra.
 - C12. La pagina del metodo mostra, sugli stessi giocatori e stessa stagione: modello, output grezzo, minuti,

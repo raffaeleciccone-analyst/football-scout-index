@@ -57,14 +57,18 @@
       "batte": true
      }
     },
-    "crescita": {
-     "n": 214,
-     "rho_modello": 0.47192496426067815,
-     "rho_rivale": 0.5023776215213471,
-     "diff_lo": -0.07838964310212468,
-     "diff_hi": 0.017484115740662037,
+    "sottovalutati": {
+     "n": 47,
+     "rho_modello": 0.7086031452358926,
+     "rho_rivale": 0.6305108267790408,
+     "diff_lo": -0.026181596611504338,
+     "diff_hi": 0.19907834014920447,
      "batte": false,
-     "rivale": "regressione verso la media"
+     "rivale": "output grezzo",
+     "gruppo_minuti": [
+      450,
+      1500
+     ]
     },
     "forbice": {
      "copertura": 0.7616822429906542,
@@ -109,21 +113,25 @@
       "batte": true
      }
     },
-    "crescita": {
-     "n": 210,
-     "rho_modello": 0.5324299546798923,
-     "rho_rivale": 0.48353477403115713,
-     "diff_lo": -0.003946988953690635,
-     "diff_hi": 0.10449043915037676,
-     "batte": false,
-     "rivale": "regressione verso la media"
+    "sottovalutati": {
+     "n": 62,
+     "rho_modello": 0.686384125305331,
+     "rho_rivale": 0.5788068797058749,
+     "diff_lo": 0.0519826909251443,
+     "diff_hi": 0.16563439873358757,
+     "batte": true,
+     "rivale": "output grezzo",
+     "gruppo_minuti": [
+      450,
+      1500
+     ]
     },
     "forbice": {
      "copertura": 0.7857142857142857,
      "mostra": true
     },
     "mostra_previsione": true,
-    "mostra_sottovalutati": false
+    "mostra_sottovalutati": true
    }
   }
  },

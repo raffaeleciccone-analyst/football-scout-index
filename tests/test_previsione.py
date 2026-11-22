@@ -106,10 +106,27 @@ def test_c09_la_regola_dura_decide_cosa_si_mostra(verdetto):
         assert v["mostra_previsione"] == v["rivali"]["grezzo"]["batte"], lega
 
 
-def test_c10_sottovalutati_solo_se_batte_la_regressione_verso_la_media(verdetto):
+def test_c10_sottovalutati_provati_solo_su_chi_gioca_poco(verdetto):
     for v in verdetto["leghe"].values():
-        assert v["mostra_sottovalutati"] == v["crescita"]["batte"]
-        assert v["crescita"]["rivale"] == "regressione verso la media"
+        s = v["sottovalutati"]
+        assert s["gruppo_minuti"] == [config.SOGLIA_PREVISIONE, config.MINUTI_POCO_CONSIDERATO]
+        assert v["mostra_sottovalutati"] == s["batte"] and s["rivale"] == "output grezzo"
+        assert 0 < s["n"] < v["n"]
+
+
+def test_c10_con_1500_minuti_non_e_mai_sottovalutato():
+    prev = pd.DataFrame({"giocatore_id": [1, 2, 3], "lega": "serie_a", "ruolo": "ATT",
+                         "minuti": [1499, 1500, 600], "pred": [0.5, 0.9, 0.4]})
+    assert list(P.sottovalutati(prev)["giocatore_id"]) == [1, 3]
+
+
+def test_c10b_sfortunati_ordinati_per_xg_meno_gol_e_dichiarati_descrizione():
+    prev = pd.DataFrame({"giocatore_id": [1, 2], "lega": "serie_a", "ruolo": "ATT", "minuti": [900, 900],
+                         "out90": [0.30, 0.20], "xgxa90": [0.35, 0.45]})
+    s = P.sfortunati(prev)
+    assert list(s["giocatore_id"]) == [2, 1]
+    assert s["sfortuna90"].tolist() == pytest.approx([0.25, 0.05])
+    assert (s["nota"] == "descrizione, non previsione").all()
 
 
 # ---- C11: forbice all'80% ----

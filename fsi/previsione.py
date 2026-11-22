@@ -246,7 +246,7 @@ def _tpi_pro(base):
 
 
 def _valuta(tab, previsioni, base, misura, fino_a_giornata) -> dict:
-    """Verdetto per lega: rivali (C8, C12), crescita (C10), forbice (C11), cosa si mostra (C9)."""
+    """Verdetto per lega: rivali (C8, C12), sottovalutati (C10), forbice (C11), cosa si mostra (C9)."""
     ev = (tab["min_dopo"] >= C.MINUTI_METRO) & tab["y"].notna()
     t = tab[ev].join(previsioni).merge(_tpi_pro(base), on=["lega", "giocatore_id"], how="left")
     grezzo = "out90" if misura == "output" else "buildup90"
@@ -259,12 +259,13 @@ def _valuta(tab, previsioni, base, misura, fino_a_giornata) -> dict:
         for nome, col in rivali.items():
             s = b[b[col].notna()]
             v["rivali"][nome] = batte(s["pred"], s[col], s["y"])
-        v["crescita"] = batte(b["pred"] - b[grezzo], b["rm"] - b[grezzo], b["y"] - b[grezzo])
-        v["crescita"]["rivale"] = "regressione verso la media"
+        poco = b[(b["minuti"] >= C.SOGLIA_PREVISIONE) & (b["minuti"] < C.MINUTI_POCO_CONSIDERATO)]
+        v["sottovalutati"] = batte(poco["pred"], poco[grezzo], poco["y"]) | {
+            "rivale": "output grezzo", "gruppo_minuti": [C.SOGLIA_PREVISIONE, C.MINUTI_POCO_CONSIDERATO]}
         cop = copertura(b["y"], b["lo"], b["hi"])
         v["forbice"] = {"copertura": cop, "mostra": mostra_forbice(cop)}
         v["mostra_previsione"] = v["rivali"]["grezzo"]["batte"]
-        v["mostra_sottovalutati"] = v["crescita"]["batte"]
+        v["mostra_sottovalutati"] = v["sottovalutati"]["batte"]
         leghe[lega] = v
     return leghe
 
@@ -313,8 +314,7 @@ def prevedi(con, mod, base):
         parti.append(ok)
         esclusi.append(fuori)
     t = pd.concat(parti, ignore_index=True)
-    p = t[["giocatore_id", "lega", "ruolo", "minuti", "out90"]].join(applica(mod, t))
-    p["crescita"] = p["pred"] - p["out90"]
+    p = t[["giocatore_id", "lega", "ruolo", "minuti", "eta", "out90", "xgxa90"]].join(applica(mod, t))
     p["posizione_ruolo"] = p.groupby(["lega", "ruolo"])["pred"].rank(ascending=False, method="first").astype(int)
     p = p.sort_values(["lega", "ruolo", "posizione_ruolo"]).reset_index(drop=True)
     in_base = {g for (g,) in con.execute("SELECT DISTINCT giocatore_id FROM righe WHERE stagione = ?", (base,))}
@@ -322,6 +322,18 @@ def prevedi(con, mod, base):
                         params=[_stagione_dopo(base)])
     nuovi = nuovi[~nuovi["giocatore_id"].isin(in_base)].assign(motivo="nessun dato nel campionato")
     return p, pd.concat(esclusi + [nuovi], ignore_index=True)
+
+
+def sottovalutati(prev) -> pd.DataFrame:
+    """F3: forti ma poco considerati = rendimento previsto più alto fra chi ha giocato da 450' a meno di 1500'."""
+    poco = prev[(prev["minuti"] >= C.SOGLIA_PREVISIONE) & (prev["minuti"] < C.MINUTI_POCO_CONSIDERATO)]
+    return poco.sort_values(["lega", "ruolo", "pred"], ascending=[True, True, False]).reset_index(drop=True)
+
+
+def sfortunati(prev) -> pd.DataFrame:
+    """F3b: più xG che gol (senza rigori), per 90. Descrizione della stagione, non una previsione."""
+    s = prev.assign(sfortuna90=prev["xgxa90"] - prev["out90"], nota="descrizione, non previsione")
+    return s.sort_values("sfortuna90", ascending=False, kind="mergesort").reset_index(drop=True)
 
 
 def salva_agosto(prev, stagione, cartella) -> Path:

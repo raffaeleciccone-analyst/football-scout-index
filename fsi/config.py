@@ -53,6 +53,7 @@ N_SQUADRE_FORTI = 6                       # "prime 6" e "difese più forti"
 
 # ---- Previsione (SPEC F2-F10) ----
 SOGLIA_PREVISIONE = 450                   # F7: minuti nella stagione di partenza
+MINUTI_POCO_CONSIDERATO = 1500           # F3: "sottovalutati" = da 450' a meno di 1500' nella stagione di partenza
 MINUTI_METRO = 900                        # rendimento reale misurabile solo da 900' nella stagione dopo (come V23)
 GRIGLIA_K = [0, 150, 300, 600, 1000, 1500, 2500, 4000]   # minuti di "media del ruolo" provati per il tiraggio
 COPERTURA_MIN, COPERTURA_MAX = 0.70, 0.90                 # C11: forbice all'80%
