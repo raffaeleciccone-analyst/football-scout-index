@@ -99,6 +99,16 @@ Tabelle (una riga = un fatto, la stagione è **sempre** una colonna, mai dedotta
   usarlo per prevedere vorrebbe dire sbirciare nel futuro (C4). Nel codice resta un commento
   `shortcut: niente valore di mercato, servono foto datate ad agosto; se le si salva per 2 stagioni, riprovare`.
 - **Costruzione (F4)**: stesso modello e stessa prova, con il buildup per 90 al posto dell'output, solo DIF e CEN.
+- *(fase 2, dettagli decisi scrivendo il codice)*
+  - **"Output grezzo"** = la stessa misura dell'obiettivo (gol senza rigori + xA per 90) nella stagione di partenza,
+    come nella V23. Fra gli ingredienti del modello c'è anche xG senza rigori + xA per 90 (più stabile dei gol).
+  - **Il rendimento reale** della stagione dopo si somma su Serie A e Premier (chi cambia campionato fra le due resta
+    nella prova: la chiave è l'id Understat).
+  - **Previsione aggiornata, finché manca la 2023-24**: alla giornata k gli ingredienti vengono dalla stagione in corso
+    tagliata a k (non c'è ancora la "stagione prima" completa da affiancare). La soglia dei 450' si riduce in
+    proporzione (450 × k / giornate) — `shortcut:` con la 2023-24 si affianca la stagione prima completa e la soglia
+    torna 450'.
+  - **Infortuni**: fuori dal modello in questo giro (nessun dato 2024-25, vedi §9b).
 
 ## 4. Sito (F11-F16, F19)
 - **Pagine statiche generate da Python**: i dati in JSON, l'HTML da modelli con jinja2 (già installato). Niente
@@ -172,7 +182,16 @@ football-scout-index/
 ## 9. Fasi
 - [x] **0. Scheletro** (22/11): repository git, schema SQLite, ponte dal MySQL, fixtures (grezzi 2025-26, rivali, cache).
 - [x] **1. TPI** (C1-C3b) 22/11: uguale alla fotografia (scarto ≤ 0,0009 anche sui 5 contesti); regola dei contesti in SPEC_CONTESTI.md; domande Q-C1, Q-C2 aperte.
-- [ ] **2. Previsione prototipo** (C4-C16) sulla coppia 24-25 → 25-26, marcata "prototipo". Primo verdetto: batte o no?
+- [x] **2. Previsione prototipo** (C4-C16) 22/11, 18 test. Verdetto in `prove/prototipo_2024-25_2025-26.json`
+      (prova a gruppi, una coppia: PROTOTIPO, NON VERIFICATO):
+      - output: Serie A **batte** l'output grezzo di un soffio (ρ 0,737 contro 0,705, intervallo 0,001…0,066);
+        Premier **no** per un pelo (0,790 contro 0,758, intervallo −0,000…0,067). Batte minuti, TPI e TPI Pro ovunque
+        (Premier: TPI 0,37, TPI Pro 0,33). Forbice ok (copre 77-78%).
+      - sottovalutati (crescita): Premier **batte** la regressione verso la media, Serie A no.
+      - costruzione (buildup): **non batte** il grezzo in nessuna lega → non si mostra.
+      - contesti: **scartati** dal modello (con 0,761, senza 0,763): "contro le big" non aiuta a prevedere.
+      - aggiornata: batte il grezzo presto (giornata 5: SA 0,63 contro 0,46; PL 0,70 contro 0,55), poi il margine sparisce
+        (Serie A non passa da giornata 10 in poi; Premier passa a 10, 15, 19, 30, non a 25).
 - [ ] **3. Sito** (C17-C20) in `uscita/`, te lo apro in locale.
 - [ ] **4. Assistente** (C21-C24).
 - [ ] **5. Controlli e raccolta** (C25-C27) sulle partite salvate.

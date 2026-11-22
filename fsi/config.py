@@ -50,3 +50,10 @@ DISP_PIENA, DISP_BASSA, DISP_PENALITA = 0.70, 0.30, 0.85   # C12b
 CONTESTI = ["totale", "casa", "trasferta", "vs_top6", "vs_forti"]
 CONTESTO_MIN_PRESENZE = 4                 # C13
 N_SQUADRE_FORTI = 6                       # "prime 6" e "difese più forti"
+
+# ---- Previsione (SPEC F2-F10) ----
+SOGLIA_PREVISIONE = 450                   # F7: minuti nella stagione di partenza
+MINUTI_METRO = 900                        # rendimento reale misurabile solo da 900' nella stagione dopo (come V23)
+GRIGLIA_K = [0, 150, 300, 600, 1000, 1500, 2500, 4000]   # minuti di "media del ruolo" provati per il tiraggio
+COPERTURA_MIN, COPERTURA_MAX = 0.70, 0.90                 # C11: forbice all'80%
+CONTROLLI_AGGIORNATA = [5, 10, 15, 19, 25, 30]            # F10: giornate in cui si prova la previsione aggiornata

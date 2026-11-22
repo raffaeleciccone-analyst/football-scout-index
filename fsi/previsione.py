@@ -1,0 +1,311 @@
+"""Previsione del rendimento della stagione dopo (SPEC F2-F10), con la sua prova onesta (C4-C16).
+
+Obiettivo: gol senza rigori + xA per 90 della stagione dopo (o xG buildup per 90 per DIF e CEN, F4).
+Pesi stimati dai dati (ridge), prova su giocatori mai visti nella stima. Finché c'è una sola coppia di stagioni la
+prova è "a gruppi" (5 gruppi di giocatori) e tutto è un prototipo (C13).
+"""
+import json
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+from scipy.stats import rankdata, spearmanr
+from sklearn.linear_model import RidgeCV
+from sklearn.model_selection import KFold
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+
+from fsi import config as C
+from fsi import db, tpi
+
+RIVALI_TPI_PRO = Path(__file__).resolve().parent.parent / "tests" / "fixtures" / "rivali_2024-25.csv"
+INGREDIENTI_MOTIVO = ["rendimento", "minuti", "eta", "tendenza", "contesti"]
+# shortcut: niente valore di mercato, servono foto datate ad agosto; se le si salva per 2 stagioni, riprovare.
+# shortcut: niente infortuni, la 2024-25 non ne ha (PIANO §9b); con la storia da Transfermarkt, riprovare.
+
+
+def _per90(righe, colonne):
+    return righe[colonne].sum(axis=1).groupby(righe["giocatore_id"]).sum()
+
+
+def ingredienti(con, lega, stagione, fino_a_giornata=None) -> pd.DataFrame:
+    """Gli ingredienti grezzi di ogni giocatore di movimento in una lega e stagione (fino alla giornata k)."""
+    r = db.righe(con, lega, stagione, fino_a_giornata)
+    r = r[r["minuti"] >= 1].sort_values(["giocatore_id", "giornata", "data"], kind="mergesort")
+    g = r.groupby("giocatore_id")
+    t = pd.DataFrame({"minuti": g["minuti"].sum(), "partite": g.size()})
+    t["out90"] = _per90(r, ["gol_senza_rigori", "xa"]) / t["minuti"] * 90
+    t["xgxa90"] = _per90(r, ["xg_senza_rigori", "xa"]) / t["minuti"] * 90
+    t["buildup90"] = g["xg_buildup"].sum() / t["minuti"] * 90
+
+    def tendenza(x):   # seconda metà delle sue partite meno la prima, in xG+xA per 90
+        if len(x) < 6:
+            return 0.0
+        a, b = x.iloc[: len(x) // 2], x.iloc[len(x) // 2:]
+        per90 = lambda p: (p["xg_senza_rigori"] + p["xa"]).sum() / p["minuti"].sum() * 90
+        return per90(b) - per90(a)
+    t["tendenza"] = g[["xg_senza_rigori", "xa", "minuti"]].apply(tendenza)
+
+    ruoli = pd.read_sql("SELECT giocatore_id, ruolo FROM ruoli WHERE lega = ? AND stagione = ?", con,
+                        params=[lega, stagione]).set_index("giocatore_id")["ruolo"]
+    t["ruolo"] = ruoli
+    t = t[t["ruolo"].isin(C.PESO_RUOLO)]                       # portieri e senza ruolo fuori
+    nascita = pd.read_sql("SELECT giocatore_id, data_nascita FROM giocatori", con).set_index("giocatore_id")
+    fine = pd.to_datetime(r["data"]).max()
+    t["eta"] = (fine - pd.to_datetime(nascita["data_nascita"].reindex(t.index), errors="coerce")).dt.days / 365.25
+
+    classifica, ctx = tpi._calcola(con, lega, stagione, fino_a_giornata)
+    t["tpi"] = classifica.set_index("giocatore_id")["tpi"]
+    piv = ctx.pivot(index="giocatore_id", columns="contesto", values="tpi")
+    t["ctx_top6"] = (piv["vs_top6"] - piv["totale"]).reindex(t.index).fillna(0.0)
+    t["ctx_casa"] = (piv["casa"] - piv["trasferta"]).reindex(t.index).fillna(0.0)
+    t.insert(0, "lega", lega)
+    return t.rename_axis("giocatore_id").reset_index().sort_values("giocatore_id").reset_index(drop=True)
+
+
+def ammessi(ingr, soglia):
+    """F7: almeno `soglia` minuti; gli altri escono con il motivo scritto."""
+    ok = ingr["minuti"] >= soglia
+    esclusi = ingr.loc[~ok, ["giocatore_id", "lega"]].assign(motivo="storia insufficiente")
+    return ingr[ok].copy(), esclusi
+
+
+def _soglia(con, lega, stagione, fino_a_giornata):
+    if fino_a_giornata is None:
+        return C.SOGLIA_PREVISIONE
+    giornate = con.execute("SELECT MAX(giornata) FROM partite WHERE lega = ? AND stagione = ?",
+                           (lega, stagione)).fetchone()[0]
+    return C.SOGLIA_PREVISIONE * fino_a_giornata / max(giornate, 38)
+
+
+def _reale(con, stagione):
+    """Rendimento reale di una stagione, sommando Serie A e Premier (la chiave è l'id Understat)."""
+    r = pd.read_sql("SELECT giocatore_id, minuti, gol_senza_rigori, xa, xg_buildup FROM righe "
+                    "WHERE stagione = ? AND minuti >= 1", con, params=[stagione])
+    g = r.groupby("giocatore_id")
+    m = g["minuti"].sum()
+    return pd.DataFrame({"min_dopo": m, "y_output": (g["gol_senza_rigori"].sum() + g["xa"].sum()) / m * 90,
+                         "y_buildup": g["xg_buildup"].sum() / m * 90})
+
+
+def tabella(con, base, dopo, fino_a_giornata=None, misura="output") -> pd.DataFrame:
+    parti = []
+    for lega in C.LEGHE:
+        ingr = ingredienti(con, lega, base, fino_a_giornata)
+        parti.append(ammessi(ingr, _soglia(con, lega, base, fino_a_giornata))[0])
+    t = pd.concat(parti, ignore_index=True).merge(_reale(con, dopo), left_on="giocatore_id", right_index=True,
+                                                  how="left")
+    t["y"] = t[f"y_{misura}"]
+    if misura == "buildup":
+        t = t[t["ruolo"].isin(["DIF", "CEN"])].reset_index(drop=True)
+    return t
+
+
+# ---------------------------------------------------------------- il modello
+def _gruppi(misura, contesti):
+    g = {"rendimento": ["out_t", "xgxa_t"] if misura == "output" else ["build_t"],
+         "minuti": ["log_minuti"], "eta": ["eta", "eta2", "eta_manca"], "tendenza": ["tendenza"],
+         "contesti": ["ctx_top6", "ctx_casa"] if contesti else []}
+    return g, [c for cols in g.values() for c in cols] + ["ruolo_CEN", "ruolo_DIF", "premier"]
+
+
+def _tirato(x, minuti, chiave, medie, k):
+    m = chiave.map(medie)
+    return (x * minuti + m * k) / (minuti + k)
+
+
+def _matrice(mod, t):
+    chiave = t["lega"] + "|" + t["ruolo"]
+    X = pd.DataFrame(index=t.index)
+    if mod["misura"] == "output":
+        X["out_t"] = _tirato(t["out90"], t["minuti"], chiave, mod["medie"]["out90"], mod["K"])
+        X["xgxa_t"] = _tirato(t["xgxa90"], t["minuti"], chiave, mod["medie"]["xgxa90"], mod["K"])
+    else:
+        X["build_t"] = _tirato(t["buildup90"], t["minuti"], chiave, mod["medie"]["buildup90"], mod["K"])
+    X["log_minuti"] = np.log(t["minuti"])
+    X["eta_manca"] = t["eta"].isna().astype(float)
+    X["eta"] = t["eta"].fillna(mod["eta_media"])
+    X["eta2"] = (X["eta"] - mod["eta_media"]) ** 2
+    X["tendenza"] = t["tendenza"]
+    X["ctx_top6"], X["ctx_casa"] = t["ctx_top6"], t["ctx_casa"]
+    X["ruolo_CEN"] = (t["ruolo"] == "CEN").astype(float)
+    X["ruolo_DIF"] = (t["ruolo"] == "DIF").astype(float)
+    X["premier"] = (t["lega"] == "premier").astype(float)
+    return X[mod["colonne"]], chiave
+
+
+def stima(tab, misura="output", contesti=True):
+    """Stima i pesi su chi ha il rendimento reale misurabile (≥ 900' nella stagione dopo)."""
+    tr = tab[(tab["min_dopo"] >= C.MINUTI_METRO) & tab["y"].notna()]
+    base = "out90" if misura == "output" else "buildup90"
+    chiave = tr["lega"] + "|" + tr["ruolo"]
+    medie = {c: tr.groupby(chiave)[c].mean() for c in ("out90", "xgxa90", "buildup90")}
+    # K della regressione verso la media: quello che, da solo, prevede meglio (è anche il rivale di C10)
+    errori = {k: ((_tirato(tr[base], tr["minuti"], chiave, medie[base], k) - tr["y"]) ** 2).mean() for k in C.GRIGLIA_K}
+    gruppi, colonne = _gruppi(misura, contesti)
+    mod = {"misura": misura, "K": min(errori, key=errori.get), "medie": medie, "eta_media": tr["eta"].mean(),
+           "gruppi": gruppi, "colonne": colonne}
+    X, chiave = _matrice(mod, tr)
+    pipe = make_pipeline(StandardScaler(), RidgeCV(alphas=np.logspace(-2, 3, 21))).fit(X, tr["y"])
+    sc, rg = pipe[0], pipe[1]
+    mod["pipe"] = pipe
+    mod["pesi"] = dict(zip(colonne, rg.coef_ / sc.scale_))
+    mod["medie_x"] = X.groupby(chiave).mean()
+    # forbice: ampiezza = a + b/√minuti stimata sui residui, poi i quantili 10-90 dei residui scalati (F6)
+    res = tr["y"] - pipe.predict(X)
+    A = np.column_stack([np.ones(len(tr)), 1 / np.sqrt(tr["minuti"])])
+    mod["scala"] = np.linalg.lstsq(A, res.abs(), rcond=None)[0]
+    z = res / np.maximum(A @ mod["scala"], 1e-6)
+    mod["quantili"] = (float(z.quantile(0.10)), float(z.quantile(0.90)))
+    return mod
+
+
+def porta_alla_media(mod, righe, ingrediente):
+    """Le stesse righe, con un ingrediente riportato alla media del ruolo (serve a verificare i motivi, C15)."""
+    return righe.assign(_a_media=ingrediente)
+
+
+def applica(mod, t) -> pd.DataFrame:
+    X, chiave = _matrice(mod, t)
+    medie = mod["medie_x"].reindex(chiave).set_axis(X.index)
+    if "_a_media" in t:
+        for i, ing in t["_a_media"].items():
+            for c in mod["gruppi"][ing]:
+                X.loc[i, c] = medie.loc[i, c]
+    pred = pd.Series(mod["pipe"].predict(X), index=t.index)
+    scala = np.maximum(mod["scala"][0] + mod["scala"][1] / np.sqrt(t["minuti"]), 1e-6)
+    out = pd.DataFrame({"pred": pred, "lo": pred + mod["quantili"][0] * scala, "hi": pred + mod["quantili"][1] * scala})
+    base = "out90" if mod["misura"] == "output" else "buildup90"
+    out["rm"] = _tirato(t[base], t["minuti"], chiave, mod["medie"][base], mod["K"])
+    contributi = pd.DataFrame({g: sum(mod["pesi"][c] * (X[c] - medie[c]) for c in cols) if cols else 0.0
+                               for g, cols in mod["gruppi"].items()}, index=t.index)
+    out["motivi"] = [list(r.abs().sort_values(ascending=False, kind="mergesort").index[:3]) for _, r in contributi.iterrows()]
+    return out
+
+
+def fuori_campione(tab, misura="output", contesti=True) -> pd.DataFrame:
+    """Previsioni di prova: ogni giocatore è previsto da un modello che non l'ha visto (5 gruppi, C5)."""
+    ids = tab["giocatore_id"].unique()
+    out = []
+    for dentro, fuori in KFold(5, shuffle=True, random_state=0).split(ids):
+        prova = tab["giocatore_id"].isin(ids[fuori])
+        out.append(applica(stima(tab[~prova], misura, contesti), tab[prova]))
+    return pd.concat(out).loc[tab.index]
+
+
+# ---------------------------------------------------------------- la prova
+def batte(pred, rivale, reale, n=2000, seed=0) -> dict:
+    """C8: batte se l'intervallo 5°-95° della differenza di ρ (bootstrap appaiato) sta tutto sopra zero."""
+    pred, rivale, reale = map(np.asarray, (pred, rivale, reale))
+    idx = np.random.default_rng(seed).integers(0, len(reale), size=(n, len(reale)))
+
+    def rho(a):   # Spearman riga per riga sui campioni ricampionati
+        ra, rr = rankdata(a[idx], axis=1), rankdata(reale[idx], axis=1)
+        ra, rr = ra - ra.mean(1, keepdims=True), rr - rr.mean(1, keepdims=True)
+        return (ra * rr).sum(1) / np.sqrt((ra ** 2).sum(1) * (rr ** 2).sum(1))
+    diff = rho(pred) - rho(rivale)
+    lo, hi = np.percentile(diff, [5, 95])
+    return {"n": len(reale), "rho_modello": float(spearmanr(pred, reale).statistic),
+            "rho_rivale": float(spearmanr(rivale, reale).statistic),
+            "diff_lo": float(lo), "diff_hi": float(hi), "batte": bool(lo > 0)}
+
+
+def copertura(reale, lo, hi) -> float:
+    return float(np.mean((np.asarray(reale) >= lo) & (np.asarray(reale) <= hi)))
+
+
+def mostra_forbice(cop) -> bool:
+    return C.COPERTURA_MIN <= round(cop, 4) <= C.COPERTURA_MAX
+
+
+def _tpi_pro(base):
+    if base != "2024-25" or not RIVALI_TPI_PRO.exists():
+        return pd.DataFrame(columns=["lega", "giocatore_id", "tpi_pro"])
+    return pd.read_csv(RIVALI_TPI_PRO)[["lega", "giocatore_id", "tpi_pro"]]
+
+
+def prova(con, base, dopo, misura="output", fino_a_giornata=None) -> dict:
+    tab = tabella(con, base, dopo, fino_a_giornata, misura)
+    ev = (tab["min_dopo"] >= C.MINUTI_METRO) & tab["y"].notna()
+    rho = {}
+    for ctx in (True, False):   # i contesti restano solo se migliorano la prova (F1b, C3c)
+        oof = fuori_campione(tab, misura, ctx)
+        rho[ctx] = spearmanr(oof.loc[ev, "pred"], tab.loc[ev, "y"]).statistic
+    tenuti = bool(rho[True] > rho[False])
+    oof = fuori_campione(tab, misura, tenuti)
+    t = tab[ev].join(oof).merge(_tpi_pro(base), on=["lega", "giocatore_id"], how="left")
+    grezzo = "out90" if misura == "output" else "buildup90"
+    rivali = {"grezzo": grezzo, "minuti": "minuti"}
+    if misura == "output" and fino_a_giornata is None:
+        rivali |= {"tpi": "tpi", "tpi_pro": "tpi_pro"}
+    leghe = {}
+    for lega, b in t.groupby("lega"):
+        v = {"n": len(b), "rivali": {}}
+        for nome, col in rivali.items():
+            s = b[b[col].notna()]
+            v["rivali"][nome] = batte(s["pred"], s[col], s["y"])
+        v["crescita"] = batte(b["pred"] - b[grezzo], b["rm"] - b[grezzo], b["y"] - b[grezzo])
+        v["crescita"]["rivale"] = "regressione verso la media"
+        cop = copertura(b["y"], b["lo"], b["hi"])
+        v["forbice"] = {"copertura": cop, "mostra": mostra_forbice(cop)}
+        v["mostra_previsione"] = v["rivali"]["grezzo"]["batte"]
+        v["mostra_sottovalutati"] = v["crescita"]["batte"]
+        leghe[lega] = v
+    return {"base": base, "dopo": dopo, "misura": misura, "giornata": fino_a_giornata,
+            "stato": "prototipo, non verificato",   # una coppia sola, prova a gruppi (C13)
+            "contesti_tenuti": tenuti, "rho_con_contesti": float(rho[True]), "rho_senza_contesti": float(rho[False]),
+            "leghe": leghe}
+
+
+# ---------------------------------------------------------------- la previsione pubblicata
+def _stagione_dopo(stagione):
+    a = int(stagione[:4]) + 1
+    return f"{a}-{str(a + 1)[2:]}"
+
+
+def prevedi(con, mod, base):
+    """Previsione per la stagione dopo `base`, per chi ha i minuti; gli altri escono con il motivo (F7)."""
+    parti, esclusi = [], []
+    for lega in C.LEGHE:
+        ok, fuori = ammessi(ingredienti(con, lega, base), C.SOGLIA_PREVISIONE)
+        parti.append(ok)
+        esclusi.append(fuori)
+    t = pd.concat(parti, ignore_index=True)
+    p = t[["giocatore_id", "lega", "ruolo", "minuti", "out90"]].join(applica(mod, t))
+    p["crescita"] = p["pred"] - p["out90"]
+    p["posizione_ruolo"] = p.groupby(["lega", "ruolo"])["pred"].rank(ascending=False, method="first").astype(int)
+    p = p.sort_values(["lega", "ruolo", "posizione_ruolo"]).reset_index(drop=True)
+    in_base = {g for (g,) in con.execute("SELECT DISTINCT giocatore_id FROM righe WHERE stagione = ?", (base,))}
+    nuovi = pd.read_sql("SELECT DISTINCT giocatore_id, lega FROM righe WHERE stagione = ?", con,
+                        params=[_stagione_dopo(base)])
+    nuovi = nuovi[~nuovi["giocatore_id"].isin(in_base)].assign(motivo="nessun dato nel campionato")
+    return p, pd.concat(esclusi + [nuovi], ignore_index=True)
+
+
+def salva_agosto(prev, stagione, cartella) -> Path:
+    """La previsione di agosto si scrive una volta e non si riscrive più (F10, C14)."""
+    p = Path(cartella) / f"previsione_agosto_{stagione}.json"
+    if not p.exists():
+        p.write_text(prev.to_json(orient="records", force_ascii=False), encoding="utf-8")
+    return p
+
+
+def giornata_valida(prove: dict, giornata):
+    """Ultimo punto di controllo raggiunto; vale solo se la sua prova è passata (C14)."""
+    raggiunti = [k for k in sorted(prove) if k <= giornata]
+    return raggiunti[-1] if raggiunti and prove[raggiunti[-1]] else None
+
+
+def prove_aggiornata(con, base, dopo) -> dict:
+    """La previsione aggiornata provata a ogni punto di controllo: {giornata: verdetto} (F10, C14)."""
+    return {k: prova(con, base, dopo, fino_a_giornata=k) for k in C.CONTROLLI_AGGIORNATA}
+
+
+if __name__ == "__main__":
+    con = db.apri()
+    cartella = C.RADICE / "prove"
+    cartella.mkdir(exist_ok=True)
+    esito = {m: prova(con, "2024-25", "2025-26", m) for m in ("output", "buildup")}
+    esito["aggiornata"] = prove_aggiornata(con, "2024-25", "2025-26")
+    (cartella / "prototipo_2024-25_2025-26.json").write_text(json.dumps(esito, indent=1, ensure_ascii=False),
+                                                             encoding="utf-8")

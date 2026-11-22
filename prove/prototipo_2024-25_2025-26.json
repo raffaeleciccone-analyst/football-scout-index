@@ -1,0 +1,708 @@
+{
+ "output": {
+  "base": "2024-25",
+  "dopo": "2025-26",
+  "misura": "output",
+  "giornata": null,
+  "stato": "prototipo, non verificato",
+  "contesti_tenuti": false,
+  "rho_con_contesti": 0.760654130633517,
+  "rho_senza_contesti": 0.7627662049377267,
+  "leghe": {
+   "premier": {
+    "n": 214,
+    "rivali": {
+     "grezzo": {
+      "n": 214,
+      "rho_modello": 0.7900358464632612,
+      "rho_rivale": 0.758024138077273,
+      "diff_lo": -0.00012886195385601856,
+      "diff_hi": 0.06661527594968245,
+      "batte": false
+     },
+     "minuti": {
+      "n": 214,
+      "rho_modello": 0.7900358464632612,
+      "rho_rivale": 0.017142697960797537,
+      "diff_lo": 0.6550264902723134,
+      "diff_hi": 0.883670000190087,
+      "batte": true
+     },
+     "tpi": {
+      "n": 214,
+      "rho_modello": 0.7900358464632612,
+      "rho_rivale": 0.3661488163932519,
+      "diff_lo": 0.32770542954605625,
+      "diff_hi": 0.5178682268520408,
+      "batte": true
+     },
+     "tpi_pro": {
+      "n": 214,
+      "rho_modello": 0.7900358464632612,
+      "rho_rivale": 0.33131693089284986,
+      "diff_lo": 0.3592748194475188,
+      "diff_hi": 0.5561400792285804,
+      "batte": true
+     }
+    },
+    "crescita": {
+     "n": 214,
+     "rho_modello": 0.6092362040095386,
+     "rho_rivale": 0.5287417615888769,
+     "diff_lo": 0.017977785115586516,
+     "diff_hi": 0.14072587632839959,
+     "batte": true,
+     "rivale": "regressione verso la media"
+    },
+    "forbice": {
+     "copertura": 0.7710280373831776,
+     "mostra": true
+    },
+    "mostra_previsione": false,
+    "mostra_sottovalutati": true
+   },
+   "serie_a": {
+    "n": 210,
+    "rivali": {
+     "grezzo": {
+      "n": 210,
+      "rho_modello": 0.7367302584543147,
+      "rho_rivale": 0.7048441995264918,
+      "diff_lo": 0.0008579844453398658,
+      "diff_hi": 0.06566626779943462,
+      "batte": true
+     },
+     "minuti": {
+      "n": 210,
+      "rho_modello": 0.7367302584543147,
+      "rho_rivale": -0.06898859573814418,
+      "diff_lo": 0.6750030735844007,
+      "diff_hi": 0.9325127208184423,
+      "batte": true
+     },
+     "tpi": {
+      "n": 209,
+      "rho_modello": 0.7438826778099532,
+      "rho_rivale": 0.4611817331293078,
+      "diff_lo": 0.18588891435856772,
+      "diff_hi": 0.3787398556173557,
+      "batte": true
+     },
+     "tpi_pro": {
+      "n": 207,
+      "rho_modello": 0.7414455755450007,
+      "rho_rivale": 0.5383920958079313,
+      "diff_lo": 0.1213928829043451,
+      "diff_hi": 0.29416861033130515,
+      "batte": true
+     }
+    },
+    "crescita": {
+     "n": 210,
+     "rho_modello": 0.5188099503390099,
+     "rho_rivale": 0.4637222094443346,
+     "diff_lo": -0.01705565189999527,
+     "diff_hi": 0.1304419976628577,
+     "batte": false,
+     "rivale": "regressione verso la media"
+    },
+    "forbice": {
+     "copertura": 0.7761904761904762,
+     "mostra": true
+    },
+    "mostra_previsione": true,
+    "mostra_sottovalutati": false
+   }
+  }
+ },
+ "buildup": {
+  "base": "2024-25",
+  "dopo": "2025-26",
+  "misura": "buildup",
+  "giornata": null,
+  "stato": "prototipo, non verificato",
+  "contesti_tenuti": true,
+  "rho_con_contesti": 0.5678227673529361,
+  "rho_senza_contesti": 0.5630627902603258,
+  "leghe": {
+   "premier": {
+    "n": 140,
+    "rivali": {
+     "grezzo": {
+      "n": 140,
+      "rho_modello": 0.4631475366819008,
+      "rho_rivale": 0.5108832083269554,
+      "diff_lo": -0.09318225893470815,
+      "diff_hi": -0.007819420697426055,
+      "batte": false
+     },
+     "minuti": {
+      "n": 140,
+      "rho_modello": 0.4631475366819008,
+      "rho_rivale": 0.05841171820871009,
+      "diff_lo": 0.21087565127352248,
+      "diff_hi": 0.6000586314959948,
+      "batte": true
+     }
+    },
+    "crescita": {
+     "n": 140,
+     "rho_modello": 0.3804683912444513,
+     "rho_rivale": 0.4123373641512323,
+     "diff_lo": -0.065201593810668,
+     "diff_hi": -0.0006524025135379869,
+     "batte": false,
+     "rivale": "regressione verso la media"
+    },
+    "forbice": {
+     "copertura": 0.6928571428571428,
+     "mostra": false
+    },
+    "mostra_previsione": false,
+    "mostra_sottovalutati": false
+   },
+   "serie_a": {
+    "n": 154,
+    "rivali": {
+     "grezzo": {
+      "n": 154,
+      "rho_modello": 0.6288917913206339,
+      "rho_rivale": 0.6456525132046955,
+      "diff_lo": -0.048581879676243576,
+      "diff_hi": 0.013435298824011723,
+      "batte": false
+     },
+     "minuti": {
+      "n": 154,
+      "rho_modello": 0.6288917913206339,
+      "rho_rivale": -0.016144732508154853,
+      "diff_lo": 0.48762095592092736,
+      "diff_hi": 0.7835225122291253,
+      "batte": true
+     }
+    },
+    "crescita": {
+     "n": 154,
+     "rho_modello": 0.49338656283627824,
+     "rho_rivale": 0.5051496258327378,
+     "diff_lo": -0.037243361166917,
+     "diff_hi": 0.012745397742431734,
+     "batte": false,
+     "rivale": "regressione verso la media"
+    },
+    "forbice": {
+     "copertura": 0.8636363636363636,
+     "mostra": true
+    },
+    "mostra_previsione": false,
+    "mostra_sottovalutati": false
+   }
+  }
+ },
+ "aggiornata": {
+  "5": {
+   "base": "2024-25",
+   "dopo": "2025-26",
+   "misura": "output",
+   "giornata": 5,
+   "stato": "prototipo, non verificato",
+   "contesti_tenuti": false,
+   "rho_con_contesti": 0.665071146708383,
+   "rho_senza_contesti": 0.670868131111361,
+   "leghe": {
+    "premier": {
+     "n": 182,
+     "rivali": {
+      "grezzo": {
+       "n": 182,
+       "rho_modello": 0.6990239178446769,
+       "rho_rivale": 0.544720506097302,
+       "diff_lo": 0.08043330406279932,
+       "diff_hi": 0.22916669873752973,
+       "batte": true
+      },
+      "minuti": {
+       "n": 182,
+       "rho_modello": 0.6990239178446769,
+       "rho_rivale": -0.01691140754079065,
+       "diff_lo": 0.5776617433775587,
+       "diff_hi": 0.843242567730408,
+       "batte": true
+      }
+     },
+     "crescita": {
+      "n": 182,
+      "rho_modello": 0.8010193773258714,
+      "rho_rivale": 0.6961064166495938,
+      "diff_lo": 0.05994838494412098,
+      "diff_hi": 0.1571808359401749,
+      "batte": true,
+      "rivale": "regressione verso la media"
+     },
+     "forbice": {
+      "copertura": 0.8076923076923077,
+      "mostra": true
+     },
+     "mostra_previsione": true,
+     "mostra_sottovalutati": true
+    },
+    "serie_a": {
+     "n": 178,
+     "rivali": {
+      "grezzo": {
+       "n": 178,
+       "rho_modello": 0.6255550289198414,
+       "rho_rivale": 0.4643682568858892,
+       "diff_lo": 0.06597150916873354,
+       "diff_hi": 0.2591217835348157,
+       "batte": true
+      },
+      "minuti": {
+       "n": 178,
+       "rho_modello": 0.6255550289198414,
+       "rho_rivale": -0.053524662949733535,
+       "diff_lo": 0.5412143486098691,
+       "diff_hi": 0.8059816327324363,
+       "batte": true
+      }
+     },
+     "crescita": {
+      "n": 178,
+      "rho_modello": 0.7195107290018715,
+      "rho_rivale": 0.6558998902577029,
+      "diff_lo": 0.006833230500616483,
+      "diff_hi": 0.12552933020323093,
+      "batte": true,
+      "rivale": "regressione verso la media"
+     },
+     "forbice": {
+      "copertura": 0.7584269662921348,
+      "mostra": true
+     },
+     "mostra_previsione": true,
+     "mostra_sottovalutati": true
+    }
+   }
+  },
+  "10": {
+   "base": "2024-25",
+   "dopo": "2025-26",
+   "misura": "output",
+   "giornata": 10,
+   "stato": "prototipo, non verificato",
+   "contesti_tenuti": false,
+   "rho_con_contesti": 0.7043197578973592,
+   "rho_senza_contesti": 0.7053997443053684,
+   "leghe": {
+    "premier": {
+     "n": 187,
+     "rivali": {
+      "grezzo": {
+       "n": 187,
+       "rho_modello": 0.7520195699169417,
+       "rho_rivale": 0.6388850148189449,
+       "diff_lo": 0.054513596943381155,
+       "diff_hi": 0.1751822172081691,
+       "batte": true
+      },
+      "minuti": {
+       "n": 187,
+       "rho_modello": 0.7520195699169417,
+       "rho_rivale": -0.06514439010482337,
+       "diff_lo": 0.6838760781305679,
+       "diff_hi": 0.939928852283583,
+       "batte": true
+      }
+     },
+     "crescita": {
+      "n": 187,
+      "rho_modello": 0.7537427649664721,
+      "rho_rivale": 0.6670967007880084,
+      "diff_lo": 0.03966925215413824,
+      "diff_hi": 0.13710625649041755,
+      "batte": true,
+      "rivale": "regressione verso la media"
+     },
+     "forbice": {
+      "copertura": 0.8128342245989305,
+      "mostra": true
+     },
+     "mostra_previsione": true,
+     "mostra_sottovalutati": true
+    },
+    "serie_a": {
+     "n": 188,
+     "rivali": {
+      "grezzo": {
+       "n": 188,
+       "rho_modello": 0.651480228478408,
+       "rho_rivale": 0.6051755487781993,
+       "diff_lo": -0.0224741452475938,
+       "diff_hi": 0.11046870982761262,
+       "batte": false
+      },
+      "minuti": {
+       "n": 188,
+       "rho_modello": 0.651480228478408,
+       "rho_rivale": -0.09694626600517837,
+       "diff_lo": 0.6039820141265062,
+       "diff_hi": 0.8852636806459353,
+       "batte": true
+      }
+     },
+     "crescita": {
+      "n": 188,
+      "rho_modello": 0.6547506172036833,
+      "rho_rivale": 0.6281751901276307,
+      "diff_lo": -0.024016033980546563,
+      "diff_hi": 0.07756725928311807,
+      "batte": false,
+      "rivale": "regressione verso la media"
+     },
+     "forbice": {
+      "copertura": 0.7606382978723404,
+      "mostra": true
+     },
+     "mostra_previsione": false,
+     "mostra_sottovalutati": false
+    }
+   }
+  },
+  "15": {
+   "base": "2024-25",
+   "dopo": "2025-26",
+   "misura": "output",
+   "giornata": 15,
+   "stato": "prototipo, non verificato",
+   "contesti_tenuti": true,
+   "rho_con_contesti": 0.7073374454991281,
+   "rho_senza_contesti": 0.7028482578820804,
+   "leghe": {
+    "premier": {
+     "n": 194,
+     "rivali": {
+      "grezzo": {
+       "n": 194,
+       "rho_modello": 0.7332341714158924,
+       "rho_rivale": 0.6828545718496108,
+       "diff_lo": 0.0009020254278775234,
+       "diff_hi": 0.1066863266193256,
+       "batte": true
+      },
+      "minuti": {
+       "n": 194,
+       "rho_modello": 0.7332341714158924,
+       "rho_rivale": -0.023715015496391212,
+       "diff_lo": 0.6246189174954405,
+       "diff_hi": 0.8868542630284687,
+       "batte": true
+      }
+     },
+     "crescita": {
+      "n": 194,
+      "rho_modello": 0.7171403565720108,
+      "rho_rivale": 0.61115489392825,
+      "diff_lo": 0.04777872965995531,
+      "diff_hi": 0.16077002366388607,
+      "batte": true,
+      "rivale": "regressione verso la media"
+     },
+     "forbice": {
+      "copertura": 0.7938144329896907,
+      "mostra": true
+     },
+     "mostra_previsione": true,
+     "mostra_sottovalutati": true
+    },
+    "serie_a": {
+     "n": 190,
+     "rivali": {
+      "grezzo": {
+       "n": 190,
+       "rho_modello": 0.6873425655511884,
+       "rho_rivale": 0.651456599894164,
+       "diff_lo": -0.02366909258457805,
+       "diff_hi": 0.09805435859585335,
+       "batte": false
+      },
+      "minuti": {
+       "n": 190,
+       "rho_modello": 0.6873425655511884,
+       "rho_rivale": -0.1125295966522669,
+       "diff_lo": 0.6636906112407261,
+       "diff_hi": 0.9335278850273473,
+       "batte": true
+      }
+     },
+     "crescita": {
+      "n": 190,
+      "rho_modello": 0.6271831410988205,
+      "rho_rivale": 0.6465579306031223,
+      "diff_lo": -0.05981725975785254,
+      "diff_hi": 0.02357330135507145,
+      "batte": false,
+      "rivale": "regressione verso la media"
+     },
+     "forbice": {
+      "copertura": 0.7631578947368421,
+      "mostra": true
+     },
+     "mostra_previsione": false,
+     "mostra_sottovalutati": false
+    }
+   }
+  },
+  "19": {
+   "base": "2024-25",
+   "dopo": "2025-26",
+   "misura": "output",
+   "giornata": 19,
+   "stato": "prototipo, non verificato",
+   "contesti_tenuti": false,
+   "rho_con_contesti": 0.7293908400358493,
+   "rho_senza_contesti": 0.732989897026062,
+   "leghe": {
+    "premier": {
+     "n": 202,
+     "rivali": {
+      "grezzo": {
+       "n": 202,
+       "rho_modello": 0.7632148480637344,
+       "rho_rivale": 0.7148913898751783,
+       "diff_lo": 0.004151627142399172,
+       "diff_hi": 0.09523239777081702,
+       "batte": true
+      },
+      "minuti": {
+       "n": 202,
+       "rho_modello": 0.7632148480637344,
+       "rho_rivale": 0.02101440149642587,
+       "diff_lo": 0.6216138114960963,
+       "diff_hi": 0.8667926877938941,
+       "batte": true
+      }
+     },
+     "crescita": {
+      "n": 202,
+      "rho_modello": 0.6780827851184501,
+      "rho_rivale": 0.584960628258988,
+      "diff_lo": 0.038183368395314554,
+      "diff_hi": 0.14606247054102944,
+      "batte": true,
+      "rivale": "regressione verso la media"
+     },
+     "forbice": {
+      "copertura": 0.8118811881188119,
+      "mostra": true
+     },
+     "mostra_previsione": true,
+     "mostra_sottovalutati": true
+    },
+    "serie_a": {
+     "n": 193,
+     "rivali": {
+      "grezzo": {
+       "n": 193,
+       "rho_modello": 0.7240217887090113,
+       "rho_rivale": 0.6858798043847152,
+       "diff_lo": -0.015088737757794783,
+       "diff_hi": 0.0937290476876863,
+       "batte": false
+      },
+      "minuti": {
+       "n": 193,
+       "rho_modello": 0.7240217887090113,
+       "rho_rivale": -0.07225259362931878,
+       "diff_lo": 0.6616171632768701,
+       "diff_hi": 0.9224187352808227,
+       "batte": true
+      }
+     },
+     "crescita": {
+      "n": 193,
+      "rho_modello": 0.5765166791303883,
+      "rho_rivale": 0.5698046311628652,
+      "diff_lo": -0.042394590078865604,
+      "diff_hi": 0.05795966723328912,
+      "batte": false,
+      "rivale": "regressione verso la media"
+     },
+     "forbice": {
+      "copertura": 0.7512953367875648,
+      "mostra": true
+     },
+     "mostra_previsione": false,
+     "mostra_sottovalutati": false
+    }
+   }
+  },
+  "25": {
+   "base": "2024-25",
+   "dopo": "2025-26",
+   "misura": "output",
+   "giornata": 25,
+   "stato": "prototipo, non verificato",
+   "contesti_tenuti": false,
+   "rho_con_contesti": 0.7382294176308541,
+   "rho_senza_contesti": 0.7390840465661086,
+   "leghe": {
+    "premier": {
+     "n": 206,
+     "rivali": {
+      "grezzo": {
+       "n": 206,
+       "rho_modello": 0.7781726707094001,
+       "rho_rivale": 0.7678108487409214,
+       "diff_lo": -0.03187340012936944,
+       "diff_hi": 0.054857524932345116,
+       "batte": false
+      },
+      "minuti": {
+       "n": 206,
+       "rho_modello": 0.7781726707094001,
+       "rho_rivale": 0.03311438964385494,
+       "diff_lo": 0.6223587183263506,
+       "diff_hi": 0.861143056780053,
+       "batte": true
+      }
+     },
+     "crescita": {
+      "n": 206,
+      "rho_modello": 0.6651779248902662,
+      "rho_rivale": 0.5573323449570502,
+      "diff_lo": 0.052164718335333704,
+      "diff_hi": 0.1674219719498107,
+      "batte": true,
+      "rivale": "regressione verso la media"
+     },
+     "forbice": {
+      "copertura": 0.8252427184466019,
+      "mostra": true
+     },
+     "mostra_previsione": false,
+     "mostra_sottovalutati": true
+    },
+    "serie_a": {
+     "n": 201,
+     "rivali": {
+      "grezzo": {
+       "n": 201,
+       "rho_modello": 0.7025131899339884,
+       "rho_rivale": 0.6754356993022752,
+       "diff_lo": -0.01796890061130495,
+       "diff_hi": 0.07403278792761235,
+       "batte": false
+      },
+      "minuti": {
+       "n": 201,
+       "rho_modello": 0.7025131899339884,
+       "rho_rivale": -0.05064713734465907,
+       "diff_lo": 0.625962741934673,
+       "diff_hi": 0.8780784748731763,
+       "batte": true
+      }
+     },
+     "crescita": {
+      "n": 201,
+      "rho_modello": 0.5456376533175705,
+      "rho_rivale": 0.5413285059849269,
+      "diff_lo": -0.05195316609379388,
+      "diff_hi": 0.058698181464622884,
+      "batte": false,
+      "rivale": "regressione verso la media"
+     },
+     "forbice": {
+      "copertura": 0.7562189054726368,
+      "mostra": true
+     },
+     "mostra_previsione": false,
+     "mostra_sottovalutati": false
+    }
+   }
+  },
+  "30": {
+   "base": "2024-25",
+   "dopo": "2025-26",
+   "misura": "output",
+   "giornata": 30,
+   "stato": "prototipo, non verificato",
+   "contesti_tenuti": false,
+   "rho_con_contesti": 0.754792645061238,
+   "rho_senza_contesti": 0.7561897889375075,
+   "leghe": {
+    "premier": {
+     "n": 208,
+     "rivali": {
+      "grezzo": {
+       "n": 208,
+       "rho_modello": 0.7933622441631594,
+       "rho_rivale": 0.7518839505319246,
+       "diff_lo": 0.005278708896484319,
+       "diff_hi": 0.0820209014386691,
+       "batte": true
+      },
+      "minuti": {
+       "n": 208,
+       "rho_modello": 0.7933622441631594,
+       "rho_rivale": 0.03663279161974266,
+       "diff_lo": 0.6370020573930962,
+       "diff_hi": 0.8688227165011474,
+       "batte": true
+      }
+     },
+     "crescita": {
+      "n": 208,
+      "rho_modello": 0.6665106441994313,
+      "rho_rivale": 0.5555986728755606,
+      "diff_lo": 0.05634479232126783,
+      "diff_hi": 0.16592452008136283,
+      "batte": true,
+      "rivale": "regressione verso la media"
+     },
+     "forbice": {
+      "copertura": 0.8028846153846154,
+      "mostra": true
+     },
+     "mostra_previsione": true,
+     "mostra_sottovalutati": true
+    },
+    "serie_a": {
+     "n": 207,
+     "rivali": {
+      "grezzo": {
+       "n": 207,
+       "rho_modello": 0.7249693980506491,
+       "rho_rivale": 0.7024708549653593,
+       "diff_lo": -0.0159017949217625,
+       "diff_hi": 0.060279963837371886,
+       "batte": false
+      },
+      "minuti": {
+       "n": 207,
+       "rho_modello": 0.7249693980506491,
+       "rho_rivale": -0.03641542989824319,
+       "diff_lo": 0.6364106964638312,
+       "diff_hi": 0.8828701076061636,
+       "batte": true
+      }
+     },
+     "crescita": {
+      "n": 207,
+      "rho_modello": 0.5236643720708727,
+      "rho_rivale": 0.48562901148380255,
+      "diff_lo": -0.02779161846047282,
+      "diff_hi": 0.10218981217112237,
+      "batte": false,
+      "rivale": "regressione verso la media"
+     },
+     "forbice": {
+      "copertura": 0.7439613526570048,
+      "mostra": true
+     },
+     "mostra_previsione": false,
+     "mostra_sottovalutati": false
+    }
+   }
+  }
+ }
+}
