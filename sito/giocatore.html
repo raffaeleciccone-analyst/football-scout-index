@@ -1,7 +1,14 @@
 {% extends "base.html" %}
 {% block contenuto %}
-{{ t("titolo_giocatore", "h1") }}
-<label class="cerca"><input id="cerca" type="search" list="nomi" autocomplete="off" data-tp="cerca_segnaposto"></label>
-<datalist id="nomi"></datalist>
-<div id="scheda" class="scheda" aria-live="polite"></div>
+<section class="intro"><div class="wrap">
+  {{ t("titolo_giocatore", "h2") }}
+  <div class="cerca grande chiara">
+    <label for="cerca">{{ t("cerca_label") }}</label>
+    <input id="cerca" type="search" list="nomi" autocomplete="off" data-tp="cerca_segnaposto">
+    <datalist id="nomi"></datalist>
+  </div>
+</div></section>
+<section class="blocco"><div class="wrap">
+  <div id="scheda" class="scheda" aria-live="polite"></div>
+</div></section>
 {% endblock %}

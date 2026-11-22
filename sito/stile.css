@@ -1,113 +1,200 @@
-/* Football Scout Index — taccuino tecnico: verde petrolio = previsione, ambra = statistica semplice. */
+/* Football Scout Index — "tabellone + dossier": blu stadio e giallo, il verdetto scritto come un risultato,
+   i giocatori come schede da scout. Testi centrati (scelta dell'utente), tranne il metodo e le tabelle. */
 :root {
-  --carta: #EEF2F5;
-  --foglio: #FFFFFF;
-  --inchiostro: #152238;
-  --tenue: #5B6B80;
-  --linea: #CDD6E0;
-  --previsione: #1F7A7A;
-  --previsione-chiara: #BFE0DD;
-  --grezzo: #B7791F;
-  --giu: #9AA6B5;
-  --testo: "Archivo", "Segoe UI", system-ui, sans-serif;
-  --lettura: "Source Serif 4", Georgia, serif;
+  --blu: #1638A8; --notte: #0A1A4A; --giallo: #FFC72C; --rosso: #E4002B;
+  --cielo: #E9EEFB; --carta: #FFFFFF; --tenue: #56638A; --banda: #C9D5F5;
+  --ATT: #E4002B; --CEN: #1638A8; --DIF: #0F8A5F;
+  --r: 12px; --ombra: 0 1px 2px #0A1A4A1a, 0 6px 18px -8px #0A1A4A40;
+  --titoli: "Big Shoulders Display", "Arial Narrow", sans-serif;
+  --testo: "Barlow", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
 }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
-body {
-  margin: 0; background: var(--carta); color: var(--inchiostro);
-  font: 400 1rem/1.5 var(--testo); font-variant-numeric: tabular-nums;
-}
-main { max-width: 68rem; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
-a { color: inherit; text-decoration-color: var(--previsione); text-underline-offset: 3px; }
-:focus-visible { outline: 3px solid var(--previsione); outline-offset: 2px; }
+body { margin: 0; font: 500 17px/1.45 var(--testo); background: var(--cielo); color: var(--notte); font-variant-numeric: tabular-nums; }
+.wrap { max-width: 1160px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); position: relative; z-index: 1; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--giallo); outline-offset: 2px; }
+[hidden] { display: none !important; }
 
-.testata {
-  display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.5rem;
-  padding: .75rem 1rem; background: var(--inchiostro); color: #fff;
-}
-.marchio { font-weight: 800; font-stretch: 115%; text-decoration: none; letter-spacing: -.01em; }
-.menu { display: flex; flex-wrap: wrap; gap: .25rem 1rem; }
-.menu a { text-decoration: none; opacity: .75; padding: .25rem 0; border-bottom: 2px solid transparent; }
-.menu a[aria-current="page"] { opacity: 1; border-color: var(--previsione-chiara); }
-.lega { margin-left: auto; font-stretch: 85%; opacity: .8; }
-.lingua { display: flex; }
-.lingua button {
-  font: inherit; font-size: .8rem; color: #fff; background: transparent; border: 1px solid #ffffff55;
-  padding: .2rem .5rem; cursor: pointer;
-}
-.lingua button[aria-pressed="true"] { background: #fff; color: var(--inchiostro); }
+/* testata */
+.top { background: var(--notte); color: #fff; }
+.top .wrap { display: flex; gap: 12px; align-items: center; padding-block: 10px; }
+.marchio { font: 900 20px var(--titoli); letter-spacing: .5px; text-decoration: none; text-transform: uppercase; }
+.lingua { margin-left: auto; display: flex; border: 2px solid #ffffff55; border-radius: var(--r); padding: 2px; }
+.lingua button { font: 700 14px var(--testo); background: none; border: 0; color: #fff; padding: 4px 10px; cursor: pointer; border-radius: 9px; }
+.lingua button[aria-pressed="true"] { background: #fff; color: var(--notte); }
+.testata-lega { background: var(--notte); color: #fff; border-top: 1px solid #ffffff22; }
+.testata-lega .wrap { display: flex; align-items: center; gap: 8px 16px; flex-wrap: wrap; padding-block: 12px 14px; }
+.testata-lega h1 { font: 900 clamp(30px, 5vw, 44px)/1 var(--titoli); margin: 0; color: var(--giallo); }
+.indietro { color: #fff; text-decoration: none; font-weight: 600; font-size: 15px; border: 2px solid #ffffff55; padding: 5px 14px; margin-left: auto; border-radius: 999px; }
+.indietro:hover { border-color: #fff; }
 
-h1 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); line-height: 1.15; font-weight: 750; font-stretch: 90%; margin: .5rem 0 1rem; max-width: 24ch; }
-h2 { font-size: 1.3rem; font-weight: 700; font-stretch: 95%; margin: 2rem 0 .5rem; }
-h3 { font-size: 1.05rem; margin: 1.5rem 0 .5rem; }
-p { max-width: 70ch; }
+/* sezioni: schede sotto la testata; sul telefono barra in basso come in un'app */
+.sezioni { background: var(--carta); border-bottom: 1px solid var(--banda); }
+.sezioni .wrap { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.sezioni a { display: flex; gap: 10px; align-items: center; justify-content: center; padding: 12px 10px 10px; text-decoration: none; color: var(--notte); border-bottom: 5px solid transparent; min-width: 0; }
+.sezioni a:hover { background: var(--cielo); }
+.sezioni a[aria-current="page"] { border-bottom-color: var(--giallo); background: var(--cielo); }
+.sezioni svg { flex: none; width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.sezioni b { display: block; font-size: 17px; line-height: 1.1; }
+.sezioni small { display: block; font-size: 13px; color: var(--tenue); line-height: 1.2; }
 
-/* home: il verdetto è il titolo, ogni campionato è una porta */
-.apertura h1 { max-width: 26ch; font-size: clamp(1.8rem, 4.5vw, 3rem); }
-.apertura p { color: var(--tenue); font-size: 1.1rem; }
-.porte { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 1rem; margin: 2rem 0; }
-.porta {
-  display: block; text-decoration: none; background: var(--foglio); padding: 1.25rem 1.25rem 1rem;
-  border-left: 6px solid var(--previsione);
-}
-.porta.no { border-left-color: var(--grezzo); }
-.porta h2 { margin: 0 0 .5rem; font-size: 1.6rem; font-stretch: 110%; }
-.porta > span:last-child { color: var(--previsione); font-weight: 600; }
-.duello { display: grid; gap: 4px; margin: .75rem 0 1rem; }
-.barra { display: block; height: 10px; width: calc(var(--v) * 100%); }
-.barra.modello { background: var(--previsione); }
-.barra.grezzo { background: var(--grezzo); }
+/* titoli e blocchi */
+h2 { font: 800 clamp(30px, 4vw, 38px)/1.05 var(--titoli); margin: 0 0 8px; text-wrap: balance; }
+h3 { font: 800 26px/1.1 var(--titoli); margin: 28px 0 8px; }
+p { margin: 0 0 12px; }
+.blocco, .intro, .home-blocco { padding-block: 36px; text-align: center; }
+.blocco > .wrap > p, .intro p, .home-blocco p { color: var(--tenue); max-width: 64ch; margin-left: auto; margin-right: auto; }
+.chiaro { background: var(--carta); }
+.intro { padding-bottom: 8px; }
 
-/* tabelle */
-.schede-ruolo { display: flex; gap: .5rem; margin: 1rem 0; flex-wrap: wrap; }
-.schede-ruolo button {
-  font: inherit; background: transparent; border: 1px solid var(--linea); padding: .35rem .9rem; cursor: pointer; color: var(--inchiostro);
-}
-.schede-ruolo button[aria-selected="true"] { background: var(--inchiostro); color: #fff; border-color: var(--inchiostro); }
-.tabella { overflow-x: auto; background: var(--foglio); }
-table { border-collapse: collapse; width: 100%; font-size: .95rem; }
-th { text-align: left; font-weight: 600; color: var(--tenue); font-size: .85rem; padding: .6rem .75rem; border-bottom: 2px solid var(--linea); }
-td { padding: .45rem .75rem; border-bottom: 1px solid var(--carta); vertical-align: middle; }
-td.n { text-align: right; }
-td.forte { font-weight: 700; color: var(--previsione); }
-.blocco { margin-top: 2.5rem; }
+/* hero: il tabellone */
+.hero, .home-hero { background: var(--blu); color: #fff; position: relative; overflow: hidden; text-align: center; padding-block: 34px 40px; }
+.hero::after, .home-hero::after { content: ""; position: absolute; right: -12%; top: -30%; width: 62%; aspect-ratio: 1; border: 3px solid #ffffff1f; border-radius: 50%; }
+.hero h2 { font-size: clamp(30px, 4.2vw, 50px); max-width: 19ch; margin: 0 auto 24px; }
+.home-hero h1 { font: 800 clamp(34px, 5vw, 58px)/1 var(--titoli); margin: 0 auto 10px; max-width: 18ch; }
+.home-hero p { max-width: 56ch; margin: 0 auto; opacity: .9; }
+.hero > .wrap > p { opacity: .85; font-size: 15px; margin-top: 12px; }
+.tab { display: inline-grid; grid-template-columns: 1fr auto 1fr; max-width: 100%; background: var(--notte); border: 4px solid var(--giallo); border-radius: var(--r); }
+.sq { padding: 14px clamp(10px, 3vw, 26px); min-width: 0; }
+.sq small { display: block; font: 700 14px var(--testo); opacity: .85; text-transform: uppercase; letter-spacing: .4px; }
+.pt { font: 900 clamp(60px, 9vw, 112px)/1 var(--titoli); color: var(--giallo); }
+.sq.r .pt { color: #fff; }
+.tr { font: 900 clamp(44px, 7vw, 76px)/1 var(--titoli); align-self: center; color: #ffffff55; }
+.esito { margin: 16px 0 0; font-weight: 700; font-size: 19px; }
+.tag, .esito-porta .tag { display: inline-block; background: var(--giallo); color: var(--notte); padding: 3px 10px; margin-right: 6px; border-radius: var(--r); font-weight: 800; }
+.esito.no .tag, .porta.no .tag { background: var(--rosso); color: #fff; }
+.ris { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 18px; }
+.ris > span { background: #ffffff14; padding: 7px 12px; font-weight: 700; border-radius: var(--r); }
+.ris i { font-style: normal; color: var(--giallo); margin-left: 4px; }
+.metodo { color: #fff; font-weight: 600; margin-top: 16px; display: inline-block; }
 
-/* la forbice */
-.forbice { width: 220px; height: 18px; display: block; }
-.forbice .banda { fill: var(--previsione-chiara); }
-.forbice .punto { fill: var(--previsione); }
-.forbice .tacca { stroke: var(--grezzo); stroke-width: 2.5; }
+/* ricerca e azioni */
+.cerca { display: flex; flex-direction: column; gap: 6px; max-width: 640px; margin: 26px auto 0; text-align: left; }
+.cerca label { font-size: 15px; font-weight: 600; }
+.cerca input { font: 600 20px var(--testo); padding: 14px 16px 14px 48px; width: 100%; border: 0; border-radius: var(--r); color: var(--notte); box-shadow: 0 0 0 3px #ffffff40, var(--ombra);
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='%2356638A' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-4-4'/%3E%3C/svg%3E") no-repeat 14px 50%; }
+.cerca input:focus { outline: none; box-shadow: 0 0 0 4px var(--giallo), var(--ombra); }
+.cerca.chiara input { box-shadow: 0 0 0 2px var(--banda), var(--ombra); }
+.azioni { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; max-width: 640px; margin: 14px auto 0; }
+.azione { flex: 1 1 240px; display: flex; flex-direction: column; justify-content: center; gap: 2px; min-height: 64px; padding: 12px 18px; text-decoration: none; border-radius: var(--r);
+  background: var(--carta); color: var(--notte); box-shadow: var(--ombra); transition: transform .12s, box-shadow .12s; }
+.azione b { font-size: 18px; }
+.azione small { font-size: 14px; color: var(--tenue); }
+.azione.prima { background: var(--giallo); }
+.azione.prima small { color: #4A3A00; }
+.azione:hover { transform: translateY(-2px); box-shadow: 0 10px 24px -10px #0A1A4A80; }
+.azione:active { transform: none; box-shadow: var(--ombra); }
+.entra { display: inline-block; text-align: center; font-weight: 700; font-size: 18px; padding: 12px 22px; background: var(--notte); color: #fff; text-decoration: none; border-radius: var(--r); box-shadow: var(--ombra); transition: background .12s, transform .12s; }
+.entra:hover, .entra:focus-visible { background: var(--blu); transform: translateY(-1px); }
+.home-blocco .entra { margin-top: 18px; }
 
-/* scheda giocatore */
-.cerca input { font: inherit; padding: .6rem .8rem; width: min(100%, 26rem); border: 2px solid var(--linea); background: var(--foglio); }
-.scheda { background: var(--foglio); padding: 1rem 1.25rem; margin-top: 1rem; min-height: 4rem; }
-.scheda h2 { margin-top: .25rem; font-size: 1.8rem; font-stretch: 110%; }
-.sotto { color: var(--tenue); }
-.grande { font-size: 1.2rem; font-weight: 600; }
-.riquadro.previsto { border-left: 4px solid var(--previsione); padding: .25rem 0 .5rem 1rem; }
-.segno { color: var(--previsione); font-weight: 700; }
-.dimensioni, .contesti { list-style: none; padding: 0; margin: 0; display: grid; gap: .35rem; }
-.dimensioni li { display: grid; grid-template-columns: minmax(10rem, 16rem) 1fr 3.5rem; align-items: center; gap: .75rem; }
+/* stato di una sezione: VERIFICATA / NON ANCORA, uguale nei due siti */
+.stato { display: flex; gap: 14px; align-items: center; justify-content: center; flex-wrap: wrap; background: var(--carta); border-radius: var(--r); box-shadow: var(--ombra); padding: 16px 20px; max-width: 760px; margin: 18px auto; text-align: left; }
+.chiaro .stato { background: var(--cielo); box-shadow: none; }
+.stato .etic { font: 800 15px var(--testo); letter-spacing: .3px; padding: 4px 10px; border-radius: 999px; background: var(--rosso); color: #fff; white-space: nowrap; }
+.stato.si .etic { background: var(--giallo); color: var(--notte); }
+.stato p { margin: 0; flex: 1 1 320px; color: var(--notte) !important; }
+
+/* filtri, legenda, aiuto */
+.filtri { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; align-items: center; margin: 14px 0; }
+.etichetta { font-weight: 700; font-size: 14px; color: var(--tenue); }
+.filtri button { font: 700 15px var(--testo); border: 2px solid var(--notte); background: none; padding: 7px 16px; cursor: pointer; color: var(--notte); border-radius: 999px; }
+.filtri button[aria-pressed="true"] { background: var(--notte); color: #fff; }
+.filtri .n { font-weight: 500; opacity: .7; }
+.chiave { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; font-size: 14px; color: var(--tenue); margin: 6px 0 4px; }
+.chiave svg { vertical-align: -2px; margin-right: 6px; }
+.k-punto { fill: var(--blu); } .k-banda { fill: var(--banda); } .k-tacca { fill: var(--giallo); stroke: var(--notte); stroke-width: .5; }
+.aiuto { display: inline-block; background: var(--notte); color: #fff !important; font-size: 14px; font-weight: 600; padding: 4px 12px; border-radius: var(--r); margin: 4px 0 16px !important; }
+
+/* schede giocatore */
+.carte { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 270px)); justify-content: center; gap: 14px; text-align: center; }
+.carta { position: relative; background: var(--carta); border-radius: var(--r); box-shadow: var(--ombra); overflow: hidden; padding: 22px 18px 14px; cursor: pointer; transition: transform .12s, box-shadow .12s; display: flex; flex-direction: column; }
+.chiaro .carta { background: var(--cielo); }
+.carta::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 6px; background: var(--blu); }
+.carta.sv::before { background: var(--giallo); }
+.carta:hover, .carta:focus-within { transform: translateY(-3px); box-shadow: 0 10px 22px -10px #0A1A4A66; }
+.carta .ru { position: absolute; top: 14px; right: 12px; font: 800 14px var(--titoli); letter-spacing: .5px; background: var(--cielo); border-radius: 999px; padding: 2px 9px; }
+.chiaro .carta .ru { background: var(--carta); }
+.carta .ru.ATT { color: var(--ATT); } .carta .ru.CEN { color: var(--CEN); } .carta .ru.DIF { color: var(--DIF); }
+.carta h4 { font: 800 26px/1 var(--titoli); margin: 0 auto 4px; padding: 0 44px; }
+.info { color: var(--tenue); font-size: 14px; margin-bottom: 10px; }
+.cifra { display: flex; align-items: baseline; justify-content: center; flex-wrap: wrap; gap: 8px; }
+.cifra b { font: 900 50px/1 var(--titoli); }
+.cifra span { color: var(--tenue); font-size: 14px; line-height: 1.2; text-align: left; }
+.forbice { width: 100%; height: 26px; margin: 8px 0 10px; }
+.forbice .linea { stroke: var(--cielo); stroke-width: 3; } .chiaro .forbice .linea { stroke: var(--carta); }
+.forbice .banda { fill: var(--banda); }
+.forbice .tacca { fill: var(--giallo); stroke: var(--notte); stroke-width: .6; }
+.forbice .punto { fill: var(--blu); }
+.perche { font-size: 14px; margin: 0; padding-top: 9px; border-top: 2px solid var(--cielo); }
+.perche em { font-style: normal; font-weight: 700; }
+.apri { display: block; margin-top: auto; padding: 8px; text-align: center; font-weight: 700; font-size: 15px; color: var(--blu); background: var(--cielo); border-radius: 10px; text-decoration: none; }
+.chiaro .apri { background: var(--carta); }
+.carta:hover .apri, .apri:focus-visible { background: var(--blu); color: #fff; }
+.carta .perche { margin-bottom: 12px; }
+
+/* home: porte e passi */
+.porte { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); gap: 16px; padding-block: 24px; text-align: center; }
+.porta { position: relative; overflow: hidden; background: var(--carta); padding: 26px 20px 20px; border-radius: var(--r); box-shadow: var(--ombra); display: flex; flex-direction: column; gap: 12px; }
+.porta::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 8px; background: var(--giallo); }
+.porta.no::before { background: var(--rosso); }
+.porta h2 { font-size: 40px; margin: 0; }
+.mini { display: flex; align-items: baseline; justify-content: center; gap: 10px; font: 900 46px/1 var(--titoli); }
+.mini .m { color: var(--blu); } .mini .t { color: #9AA6C8; font-size: 34px; }
+.mini small { font: 600 13px var(--testo); color: var(--tenue); display: block; }
+.esito-porta { margin: 0; font-weight: 600; }
+.passi { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 14px; margin-top: 16px; }
+.passo { background: var(--cielo); padding: 18px; border-radius: var(--r); }
+.passo h3 { margin: 0 0 6px; }
+
+/* tabelle (classifica, sfortunati): allineate a sinistra */
+.tabella { overflow-x: auto; background: var(--carta); border-radius: var(--r); box-shadow: var(--ombra); text-align: left; max-width: 900px; margin: 0 auto; }
+.chiaro .tabella { background: var(--cielo); box-shadow: none; }
+table { border-collapse: collapse; width: 100%; font-size: 16px; }
+th { text-align: left; font-weight: 700; color: var(--tenue); font-size: 14px; padding: 12px 14px; border-bottom: 2px solid var(--banda); }
+td { padding: 10px 14px; border-bottom: 1px solid var(--cielo); }
+td.n, th.n { text-align: right; }
+td a { font-weight: 700; text-decoration: none; }
+td a:hover { text-decoration: underline; }
+
+/* scheda completa del giocatore */
+.scheda { background: var(--carta); border-radius: var(--r); box-shadow: var(--ombra); padding: 24px; max-width: 860px; margin: 0 auto; text-align: center; }
+.scheda > h3:first-child { font-size: 44px; margin-top: 0; }
+.scheda .sotto { color: var(--tenue); }
+.scheda .grande { font-size: 20px; font-weight: 700; }
+.scheda .previsto { background: var(--cielo); border-radius: var(--r); padding: 16px; margin: 16px 0; }
+.scheda .previsto .forbice { max-width: 420px; display: block; margin: 8px auto; }
+.scheda ul { list-style: none; padding: 0; margin: 0 auto; max-width: 560px; display: grid; gap: 6px; text-align: left; }
+.dimensioni li { display: grid; grid-template-columns: minmax(0, 15rem) 1fr 3.5rem; align-items: center; gap: 12px; }
 .dimensioni b { text-align: right; }
-.zbar { height: 8px; width: calc(var(--z) * 100%); max-width: 100%; }
-.zbar.su { background: var(--previsione); }
-.zbar.giu { background: var(--giu); }
-.contesti li { display: grid; grid-template-columns: minmax(10rem, 16rem) 4rem 1fr; gap: .75rem; }
-.andamento { width: 100%; max-width: 560px; height: 90px; }
-.andamento path { fill: none; stroke: var(--previsione); stroke-width: 2; }
+.zbar { height: 8px; border-radius: 4px; width: calc(var(--z) * 100%); max-width: 100%; }
+.zbar.su { background: var(--blu); } .zbar.giu { background: #9AA6C8; }
+.contesti li { display: grid; grid-template-columns: minmax(0, 15rem) 4rem 1fr; gap: 12px; }
+.andamento { width: 100%; max-width: 640px; height: 100px; }
+.andamento path { fill: none; stroke: var(--blu); stroke-width: 2.5; }
+.segno { color: var(--blu); font-weight: 700; }
 
-/* metodo */
-.testo-lungo p, .testo-lungo li { font-family: var(--lettura); font-size: 1.08rem; line-height: 1.65; }
-.rivali li.batte strong { color: var(--previsione); }
-.rivali li.no strong { color: var(--grezzo); }
+/* metodo: testo lungo allineato a sinistra */
+.testo-lungo { max-width: 760px; text-align: left; }
+.testo-lungo p, .testo-lungo li { font-size: 18px; line-height: 1.6; color: var(--notte) !important; }
+.testo-lungo ul { padding-left: 20px; }
+.rivali li.batte strong { color: var(--DIF); } .rivali li.no strong { color: var(--rosso); }
 .pesi { columns: 2 14rem; }
 
-.piede { max-width: 68rem; margin: 0 auto; padding: 1rem; color: var(--tenue); font-size: .85rem; }
+.piede { color: var(--tenue); font-size: 14px; padding-block: 24px 40px; }
 
-@media (max-width: 40rem) {
-  .lega { margin-left: 0; }
+@media (max-width: 700px) {
+  body { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
+  .sezioni { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; border-top: 1px solid var(--banda); border-bottom: 0; padding-bottom: env(safe-area-inset-bottom, 0px); box-shadow: 0 -4px 14px #0A1A4A22; }
+  .sezioni a { flex-direction: column; gap: 3px; padding: 8px 2px 7px; border-bottom: 0; border-top: 4px solid transparent; text-align: center; }
+  .sezioni a[aria-current="page"] { border-top-color: var(--giallo); }
+  .sezioni small { display: none; }
+  .sezioni b { font-size: 12.5px; }
+  .indietro { margin-left: 0; }
   .dimensioni li, .contesti li { grid-template-columns: 1fr 3.5rem; }
   .zbar { grid-column: 1 / -1; }
 }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+@media (prefers-reduced-motion: reduce) { .carta, .azione, .entra { transition: none; } .carta:hover, .azione:hover, .entra:hover { transform: none; } }
+.testo-lungo p { margin-left: 0; max-width: none; }

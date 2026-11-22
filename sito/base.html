@@ -2,33 +2,37 @@
 <html lang="it">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 {{ t("nome_progetto", "title") }}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="stile.css">
 </head>
 <body data-pagina="{{ pagina }}">
-<header class="testata">
-  <a class="marchio" href="../home/index.html">{{ t("nome_progetto") }}</a>
-  {% if d %}
-  <nav class="menu" aria-label="sezioni">
-    <a href="index.html"{% if pagina == "index.html" %} aria-current="page"{% endif %}>{{ t("nav_classifica") }}</a>
-    <a href="previsione.html"{% if pagina == "previsione.html" %} aria-current="page"{% endif %}>{{ t("nav_previsione") }}</a>
-    <a href="giocatore.html"{% if pagina == "giocatore.html" %} aria-current="page"{% endif %}>{{ t("nav_giocatore") }}</a>
-    <a href="metodo.html"{% if pagina == "metodo.html" %} aria-current="page"{% endif %}>{{ t("nav_metodo") }}</a>
-  </nav>
-  <span class="lega">{{ t("lega_" ~ d.lega) }}</span>
-  {% endif %}
-  <div class="lingua" role="group" aria-label="lingua / language">
-    <button type="button" data-lingua="it">IT</button><button type="button" data-lingua="en">EN</button>
-  </div>
-</header>
+<header class="top"><div class="wrap">
+  <a class="marchio" href="{{ '../home/index.html' if d else 'index.html' }}">{{ t("nome_progetto") }}</a>
+  <div class="lingua" role="group" aria-label="IT / EN"><button type="button" data-lingua="it">IT</button><button type="button" data-lingua="en">EN</button></div>
+</div></header>
+{% if d %}
+<div class="testata-lega"><div class="wrap">
+  {{ t("lega_" ~ d.lega, "h1") }}
+  <a class="indietro" href="../home/index.html">{{ t("indietro") }}</a>
+</div></div>
+<nav class="sezioni" aria-label="sezioni"><div class="wrap">
+  {% set voci = [("index.html", "previsione", '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>'),
+                 ("classifica.html", "classifica", '<path d="M3 21h18"/><path d="M5 21v-8h4v8M10 21V7h4v14M15 21v-5h4v5"/>'),
+                 ("giocatore.html", "cerca", '<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>'),
+                 ("metodo.html", "metodo", '<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16.5 9"/>')] %}
+  {% for href, chiave, icona in voci %}
+  <a href="{{ href }}"{% if pagina == href %} aria-current="page"{% endif %}><svg viewBox="0 0 24 24" aria-hidden="true">{{ icona | safe }}</svg><span>{{ t("sez_" ~ chiave ~ "_t", "b") }}{{ t("sez_" ~ chiave ~ "_s", "small") }}</span></a>
+  {% endfor %}
+</div></nav>
+{% endif %}
 <main>
 {% block contenuto %}{% endblock %}
 </main>
-<footer class="piede">{{ t("piede", "p") }}</footer>
+<footer class="piede"><div class="wrap">{{ t("piede", "p") }}</div></footer>
 <script src="testi.js"></script>
 <script src="dati.js"></script>
 <script src="sito.js"></script>

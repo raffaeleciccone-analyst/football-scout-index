@@ -1,11 +1,68 @@
 {% extends "base.html" %}
 {% block contenuto %}
-{{ t("titolo_classifica", "h1") }}
-{{ t("spiega_tpi", "p", stagione=d.stagione) }}
-<div class="schede-ruolo" role="tablist">
-  <button type="button" role="tab" data-ruolo="ATT">{{ t("ruolo_ATT") }}</button>
-  <button type="button" role="tab" data-ruolo="CEN">{{ t("ruolo_CEN") }}</button>
-  <button type="button" role="tab" data-ruolo="DIF">{{ t("ruolo_DIF") }}</button>
-</div>
-<div id="classifica" class="tabella"></div>
+{% set g = v.rivali.grezzo %}
+{% set s = v.sottovalutati %}
+<section class="hero"><div class="wrap">
+  {{ t("partita_titolo", "h2") }}
+  <div class="tab">
+    <div class="sq">{{ t("lab_previsione", "small") }}<div class="pt">{{ g.rho_modello | n }}</div></div>
+    <div class="tr">–</div>
+    <div class="sq r">{{ t("lab_semplice", "small") }}<div class="pt">{{ g.rho_rivale | n }}</div></div>
+  </div>
+  <p class="esito {{ '' if v.mostra_previsione else 'no' }}">{{ t("tag_vince" if v.mostra_previsione else "tag_non_ancora", "span", "tag") }} {{ t("esito_batte" if v.mostra_previsione else "esito_non_batte") }}</p>
+  <div class="ris">
+    {% for stagione, x in v.per_stagione.items() %}
+    <span>{{ stagione.split(" -> ")[1] }} {{ x.rho_modello | n }} – {{ x.rho_grezzo | n }} <i>{{ "✓" if x.rho_modello > x.rho_grezzo else "✗" }}</i></span>
+    {% endfor %}
+  </div>
+  {{ t("stato_verificata" if v.verificata else "stato_prototipo", "p") }}
+  <div class="cerca grande">
+    <label for="cerca">{{ t("cerca_label") }}</label>
+    <input id="cerca" type="search" list="nomi" autocomplete="off" data-tp="cerca_segnaposto">
+    <datalist id="nomi"></datalist>
+  </div>
+  <div class="azioni">
+    <a class="azione prima" href="#da-seguire">{{ t("azione_giovani_t", "b") }}{{ t("azione_giovani_s", "small") }}</a>
+    <a class="azione" href="#formazione">{{ t("azione_formazione_t", "b") }}{{ t("azione_formazione_s", "small") }}</a>
+  </div>
+  <a class="metodo" href="metodo.html">{{ t("metodo_link") }}</a>
+</div></section>
+
+<section class="blocco chiaro" id="da-seguire"><div class="wrap">
+  {{ t("sv_titolo", "h2") }}
+  {{ t("sv_spiega", "p", eta=m.eta_max, poco=m.poco) }}
+  <div class="stato {{ 'si' if v.mostra_sottovalutati else '' }}">
+    {{ t("stato_etic_si" if v.mostra_sottovalutati else "stato_etic_no", "span", "etic") }}
+    <p>{{ t("stato_sv_si" if v.mostra_sottovalutati else "stato_sv_no") }} {{ t("contro", "b", a=s.rho_modello, b=s.rho_rivale) }}</p>
+  </div>
+  {% if v.mostra_sottovalutati %}<div class="carte" id="sottovalutati"></div>{% endif %}
+</div></section>
+
+<section class="blocco" id="formazione"><div class="wrap">
+  {{ t("formazione_titolo", "h2") }}
+  {{ t("formazione_spiega", "p", stagione=d.stagione_prevista, soglia=m.soglia) }}
+  {% if v.mostra_previsione and v.mostra_forbice %}
+  <div class="chiave">
+    <span><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" class="k-punto"/></svg>{{ t("leg_previsione") }}</span>
+    <span><svg width="16" height="14" aria-hidden="true"><rect x="0" y="3" width="16" height="8" rx="4" class="k-banda"/></svg>{{ t("leg_forbice") }}</span>
+    <span><svg width="6" height="14" aria-hidden="true"><rect width="4" height="14" class="k-tacca"/></svg>{{ t("leg_prima") }}</span>
+  </div>
+  {% endif %}
+  <div class="filtri" role="group">
+    {{ t("mostra_label", "span", "etichetta") }}
+    {% for r in ["ATT", "CEN", "DIF"] %}<button type="button" data-ruolo="{{ r }}">{{ t("ruolo_" ~ r) }} <span class="n" data-conta="{{ r }}"></span></button>{% endfor %}
+  </div>
+  <div class="stato {{ 'si' if v.mostra_previsione else '' }}">
+    {{ t("stato_etic_si" if v.mostra_previsione else "stato_etic_no", "span", "etic") }}
+    <p>{{ t("stato_prev_si" if v.mostra_previsione else "stato_prev_no") }} {{ t("contro", "b", a=g.rho_modello, b=g.rho_rivale) }}</p>
+  </div>
+  <p class="aiuto">{{ t("aiuto_click") }}</p>
+  <div class="carte" id="previsione"></div>
+</div></section>
+
+<section class="blocco chiaro"><div class="wrap">
+  {{ t("sfortunati_titolo", "h2") }}
+  {{ t("sfortunati_nota", "p") }}
+  <div id="sfortunati" class="tabella"></div>
+</div></section>
 {% endblock %}

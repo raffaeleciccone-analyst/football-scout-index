@@ -1,44 +1,45 @@
 {% extends "base.html" %}
 {% block contenuto %}
 {% set s = v.sottovalutati %}
-<article class="testo-lungo">
-{{ t("titolo_metodo", "h1") }}
-{{ t("metodo_intro", "p") }}
+<section class="intro"><div class="wrap">
+  {{ t("titolo_metodo", "h2") }}
+  {{ t("metodo_intro", "p") }}
+</div></section>
+<section class="blocco"><div class="wrap testo-lungo">
+  {{ t("metodo_prova_titolo", "h3") }}
+  {{ t("stato_verificata" if v.verificata else "stato_prototipo", "p") }}
+  {{ t("metodo_come_si_legge", "p") }}
+  <ul class="stagioni">
+    {% for stagione, x in v.per_stagione.items() %}
+    <li>{{ t("riga_stagione", stagione=stagione.split(" -> ")[1], mod=x.rho_modello, grezzo=x.rho_grezzo) }}</li>
+    {% endfor %}
+  </ul>
 
-{{ t("metodo_prova_titolo", "h2") }}
-{{ t("stato_verificata" if v.verificata else "stato_prototipo", "p") }}
-{{ t("metodo_come_si_legge", "p") }}
-<ul class="stagioni">
-  {% for stagione, x in v.per_stagione.items() %}
-  <li>{{ t("riga_stagione", stagione=stagione.split(" -> ")[1], mod=x.rho_modello, grezzo=x.rho_grezzo) }}</li>
-  {% endfor %}
-</ul>
+  {{ t("metodo_rivali_titolo", "h3") }}
+  <ul class="rivali">
+    {% for nome, r in v.rivali.items() %}
+    <li class="{{ 'batte' if r.batte else 'no' }}">{{ t("rivale_" ~ nome) }}: {{ t("confronto", mod=r.rho_modello, riv=r.rho_rivale) }} {{ t("esito_breve_si" if r.batte else "esito_breve_no", "strong") }}</li>
+    {% endfor %}
+  </ul>
+  {% if v.rivali.tpi_pro %}{{ t("storia_tpi_pro", "p", pro=v.rivali.tpi_pro.rho_rivale, mod=v.rivali.tpi_pro.rho_modello) }}{% endif %}
+  {{ t("metodo_forbice", "p", copertura=(v.copertura * 100) | round | int ~ "%") }}
+  {{ t("metodo_sottovalutati", "p", n=s.n, mod=s.rho_modello, riv=s.rho_rivale) }}
+  {% if v.costruzione is not none %}{{ t("metodo_costruzione_si" if v.costruzione else "metodo_costruzione_no", "p") }}{% endif %}
+  {{ t("metodo_ingredienti", "p") }}
+  {% if v.infortuni_provati %}{{ t("metodo_infortuni_si" if v.infortuni else "metodo_infortuni_no", "p") }}{% endif %}
+  {{ t("metodo_contesti", "p") }}
 
-{{ t("metodo_rivali_titolo", "h2") }}
-<ul class="rivali">
-  {% for nome, r in v.rivali.items() %}
-  <li class="{{ 'batte' if r.batte else 'no' }}">{{ t("rivale_" ~ nome) }} {{ t("confronto", mod=r.rho_modello, riv=r.rho_rivale) }} {{ t("esito_batte" if r.batte else "esito_non_batte", "strong") }}</li>
-  {% endfor %}
-</ul>
-{% if v.rivali.tpi_pro %}{{ t("storia_tpi_pro", "p", pro=v.rivali.tpi_pro.rho_rivale, mod=v.rivali.tpi_pro.rho_modello) }}{% endif %}
-{{ t("metodo_forbice", "p", copertura=(v.copertura * 100) | round | int ~ "%") }}
-{{ t("metodo_sottovalutati", "p", n=s.n, mod=s.rho_modello, riv=s.rho_rivale) }}
-{% if v.costruzione is not none %}{{ t("metodo_costruzione_si" if v.costruzione else "metodo_costruzione_no", "p") }}{% endif %}
-{{ t("metodo_ingredienti", "p") }}
-{{ t("metodo_infortuni_si" if v.infortuni else "metodo_infortuni_no", "p") }}
-{{ t("metodo_contesti", "p") }}
+  {{ t("non_misurato_titolo", "h3") }}
+  <ul>
+    <li>{{ t("non_misurato_difesa") }}</li>
+    <li>{{ t("non_misurato_possesso") }}</li>
+  </ul>
 
-{{ t("non_misurato_titolo", "h2") }}
-<ul>
-  <li>{{ t("non_misurato_difesa") }}</li>
-  <li>{{ t("non_misurato_possesso") }}</li>
-</ul>
-
-{{ t("metodo_pesi_titolo", "h2") }}
-<ul class="pesi">
-  {% for dim, peso in m.pesi_tpi.items() %}
-  <li>{{ t("dim_" ~ dim) }} <b>{{ (peso * 100) | round(1) }}%</b></li>
-  {% endfor %}
-</ul>
-</article>
+  {{ t("metodo_pesi_titolo", "h3") }}
+  <ul class="pesi">
+    {% for dim, peso in m.pesi_tpi.items() %}
+    <li>{{ t("dim_" ~ dim) }} <b>{{ (peso * 100) | n(1) }}%</b></li>
+    {% endfor %}
+  </ul>
+</div></section>
 {% endblock %}

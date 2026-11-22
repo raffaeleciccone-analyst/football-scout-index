@@ -18,7 +18,8 @@ from fsi import db, previsione as P, tpi
 
 SORGENTE = C.RADICE / "sito"
 VIETATE = [Path(r"C:\dev\serie-a-index"), Path(r"C:\dev\premier-league-index")]
-PAGINE = ["index.html", "previsione.html", "giocatore.html", "metodo.html"]
+PAGINE = ["index.html", "classifica.html", "giocatore.html", "metodo.html"]
+NOMI = {"serie_a": "Serie A", "premier": "Premier League"}
 FISSI = ["stile.css", "sito.js"]
 
 
@@ -40,11 +41,14 @@ def _numero_it(v):
 def _ambiente(testi):
     env = Environment(loader=FileSystemLoader(SORGENTE), autoescape=True)
 
-    def t(chiave, tag="span", **valori):
+    def t(chiave, tag="span", cls=None, **valori):
         testo = testi[chiave]["it"].format(**{k: _numero_it(v) for k, v in valori.items()})
         dati = escape(json.dumps(_pulito(valori), ensure_ascii=False))
-        return Markup(f'<{tag} data-t="{chiave}" data-v="{dati}">{escape(testo)}</{tag}>')
+        classe = f' class="{cls}"' if cls else ""
+        return Markup(f'<{tag}{classe} data-t="{chiave}" data-v="{dati}">{escape(testo)}</{tag}>')
     env.globals["t"] = t
+    # numero scritto in pagina: in italiano 0,82; lo script lo riscrive 0.82 in inglese
+    env.filters["n"] = lambda v, dec=2: Markup(f'<span data-n="{v}" data-dec="{dec}">{f"{v:.{dec}f}".replace(".", ",")}</span>')
     return env
 
 
@@ -68,10 +72,15 @@ def _dati_lega(con, lega, stagione, prev, esclusi, verdetto, verdetto_costruzion
                          for c in mie.itertuples(index=False)],
             "andamento": andamento.get(r.giocatore_id, [])}
     p = prev[prev["lega"] == lega]
+    # la squadra della stagione di partenza (l'ultima con cui ha giocato), anche per chi non è nella classifica TPI
+    a = int(stagione_prevista[:4]) - 1
+    base = db.righe(con, lega, f"{a}-{str(a + 1)[2:]}").sort_values(["giornata", "data"])
+    squadra_base = base.groupby("giocatore_id")["squadra"].last()
     sotto = set(P.sottovalutati(p)["giocatore_id"])
     sfortuna = P.sfortunati(p).set_index("giocatore_id")["sfortuna90"]
     for r in p.itertuples(index=False):
         g = giocatori.setdefault(int(r.giocatore_id), {"nome": nomi.get(r.giocatore_id, "?"), "ruolo": r.ruolo, "tpi": None})
+        g["squadra_prima"] = squadra_base.get(r.giocatore_id)
         g["previsione"] = {"pred": r.pred, "lo": r.lo, "hi": r.hi, "prima": r.out90, "minuti_prima": int(r.minuti),
                            "eta": r.eta, "motivi": list(r.motivi), "sottovalutato": r.giocatore_id in sotto,
                            "sfortuna90": sfortuna.get(r.giocatore_id), "pos_ruolo": int(r.posizione_ruolo)}
@@ -87,6 +96,8 @@ def _dati_lega(con, lega, stagione, prev, esclusi, verdetto, verdetto_costruzion
                      "rivali": v["rivali"], "sottovalutati": v["sottovalutati"],
                      "per_stagione": {k: x[lega] for k, x in verdetto["per_stagione"].items() if lega in x},
                      "infortuni": verdetto.get("infortuni", False),
+                     # la frase sugli infortuni esce solo se la prova con e senza infortuni è stata fatta davvero
+                     "infortuni_provati": verdetto.get("infortuni_provati", False),
                      "costruzione": verdetto_costruzione["leghe"][lega]["mostra_previsione"] if verdetto_costruzione else None},
         "metodo": {"pesi_tpi": pesi, "soglia": C.SOGLIA_PREVISIONE, "metro": C.MINUTI_METRO,
                    "poco": C.MINUTI_POCO_CONSIDERATO, "eta_max": C.ETA_MAX_SOTTOVALUTATI}})
@@ -103,12 +114,13 @@ def genera(con, cartella, stagioni_tpi, prev, esclusi, verdetto, verdetto_costru
         raise ValueError(f"{cartella} è la cartella di un sito: fino al cambio si scrive solo altrove (V8)")
     testi = json.loads((SORGENTE / "testi.json").read_text(encoding="utf-8"))
     env = _ambiente(testi)
-    riassunto = {}
+    riassunto, tutti = {}, {}
     for lega, stagione in stagioni_tpi.items():
         uscita = cartella / lega
         uscita.mkdir(parents=True, exist_ok=True)
         dati = _dati_lega(con, lega, stagione, prev, esclusi, verdetto, verdetto_costruzione, stagione_prevista)
         riassunto[lega] = dati["verdetto"]
+        tutti[lega] = dati["giocatori"]
         _scrivi_js(uscita / "dati.js", "DATI", dati)
         _scrivi_js(uscita / "testi.js", "TESTI", testi)
         for f in FISSI:
@@ -119,10 +131,25 @@ def genera(con, cartella, stagioni_tpi, prev, esclusi, verdetto, verdetto_costru
     home = cartella / "home"
     home.mkdir(parents=True, exist_ok=True)
     _scrivi_js(home / "testi.js", "TESTI", testi)
-    _scrivi_js(home / "dati.js", "DATI", {"leghe": riassunto})
+    # in vetrina: i giovani della prima lega dove la lista ha passato la prova, le previsioni della prima dove passa
+    vetrina = {"sv": next((l for l, v in riassunto.items() if v["mostra_sottovalutati"]), None),
+               "top": next((l for l, v in riassunto.items() if v["mostra_previsione"]), None)}
+    schede = {}
+    if vetrina["sv"]:
+        G = tutti[vetrina["sv"]]
+        schede["sv"] = sorted([dict(g, id=i, lega=vetrina["sv"]) for i, g in G.items() if g.get("previsione", {}).get("sottovalutato")],
+                              key=lambda g: -g["previsione"]["pred"])[:3]
+    if vetrina["top"]:
+        G = tutti[vetrina["top"]]
+        schede["top"] = sorted([dict(g, id=i, lega=vetrina["top"]) for i, g in G.items() if g.get("previsione")],
+                               key=lambda g: -g["previsione"]["pred"])[:3]
+    ricerca = [{"n": g["nome"], "id": i, "lega": l} for l, G in tutti.items() for i, g in G.items()]
+    _scrivi_js(home / "dati.js", "DATI", {"leghe": riassunto, "schede": schede, "ricerca": ricerca})
     for f in FISSI:
         shutil.copy(SORGENTE / f, home / f)
-    (home / "index.html").write_text(env.get_template("home.html").render(leghe=riassunto), encoding="utf-8")
+    (home / "index.html").write_text(env.get_template("home.html").render(
+        leghe=riassunto, vetrina=vetrina, nomi=NOMI, eta_max=C.ETA_MAX_SOTTOVALUTATI,
+        stagione_prevista=stagione_prevista, pagina="home"), encoding="utf-8")
     return cartella
 
 

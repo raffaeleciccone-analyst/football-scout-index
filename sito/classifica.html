@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block contenuto %}
+<section class="intro"><div class="wrap">
+  {{ t("titolo_classifica", "h2") }}
+  {{ t("spiega_tpi", "p", stagione=d.stagione) }}
+  <div class="filtri" role="group">
+    {{ t("mostra_label", "span", "etichetta") }}
+    {% for r in ["ATT", "CEN", "DIF"] %}<button type="button" data-ruolo="{{ r }}">{{ t("ruolo_" ~ r) }}</button>{% endfor %}
+  </div>
+</div></section>
+<section class="blocco"><div class="wrap">
+  <div id="classifica" class="tabella"></div>
+</div></section>
+{% endblock %}

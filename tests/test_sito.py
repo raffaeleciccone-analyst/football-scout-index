@@ -70,6 +70,7 @@ def test_c17_le_pagine_non_hanno_testo_fuori_da_testi_json(costruito):
     from fsi import config, previsione, tpi
     varianti = {"dim_": tpi.DIMENSIONI, "ruolo_": list(config.PESO_RUOLO), "ctx_": config.CONTESTI,
                 "motivo_": previsione.INGREDIENTI_MOTIVO, "rivale_": ["grezzo", "minuti", "tpi", "tpi_pro"],
+                "ruolo_breve_": list(config.PESO_RUOLO), "sez_": [f"{s}_{x}" for s in ("previsione", "classifica", "cerca", "metodo") for x in "ts"],
                 "lega_": list(config.LEGHE), "escluso_": ["storia insufficiente", "nessun dato nel campionato"]}
     assert prefissi <= set(varianti), prefissi - set(varianti)
     mancanti = [p + v for p in prefissi for v in varianti[p] if p + v not in TESTI]
@@ -101,7 +102,7 @@ def test_c19_e_c03c_dati_della_pagina_giocatore(costruito, con):
 def test_c20_home_porta_ai_due_siti_e_ogni_sito_ha_le_sezioni(costruito):
     home = (costruito / "home" / "index.html").read_text(encoding="utf-8")
     assert "serie_a/index.html" in home
-    for pagina in ("index.html", "previsione.html", "giocatore.html", "metodo.html"):
+    for pagina in ("index.html", "classifica.html", "giocatore.html", "metodo.html"):
         assert (costruito / "serie_a" / pagina).exists(), pagina
     metodo = (costruito / "serie_a" / "metodo.html").read_text(encoding="utf-8")
     assert 'data-t="non_misurato_difesa"' in metodo and 'data-t="non_misurato_possesso"' in metodo
@@ -114,8 +115,8 @@ def test_c09_c10_se_non_batte_la_pagina_lo_dice(con, tmp_path):
                 stagione_prevista="2026-27")
     d = _dati(tmp_path)
     assert d["verdetto"]["mostra_previsione"] is False and d["verdetto"]["mostra_sottovalutati"] is False
-    h = (tmp_path / "serie_a" / "previsione.html").read_text(encoding="utf-8")
-    assert 'data-t="previsione_non_batte"' in h and 'data-t="sottovalutati_non_batte"' in h
+    h = (tmp_path / "serie_a" / "index.html").read_text(encoding="utf-8")
+    assert 'data-t="stato_prev_no"' in h and 'data-t="stato_sv_no"' in h and 'id="sottovalutati"' not in h
 
 
 # ---- C28: fino al cambio, mai nelle cartelle dei siti ----
