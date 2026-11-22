@@ -3,10 +3,9 @@
 **Who will do well next season in Serie A and the Premier League? A forecast that is shown only
 where, on seasons it had never seen, it beat the simple statistic.**
 
-**Status:** finished and tested. It replaces the engine behind
-[serie-a-index](https://raffaeleciccone-analyst.github.io/serie-a-index/) and
-[premier-league-index](https://raffaeleciccone-analyst.github.io/premier-league-index/); the switch happens when
-Understat (the data source, in maintenance since 5 November 2026) is back.
+**[Open the site](https://raffaeleciccone-analyst.github.io/football-scout-index/)** · **Status:** finished and tested. It replaces the two older sites
+(serie-a-index and premier-league-index), which stay online until Understat, the data source in maintenance since
+5 November 2026, is back; from then on this site updates after every matchday.
 
 ## The results
 
