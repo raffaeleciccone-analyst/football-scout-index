@@ -1,9 +1,11 @@
 # SPEC_CONTESTI — la regola completa dei 5 contesti (SPEC F1b, C3b)
 
-Stato: **scritta il 22/11/2026**, ricavata da `parte1_analisi.py` del motore vecchio (`compute_dimensions`,
+Stato: **scritta e decisa il 22/11/2026** (Q-C1 = B, Q-C2 = B), ricavata da `parte1_analisi.py` del motore vecchio (`compute_dimensions`,
 `compute_all_contexts`, `compute_bayesian_priors`, `_weighted_tpi`, `z_series`) e **verificata**: rifatto da qui,
 il TPI di ogni contesto torna uguale al payload 2025-26 per tutti i giocatori con almeno 4 presenze nel contesto
-(1.731 valori, scarto massimo 0,0009, stesso numero di partite per tutti). Test: `test_c03b_...`.
+(1.731 valori, scarto massimo 0,0009, stesso numero di partite per tutti). Dopo le decisioni Q-C1/Q-C2: totale,
+casa, trasferta e prime 6 restano uguali (scarto ≤ 0,003); "difese forti" cambia (stesse partite nel 56% dei
+casi, Spearman con oggi 0,88). Test: `test_c03b_...`.
 Chiude i punti che SPEC_INDICE C13 lasciava aperti (trovati dalla ricostruzione alla cieca).
 
 ## I contesti
@@ -15,12 +17,12 @@ Chiude i punti che SPEC_INDICE C13 lasciava aperti (trovati dalla ricostruzione 
   suo posto** (⚠ regola nascosta 1: diversa da vs_top6).
 - "La sua squadra" = quella dell'ultima partita giocata nella stagione.
 
-## Da dove vengono le difese (⚠ regola nascosta 2)
+## Da dove vengono le difese (⚠ regola nascosta 2 → CAMBIATA, Q-C1 = B)
+- **Decisione**: sempre dagli xG concessi delle partite Understat, in tutte le stagioni e leghe. Sotto, com'era.
 - Se c'è il file heXI/Sportmonks degli xG concessi della stagione, vince lui. Oggi esiste **solo per la Serie A
   2025-26**; per le altre stagioni e per la Premier si usano gli xG concessi delle partite Understat.
 - Con l'ordine Understat, nella Serie A 2025-26 la sesta difesa è il Milan invece del Bologna, e il TPI
-  "contro le difese forti" cambia per 318 giocatori su 335. **Domanda aperta per l'utente (Q-C1).**
-- A stagione in corso il file esterno non si usa (sono xG a stagione intera: sarebbe sbirciare nel futuro).
+  "contro le difese forti" cambia per 318 giocatori su 335. Accettato (Q-C1 = B).
 
 ## Le dimensioni in un contesto (giocatore con almeno 4 presenze nel contesto)
 - **output** e **buildup** per 90, divisi per la SOS media degli avversari *del contesto*; poi tirati verso la
@@ -40,12 +42,12 @@ Chiude i punti che SPEC_INDICE C13 lasciava aperti (trovati dalla ricostruzione 
 - Media pesata con gli stessi pesi del totale, riproporzionati sulle dimensioni presenti.
 - Poi gli stessi passaggi del totale: riporto verso la media del ruolo *del contesto* con la confidenza del
   totale → × peso del ruolo → × penalità di disponibilità.
-- ⚠ **Regola nascosta 3**: chi ha **meno di 4 presenze** in un contesto riceve lo stesso un TPI di quel contesto,
+- ⚠ **Regola nascosta 3 → TOLTA (Q-C2 = B)**: sotto le 4 presenze il contesto non ha TPI e non entra nella media
+  del ruolo. Effetto misurato: prime 6 si muove al massimo di 0,003, casa e trasferta per niente. Com'era: chi ha **meno di 4 presenze** in un contesto riceve lo stesso un TPI di quel contesto,
   fatto solo di finalizzazione e forma (le uniche dimensioni presenti), ed entra nella media del ruolo usata per
-  il riporto. Nel sito nuovo i contesti si **mostrano** solo da 4 presenze (C13), ma il calcolo la tiene, per
-  ridare gli stessi numeri.
+  il riporto.
 
-## Domande aperte
+## Domande (risolte il 22/11: B e B)
 - Q-C1. Difese forti: tenere la fonte heXI/Sportmonks (uguale a oggi, ma una fonte in più e solo per una
   stagione) o usare sempre gli xG concessi Understat (una fonte sola, coerente in tutte le stagioni, ma
   "contro le difese forti" cambia per quasi tutti nella Serie A 2025-26)?

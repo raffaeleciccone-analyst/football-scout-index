@@ -131,10 +131,6 @@ def copia(lega: str, con_nuovo) -> dict[str, int]:
     con_nuovo.executemany("INSERT OR REPLACE INTO id_vecchi VALUES (?, ?, ?)",
                           [(lega, int(i), int(u)) for i, u in uid.dropna().items()])
     con_nuovo.commit()
-    for f in (MOTORE / "dati_esterni").glob("xg_concessi_*.json"):   # es. xg_concessi_serie_a_2025-26.json
-        nome_lega, stagione = f.stem.removeprefix("xg_concessi_").rsplit("_", 1)
-        if nome_lega == lega:
-            db.carica_difese(con_nuovo, lega, stagione, f)
     return {"partite": len(partite), "righe": len(righe), "giocatori": len(giocatori),
             "ruoli": len(ruoli), "infortuni": len(infortuni)}
 

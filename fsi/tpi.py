@@ -43,19 +43,14 @@ def _partite_squadra(cal):
     return pd.concat(lati, ignore_index=True)
 
 
-def _squadre_di_riferimento(ps, difese_esterne=None):
-    """Le prime 6 per punti (poi differenza reti, gol fatti) e le squadre in ordine di xG concessi a partita.
-
-    Le difese: se c'è il file heXI/Sportmonks della stagione (tabella difese) vince lui, come nel motore vecchio;
-    altrimenti gli xG concessi delle nostre partite.
-    """
+def _squadre_di_riferimento(ps):
+    """Le prime 6 per punti (poi differenza reti, gol fatti) e le squadre in ordine di xG concessi a partita
+    (sempre dalle partite Understat: decisione Q-C1 = B, una fonte sola)."""
     ps = ps.assign(punti=np.select([ps["gol_fatti"] > ps["gol_subiti"], ps["gol_fatti"] == ps["gol_subiti"]], [3, 1], 0))
     t = ps.groupby("squadra").agg(punti=("punti", "sum"), gf=("gol_fatti", "sum"), gs=("gol_subiti", "sum"),
                                   xgc=("xg_concessi", "mean"))
     t["dr"] = t["gf"] - t["gs"]
     prime = list(t.sort_values(["punti", "dr", "gf"], ascending=False).index[:C.N_SQUADRE_FORTI])
-    if difese_esterne is not None and set(difese_esterne.index) >= set(t.index):
-        t["xgc"] = difese_esterne
     return prime, list(t.sort_values("xgc").index)   # le difese tutte in ordine: le 6 si scelgono per giocatore
 
 
@@ -112,11 +107,7 @@ def _calcola(con, lega, stagione, fino_a_giornata=None):
     pg, cal, ruoli, nomi = _dati(con, lega, stagione, fino_a_giornata)
     ps = _partite_squadra(cal)
     sos = ps.groupby("squadra")["xg_concessi"].mean() / ps["xg_concessi"].mean()   # C12a
-    esterne = pd.read_sql("SELECT squadra, xg_concessi_pg FROM difese WHERE lega = ? AND stagione = ?", con,
-                          params=[lega, stagione]).set_index("squadra")["xg_concessi_pg"]
-    # shortcut: le difese esterne valgono solo a stagione finita (sono xG a stagione intera); a metà stagione
-    # userebbero partite future. Fino a una regola migliore, a stagione in corso si usano le nostre.
-    prime6, forti = _squadre_di_riferimento(ps, esterne if fino_a_giornata is None and len(esterne) else None)
+    prime6, forti = _squadre_di_riferimento(ps)
     giornate = int(cal["giornata"].max())
 
     pg = pg.merge(ps[["partita_id", "squadra", "xg_fatti"]], on=["partita_id", "squadra"], how="left")
@@ -202,6 +193,8 @@ def _calcola(con, lega, stagione, fino_a_giornata=None):
     for dim in DIM_STAGIONE:
         ctx[f"z_{dim}"] = ctx["giocatore_id"].map(q[f"z_{dim}"])
     ctx["media_pesata"] = _media_pesata(ctx[[f"z_{d}" for d in DIMENSIONI]])
+    # sotto le 4 presenze il contesto non esiste, neanche nella media del ruolo (decisione Q-C2 = B)
+    ctx.loc[ctx["partite"] < C.CONTESTO_MIN_PRESENZE, "media_pesata"] = np.nan
 
     # ---- confidenza (C10b), dal contesto totale ----
     p95 = float(np.percentile(q["minuti"], C.CONF_PERCENTILE_MINUTI))

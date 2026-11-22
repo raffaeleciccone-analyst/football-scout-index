@@ -47,13 +47,34 @@ def test_c03_ogni_peso_in_un_posto_solo(con, monkeypatch):
 
 
 def test_c03b_contesti_uguali_al_motore_di_oggi(con, contesti_vecchi):
+    """Totale, casa, trasferta, prime 6: come oggi. Le difese forti cambiano apposta (Q-C1), vedi i test sotto."""
     nuovi = tpi.contesti(con, "serie_a", "2025-26")
     confrontati = 0
-    for r in nuovi.itertuples(index=False):
+    for r in nuovi[nuovi["contesto"] != "vs_forti"].itertuples(index=False):
         vecchio = contesti_vecchi.get(str(r.giocatore_id), {}).get(r.contesto)
         if vecchio is None or vecchio["tpi"] is None or (vecchio["n_app"] or 0) < 4:
             continue
         assert r.partite == vecchio["n_app"], (r.giocatore_id, r.contesto)
         assert r.tpi == pytest.approx(vecchio["tpi"], abs=0.01), (r.giocatore_id, r.contesto)
         confrontati += 1
-    assert confrontati > 1000, f"confrontati solo {confrontati} valori"
+    assert confrontati > 1300, f"confrontati solo {confrontati} valori"
+
+
+def test_c03b_difese_forti_dalle_partite_understat_con_la_settima(con):
+    c = tpi.classifica(con, "serie_a", "2025-26")
+    forti = c.attrs["forti"]
+    assert forti[:6] == ["Inter", "Juventus", "Como", "Napoli", "Roma", "AC Milan"]   # Q-C1: non più Bologna
+    # un giocatore dell'Inter: la sua squadra è fra le 6, quindi entra la settima (Lazio)
+    inter = c[c["squadra"] == "Inter"].iloc[0]
+    righe = con.execute("SELECT avversario FROM righe WHERE lega='serie_a' AND stagione='2025-26' "
+                        "AND giocatore_id=? AND minuti >= 1", (int(inter["giocatore_id"]),)).fetchall()
+    attese = sum(a in forti[1:7] for (a,) in righe)
+    ctx = tpi.contesti(con, "serie_a", "2025-26")
+    trovate = ctx[(ctx["giocatore_id"] == inter["giocatore_id"]) & (ctx["contesto"] == "vs_forti")]["partite"].item()
+    assert trovate == attese
+
+
+def test_c03b_sotto_4_presenze_il_contesto_non_esiste(con):
+    ctx = tpi.contesti(con, "serie_a", "2025-26")
+    sotto = ctx[ctx["partite"] < 4]
+    assert len(sotto) > 0 and sotto["tpi"].isna().all()   # Q-C2: niente TPI di contesto, neanche nella media

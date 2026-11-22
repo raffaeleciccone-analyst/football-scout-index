@@ -106,8 +106,11 @@ Ogni criterio diventa almeno un test. ✱ = soglie proposte da me.
 - C1. Dai grezzi 2025-26 (tests/fixtures) il TPI dei 354 qualificati è uguale alla fotografia: 354/354 stessi
   giocatori, stesso valore (scarto ≤ 0,01), Spearman 1,000. Valgono anche tutti i criteri di SPEC_INDICE.
 - C2. **Stagioni mai mescolate**: aggiungo una partita finta della 2026-27 → TPI e previsione della 2025-26 non cambiano.
-- C3b. **Contesti**: dai grezzi 2025-26 il TPI di ogni contesto è uguale a quello del motore di oggi
-  (payload 2025-26, campo `ctx`), per ogni giocatore con almeno 4 presenze nel contesto.
+- C3b. **Contesti**: dai grezzi 2025-26 totale, casa, trasferta e prime 6 sono uguali al motore di oggi
+  (payload 2025-26, campo `ctx`: stesse partite, scarto ≤ 0,01) per chi ha almeno 4 presenze nel contesto.
+  *Cambiati apposta il 22/11 (Q-C1 = B, Q-C2 = B, vedi SPEC_CONTESTI):* le difese forti si scelgono sempre dagli
+  xG concessi Understat (Serie A 2025-26: Inter, Juventus, Como, Napoli, Roma, Milan; con la settima se la sua
+  squadra è fra queste); sotto le 4 presenze un contesto non ha TPI e non entra nella media del ruolo.
 - C3c. Nella pagina giocatore ogni contesto mostra il numero di partite; sotto le 8 partite ✱ compare
   "campione piccolo". Il metodo riporta se gli ingredienti di contesto sono stati tenuti o scartati dal modello.
 - C3. **Ogni peso e soglia in un posto solo**: cambio un peso lì → cambiano calcolo e pagina del metodo; nessun
