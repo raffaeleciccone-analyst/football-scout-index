@@ -167,3 +167,28 @@ def test_c16_classifiche_dentro_il_ruolo(vero, modello):
     prev, _ = P.prevedi(vero, modello, DOPO)
     for (lega, ruolo), b in prev.groupby(["lega", "ruolo"]):
         assert sorted(b["posizione_ruolo"]) == list(range(1, len(b) + 1)), (lega, ruolo)
+
+
+# ---- prova vera: stima su 2023-24 -> 2024-25 (stagione riassunta dall'archivio), prova su 2024-25 -> 2025-26 ----
+@pytest.fixture(scope="module")
+def riassunta(vero):
+    if not vero.execute("SELECT COUNT(*) FROM stagioni_riassunte WHERE stagione = '2023-24'").fetchone()[0]:
+        pytest.skip("2023-24 non importata (python -m fsi.archivio)")
+    return vero
+
+
+def test_c05_tolgo_la_stagione_di_prova_i_pesi_non_cambiano(riassunta):
+    stimata = P.tabella(riassunta, "2023-24", "2024-25")
+    prima = P.stima(stimata, contesti=False)["pesi"]
+    riassunta.execute("SAVEPOINT s")
+    riassunta.execute("DELETE FROM righe WHERE stagione = '2025-26'")
+    dopo = P.stima(P.tabella(riassunta, "2023-24", "2024-25"), contesti=False)["pesi"]
+    riassunta.execute("ROLLBACK TO s")
+    assert prima == pytest.approx(dopo)
+
+
+def test_c13_la_prova_vera_e_verificata(riassunta):
+    v = P.prova_vera(riassunta, [("2023-24", "2024-25")], "2024-25", "2025-26")
+    assert v["stato"].startswith("verificata") and set(v["leghe"]) == {"serie_a", "premier"}
+    for x in v["leghe"].values():
+        assert x["mostra_previsione"] == x["rivali"]["grezzo"]["batte"]

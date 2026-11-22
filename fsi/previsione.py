@@ -28,9 +28,30 @@ def _per90(righe, colonne):
     return righe[colonne].sum(axis=1).groupby(righe["giocatore_id"]).sum()
 
 
+def _ingredienti_riassunti(con, lega, stagione) -> pd.DataFrame:
+    """Stessi ingredienti da una stagione riassunta (archivio): niente tendenza, TPI e contesti (servono le partite)."""
+    r = pd.read_sql("SELECT * FROM stagioni_riassunte WHERE lega = ? AND stagione = ? AND minuti > 0", con,
+                    params=[lega, stagione]).set_index("giocatore_id")
+    t = pd.DataFrame({"minuti": r["minuti"], "partite": r["partite"]})
+    t["out90"] = (r["gol_senza_rigori"] + r["xa"]) / r["minuti"] * 90
+    t["xgxa90"] = (r["xg_senza_rigori"] + r["xa"]) / r["minuti"] * 90
+    t["buildup90"] = r["xg_buildup"] / r["minuti"] * 90
+    t["tendenza"] = 0.0
+    t["ruolo"] = r["ruolo"]
+    t = t[t["ruolo"].isin(C.PESO_RUOLO)]
+    nascita = pd.read_sql("SELECT giocatore_id, data_nascita FROM giocatori", con).set_index("giocatore_id")
+    fine = pd.Timestamp(f"{int(stagione[:4]) + 1}-05-31")
+    t["eta"] = (fine - pd.to_datetime(nascita["data_nascita"].reindex(t.index), errors="coerce")).dt.days / 365.25
+    t["tpi"], t["ctx_top6"], t["ctx_casa"] = np.nan, 0.0, 0.0
+    t.insert(0, "lega", lega)
+    return t.rename_axis("giocatore_id").reset_index().sort_values("giocatore_id").reset_index(drop=True)
+
+
 def ingredienti(con, lega, stagione, fino_a_giornata=None) -> pd.DataFrame:
     """Gli ingredienti grezzi di ogni giocatore di movimento in una lega e stagione (fino alla giornata k)."""
     r = db.righe(con, lega, stagione, fino_a_giornata)
+    if r.empty and fino_a_giornata is None:
+        return _ingredienti_riassunti(con, lega, stagione)
     r = r[r["minuti"] >= 1].sort_values(["giocatore_id", "giornata", "data"], kind="mergesort")
     g = r.groupby("giocatore_id")
     t = pd.DataFrame({"minuti": g["minuti"].sum(), "partite": g.size()})
@@ -224,16 +245,10 @@ def _tpi_pro(base):
     return pd.read_csv(RIVALI_TPI_PRO)[["lega", "giocatore_id", "tpi_pro"]]
 
 
-def prova(con, base, dopo, misura="output", fino_a_giornata=None) -> dict:
-    tab = tabella(con, base, dopo, fino_a_giornata, misura)
+def _valuta(tab, previsioni, base, misura, fino_a_giornata) -> dict:
+    """Verdetto per lega: rivali (C8, C12), crescita (C10), forbice (C11), cosa si mostra (C9)."""
     ev = (tab["min_dopo"] >= C.MINUTI_METRO) & tab["y"].notna()
-    rho = {}
-    for ctx in (True, False):   # i contesti restano solo se migliorano la prova (F1b, C3c)
-        oof = fuori_campione(tab, misura, ctx)
-        rho[ctx] = spearmanr(oof.loc[ev, "pred"], tab.loc[ev, "y"]).statistic
-    tenuti = bool(rho[True] > rho[False])
-    oof = fuori_campione(tab, misura, tenuti)
-    t = tab[ev].join(oof).merge(_tpi_pro(base), on=["lega", "giocatore_id"], how="left")
+    t = tab[ev].join(previsioni).merge(_tpi_pro(base), on=["lega", "giocatore_id"], how="left")
     grezzo = "out90" if misura == "output" else "buildup90"
     rivali = {"grezzo": grezzo, "minuti": "minuti"}
     if misura == "output" and fino_a_giornata is None:
@@ -251,10 +266,37 @@ def prova(con, base, dopo, misura="output", fino_a_giornata=None) -> dict:
         v["mostra_previsione"] = v["rivali"]["grezzo"]["batte"]
         v["mostra_sottovalutati"] = v["crescita"]["batte"]
         leghe[lega] = v
+    return leghe
+
+
+def prova(con, base, dopo, misura="output", fino_a_giornata=None) -> dict:
+    """Prova a gruppi su una coppia sola: un prototipo (C13)."""
+    tab = tabella(con, base, dopo, fino_a_giornata, misura)
+    ev = (tab["min_dopo"] >= C.MINUTI_METRO) & tab["y"].notna()
+    rho = {}
+    for ctx in (True, False):   # i contesti restano solo se migliorano la prova (F1b, C3c)
+        oof = fuori_campione(tab, misura, ctx)
+        rho[ctx] = spearmanr(oof.loc[ev, "pred"], tab.loc[ev, "y"]).statistic
+    tenuti = bool(rho[True] > rho[False])
+    leghe = _valuta(tab, fuori_campione(tab, misura, tenuti), base, misura, fino_a_giornata)
     return {"base": base, "dopo": dopo, "misura": misura, "giornata": fino_a_giornata,
-            "stato": "prototipo, non verificato",   # una coppia sola, prova a gruppi (C13)
+            "stato": "prototipo, non verificato",
             "contesti_tenuti": tenuti, "rho_con_contesti": float(rho[True]), "rho_senza_contesti": float(rho[False]),
             "leghe": leghe}
+
+
+def prova_vera(con, addestramento, base, dopo, misura="output") -> dict:
+    """Stima su coppie di stagioni passate, prova su una coppia che la stima non ha mai visto (C5, C13).
+
+    Contesti fuori: scartati dal prototipo, e la stagione riassunta 2023-24 non li ha.
+    """
+    stimata = pd.concat([tabella(con, a, d, misura=misura) for a, d in addestramento], ignore_index=True)
+    mod = stima(stimata, misura, contesti=False)
+    tab = tabella(con, base, dopo, misura=misura)
+    leghe = _valuta(tab, applica(mod, tab), base, misura, None)
+    return {"addestramento": [f"{a} -> {d}" for a, d in addestramento], "base": base, "dopo": dopo,
+            "misura": misura, "stato": "verificata (prova su una stagione mai vista)", "K": mod["K"],
+            "pesi": {k: float(v) for k, v in mod["pesi"].items()}, "leghe": leghe}
 
 
 # ---------------------------------------------------------------- la previsione pubblicata
@@ -309,3 +351,5 @@ if __name__ == "__main__":
     esito["aggiornata"] = prove_aggiornata(con, "2024-25", "2025-26")
     (cartella / "prototipo_2024-25_2025-26.json").write_text(json.dumps(esito, indent=1, ensure_ascii=False),
                                                              encoding="utf-8")
+    vera = {m: prova_vera(con, [("2023-24", "2024-25")], "2024-25", "2025-26", m) for m in ("output", "buildup")}
+    (cartella / "vera_2024-25_2025-26.json").write_text(json.dumps(vera, indent=1, ensure_ascii=False), encoding="utf-8")

@@ -1,0 +1,225 @@
+{
+ "output": {
+  "addestramento": [
+   "2023-24 -> 2024-25"
+  ],
+  "base": "2024-25",
+  "dopo": "2025-26",
+  "misura": "output",
+  "stato": "verificata (prova su una stagione mai vista)",
+  "K": 1000,
+  "pesi": {
+   "out_t": 0.41426939423383846,
+   "xgxa_t": 0.5809767815008189,
+   "log_minuti": -0.006595339570726672,
+   "eta": 0.0003146819454009248,
+   "eta2": 0.00023492135407804685,
+   "eta_manca": 0.018880248346207162,
+   "tendenza": 0.0,
+   "ruolo_CEN": -0.007849389880059138,
+   "ruolo_DIF": -0.017379864727241717,
+   "premier": -0.0337992597349013
+  },
+  "leghe": {
+   "premier": {
+    "n": 214,
+    "rivali": {
+     "grezzo": {
+      "n": 214,
+      "rho_modello": 0.8030164905975736,
+      "rho_rivale": 0.758024138077273,
+      "diff_lo": 0.017845448315194183,
+      "diff_hi": 0.07497605829060279,
+      "batte": true
+     },
+     "minuti": {
+      "n": 214,
+      "rho_modello": 0.8030164905975736,
+      "rho_rivale": 0.017142697960797537,
+      "diff_lo": 0.6607338085904988,
+      "diff_hi": 0.903328189632208,
+      "batte": true
+     },
+     "tpi": {
+      "n": 214,
+      "rho_modello": 0.8030164905975736,
+      "rho_rivale": 0.3661488163932519,
+      "diff_lo": 0.34424962074577836,
+      "diff_hi": 0.5273744079266407,
+      "batte": true
+     },
+     "tpi_pro": {
+      "n": 214,
+      "rho_modello": 0.8030164905975736,
+      "rho_rivale": 0.33131693089284986,
+      "diff_lo": 0.3728798476034464,
+      "diff_hi": 0.5700284384146349,
+      "batte": true
+     }
+    },
+    "crescita": {
+     "n": 214,
+     "rho_modello": 0.47192496426067815,
+     "rho_rivale": 0.5023776215213471,
+     "diff_lo": -0.07838964310212468,
+     "diff_hi": 0.017484115740662037,
+     "batte": false,
+     "rivale": "regressione verso la media"
+    },
+    "forbice": {
+     "copertura": 0.7616822429906542,
+     "mostra": true
+    },
+    "mostra_previsione": true,
+    "mostra_sottovalutati": false
+   },
+   "serie_a": {
+    "n": 210,
+    "rivali": {
+     "grezzo": {
+      "n": 210,
+      "rho_modello": 0.743579784309947,
+      "rho_rivale": 0.7048441995264918,
+      "diff_lo": 0.01595126565499889,
+      "diff_hi": 0.06508327568950316,
+      "batte": true
+     },
+     "minuti": {
+      "n": 210,
+      "rho_modello": 0.743579784309947,
+      "rho_rivale": -0.06898859573814418,
+      "diff_lo": 0.6785912722411547,
+      "diff_hi": 0.9397168324603534,
+      "batte": true
+     },
+     "tpi": {
+      "n": 209,
+      "rho_modello": 0.7505759867028071,
+      "rho_rivale": 0.4611817331293078,
+      "diff_lo": 0.1985292051684611,
+      "diff_hi": 0.3831324642501662,
+      "batte": true
+     },
+     "tpi_pro": {
+      "n": 207,
+      "rho_modello": 0.7474147736978237,
+      "rho_rivale": 0.5383920958079313,
+      "diff_lo": 0.13008205798992276,
+      "diff_hi": 0.2960951041065699,
+      "batte": true
+     }
+    },
+    "crescita": {
+     "n": 210,
+     "rho_modello": 0.5324299546798923,
+     "rho_rivale": 0.48353477403115713,
+     "diff_lo": -0.003946988953690635,
+     "diff_hi": 0.10449043915037676,
+     "batte": false,
+     "rivale": "regressione verso la media"
+    },
+    "forbice": {
+     "copertura": 0.7857142857142857,
+     "mostra": true
+    },
+    "mostra_previsione": true,
+    "mostra_sottovalutati": false
+   }
+  }
+ },
+ "buildup": {
+  "addestramento": [
+   "2023-24 -> 2024-25"
+  ],
+  "base": "2024-25",
+  "dopo": "2025-26",
+  "misura": "buildup",
+  "stato": "verificata (prova su una stagione mai vista)",
+  "K": 1500,
+  "pesi": {
+   "build_t": 1.030994505293489,
+   "log_minuti": 0.03435988208622245,
+   "eta": -0.0015466438313013913,
+   "eta2": 0.000351787929375677,
+   "eta_manca": -0.00862965866494712,
+   "tendenza": 0.0,
+   "ruolo_CEN": -3.237151589506003e-05,
+   "ruolo_DIF": 3.2371515894940495e-05,
+   "premier": -0.029728093487698334
+  },
+  "leghe": {
+   "premier": {
+    "n": 140,
+    "rivali": {
+     "grezzo": {
+      "n": 140,
+      "rho_modello": 0.5259189608799283,
+      "rho_rivale": 0.5108832083269554,
+      "diff_lo": -0.023840832334083777,
+      "diff_hi": 0.050529968219169566,
+      "batte": false
+     },
+     "minuti": {
+      "n": 140,
+      "rho_modello": 0.5259189608799283,
+      "rho_rivale": 0.05841171820871009,
+      "diff_lo": 0.2936563468908053,
+      "diff_hi": 0.6388343262842463,
+      "batte": true
+     }
+    },
+    "crescita": {
+     "n": 140,
+     "rho_modello": 0.41920797708337887,
+     "rho_rivale": 0.41588856574315025,
+     "diff_lo": -0.04084331811533233,
+     "diff_hi": 0.042256074800753635,
+     "batte": false,
+     "rivale": "regressione verso la media"
+    },
+    "forbice": {
+     "copertura": 0.65,
+     "mostra": false
+    },
+    "mostra_previsione": false,
+    "mostra_sottovalutati": false
+   },
+   "serie_a": {
+    "n": 154,
+    "rivali": {
+     "grezzo": {
+      "n": 154,
+      "rho_modello": 0.6363767794507833,
+      "rho_rivale": 0.6456525132046955,
+      "diff_lo": -0.03682477172145003,
+      "diff_hi": 0.018414521238559654,
+      "batte": false
+     },
+     "minuti": {
+      "n": 154,
+      "rho_modello": 0.6363767794507833,
+      "rho_rivale": -0.016144732508154853,
+      "diff_lo": 0.5037197720455131,
+      "diff_hi": 0.7836652870850409,
+      "batte": true
+     }
+    },
+    "crescita": {
+     "n": 154,
+     "rho_modello": 0.5062109301198485,
+     "rho_rivale": 0.5186541478761594,
+     "diff_lo": -0.044508784349972644,
+     "diff_hi": 0.01798012812436498,
+     "batte": false,
+     "rivale": "regressione verso la media"
+    },
+    "forbice": {
+     "copertura": 0.7467532467532467,
+     "mostra": true
+    },
+    "mostra_previsione": false,
+    "mostra_sottovalutati": false
+   }
+  }
+ }
+}

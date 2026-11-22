@@ -25,6 +25,10 @@ Tutto il calcolo legge **solo** il database nuovo (un file SQLite). Lo riempiono
   adesso, con Understat giù. Motivo: F23.
 - **raccolta.py** (dopo): scarica dalle fonti. Il test C26 confronta le righe che produce con quelle del ponte;
   al cambio (F24) il ponte si cancella.
+- **archivio.py** (provvisorio, 22/11): i **totali di stagione 2023-24** di Understat dalle copie dell'Internet
+  Archive (Serie A copia del 17/06/2025, Premier del 24/03/2025: 380 partite, ~580 giocatori, stessi id). Tabella a
+  parte `stagioni_riassunte`, letta **solo** dalla prova del modello (né TPI né sito). Senza le partite mancano
+  tendenza, TPI e contesti della 2023-24. Quando Understat torna la raccolta la riscarica partita per partita.
 
 Tabelle (una riga = un fatto, la stagione è **sempre** una colonna, mai dedotta):
 
@@ -192,6 +196,16 @@ football-scout-index/
       - contesti: **scartati** dal modello (con 0,761, senza 0,763): "contro le big" non aiuta a prevedere.
       - aggiornata: batte il grezzo presto (giornata 5: SA 0,63 contro 0,46; PL 0,70 contro 0,55), poi il margine sparisce
         (Serie A non passa da giornata 10 in poi; Premier passa a 10, 15, 19, 30, non a 25).
+- [x] **2b. PROVA VERA** 22/11 (`prove/vera_2024-25_2025-26.json`): stima su 2023-24 → 2024-25 (stagione riassunta
+      dall'archivio), prova su 2024-25 → 2025-26, mai vista dalla stima.
+      - output: **batte l'output grezzo in tutti e due i campionati** — Serie A 0,744 contro 0,705 (intervallo
+        +0,016…+0,065), Premier 0,803 contro 0,758 (+0,018…+0,075). Batte minuti, TPI, TPI Pro. Forbice ok (76-79%).
+      - sottovalutati (crescita): **non batte** la regressione verso la media in nessuna lega → la lista non si mostra.
+      - costruzione: **non batte** il grezzo → non si mostra.
+      - di cosa è fatto: quasi solo xG+xA e gol+xA "tirati" verso la media del ruolo (K = 1000'); età, minuti,
+        ruolo pesano pochissimo; tendenza a zero (la 2023-24 non ce l'ha). Il guadagno viene dall'usare gli xG
+        (più stabili dei gol) e dal tirare verso la media chi ha giocato poco.
+      - la previsione aggiornata resta prototipo (servono le partite della 2023-24 per tagliarla a giornata k).
 - [ ] **3. Sito** (C17-C20) in `uscita/`, te lo apro in locale.
 - [ ] **4. Assistente** (C21-C24).
 - [ ] **5. Controlli e raccolta** (C25-C27) sulle partite salvate.

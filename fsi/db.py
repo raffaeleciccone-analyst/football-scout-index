@@ -25,6 +25,11 @@ CREATE TABLE IF NOT EXISTS ruoli (
     lega TEXT NOT NULL, stagione TEXT NOT NULL, giocatore_id INTEGER NOT NULL,
     ruolo TEXT NOT NULL CHECK (ruolo IN ('POR', 'DIF', 'CEN', 'ATT')), fonte TEXT NOT NULL,
     PRIMARY KEY (lega, stagione, giocatore_id));
+CREATE TABLE IF NOT EXISTS stagioni_riassunte (
+    lega TEXT NOT NULL, stagione TEXT NOT NULL, giocatore_id INTEGER NOT NULL, nome TEXT, squadra TEXT, ruolo TEXT,
+    partite INTEGER, minuti INTEGER, gol INTEGER, gol_senza_rigori INTEGER, assist INTEGER,
+    xg REAL, xg_senza_rigori REAL, xa REAL, xg_buildup REAL, xg_chain REAL, fonte TEXT NOT NULL,
+    PRIMARY KEY (lega, stagione, giocatore_id));
 CREATE TABLE IF NOT EXISTS infortuni (
     giocatore_id INTEGER NOT NULL, stagione TEXT NOT NULL, inizio TEXT NOT NULL,
     rientro TEXT, giorni_fuori INTEGER, tipo TEXT,
