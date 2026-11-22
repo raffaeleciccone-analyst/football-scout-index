@@ -10,10 +10,18 @@
     <div class="sq r">{{ t("lab_semplice", "small") }}<div class="pt">{{ g.rho_rivale | n }}</div></div>
   </div>
   <p class="esito {{ '' if v.mostra_previsione else 'no' }}">{{ t("tag_vince" if v.mostra_previsione else "tag_non_ancora", "span", "tag") }} {{ t("esito_batte" if v.mostra_previsione else "esito_non_batte") }}</p>
-  <div class="ris">
+  <div class="stagioni-prova">
+    {{ t("stagioni_titolo", "p", "stagioni-titolo") }}
+    <div class="stagioni-griglia">
     {% for stagione, x in v.per_stagione.items() %}
-    <span>{{ stagione.split(" -> ")[1] }} {{ x.rho_modello | n }} – {{ x.rho_grezzo | n }} <i>{{ "✓" if x.rho_modello > x.rho_grezzo else "✗" }}</i></span>
+    {% set vinta = x.rho_modello > x.rho_grezzo %}
+    <div class="st-scheda {{ 'vinta' if vinta else 'persa' }}">
+      <div class="st-testa"><b>{{ stagione.split(" -> ")[1] }}</b>{{ t("stagione_vinta" if vinta else "stagione_persa", "span", "st-esito") }}</div>
+      <div class="st-riga">{{ t("lab_previsione", "span", "st-nome") }}<span class="st-barra mod" style="--v: {{ x.rho_modello }}"></span><b>{{ x.rho_modello | n }}</b></div>
+      <div class="st-riga">{{ t("lab_semplice", "span", "st-nome") }}<span class="st-barra gr" style="--v: {{ x.rho_grezzo }}"></span><b>{{ x.rho_grezzo | n }}</b></div>
+    </div>
     {% endfor %}
+    </div>
   </div>
   {{ t("stato_verificata" if v.verificata else "stato_prototipo", "p") }}
   <div class="cerca grande">
@@ -25,6 +33,14 @@
     <a class="azione prima" href="#da-seguire">{{ t("azione_giovani_t", "b") }}{{ t("azione_giovani_s", "small") }}</a>
     <a class="azione" href="#formazione">{{ t("azione_formazione_t", "b") }}{{ t("azione_formazione_s", "small") }}</a>
   </div>
+  {% if assistente_url %}
+  <form class="chiedi" id="chiedi" data-url="{{ assistente_url }}" data-lega="{{ d.lega }}">
+    <label for="chiedi-domanda">{{ t("chiedi_titolo") }}</label>
+    <div class="chiedi-riga"><input id="chiedi-domanda" maxlength="600" autocomplete="off" data-tp="chat_segnaposto"><button type="submit">{{ t("chat_invia") }}</button></div>
+    {{ t("chat_nota", "p", "chiedi-nota") }}
+  </form>
+  <div class="risposta-dati" id="risposta-dati" hidden aria-live="polite">{{ t("chiedi_risposta", "p", "rd-titolo") }}<div id="rd-testo"></div></div>
+  {% endif %}
   <a class="metodo" href="metodo.html">{{ t("metodo_link") }}</a>
 </div></section>
 

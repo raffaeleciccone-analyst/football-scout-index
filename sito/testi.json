@@ -619,14 +619,6 @@
   "it": "la stagione intera prima",
   "en": "the full previous season"
  },
- "chat_apri": {
-  "it": "Chiedi all'assistente",
-  "en": "Ask the assistant"
- },
- "chat_titolo": {
-  "it": "Chiedi su giocatori, previsioni e TPI",
-  "en": "Ask about players, forecasts and TPI"
- },
  "chat_nota": {
   "it": "Risponde solo con i numeri di questo sito; ogni numero viene controllato. Niente notizie di mercato.",
   "en": "It answers only with this site's numbers; every number is checked. No transfer news."
@@ -651,8 +643,24 @@
   "it": "L'assistente non risponde in questo momento: riprova più tardi.",
   "en": "The assistant is not answering right now: try again later."
  },
- "chat_chiudi": {
-  "it": "Chiudi",
-  "en": "Close"
+ "stagioni_titolo": {
+  "it": "Stagione per stagione",
+  "en": "Season by season"
+ },
+ "stagione_vinta": {
+  "it": "VINTA",
+  "en": "WON"
+ },
+ "stagione_persa": {
+  "it": "PERSA",
+  "en": "LOST"
+ },
+ "chiedi_titolo": {
+  "it": "Fai una domanda ai dati",
+  "en": "Ask the data"
+ },
+ "chiedi_risposta": {
+  "it": "Risposta dai dati",
+  "en": "Answer from the data"
  }
 }

@@ -195,32 +195,26 @@
     var r = ev.target.closest("[data-ruolo]");
     if (r) { ruolo = r.dataset.ruolo; disegna(); }
   });
-  // ---- chat dell'assistente (F17): la risposta entra come testo, mai come HTML ----
-  function chat() {
-    var box = document.getElementById("chat"), apri = document.getElementById("chat-apri");
-    if (!box || !apri) return;
-    var storia = document.getElementById("chat-storia"), campo = document.getElementById("chat-domanda");
-    function mostra(aperta) { box.hidden = !aperta; apri.hidden = aperta; apri.setAttribute("aria-expanded", aperta); if (aperta) campo.focus(); }
-    function riga(cls, testo) { var p = el("p", { "class": cls, testo: testo }); storia.appendChild(p); storia.scrollTop = storia.scrollHeight; return p; }
-    apri.addEventListener("click", function () { mostra(true); });
-    document.getElementById("chat-chiudi").addEventListener("click", function () { mostra(false); });
-    document.getElementById("chat-modulo").addEventListener("submit", function (ev) {
+  // ---- l'assistente dentro la pagina (F17): una domanda ai dati; la risposta entra come testo, mai come HTML ----
+  function chiedi() {
+    var modulo = document.getElementById("chiedi"); if (!modulo) return;
+    var campo = document.getElementById("chiedi-domanda"), box = document.getElementById("risposta-dati"), testo = document.getElementById("rd-testo");
+    modulo.addEventListener("submit", function (ev) {
       ev.preventDefault();
       var domanda = campo.value.trim(); if (!domanda) return;
-      campo.value = ""; riga("tu", domanda);
-      var attesa = riga("lui", t("chat_attesa"));
-      fetch(box.dataset.url, { method: "POST", headers: { "content-type": "application/json" },
-        body: JSON.stringify({ domanda: domanda, lega: box.dataset.lega, lingua: lingua }) })
+      box.hidden = false; testo.textContent = t("chat_attesa");
+      fetch(modulo.dataset.url, { method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify({ domanda: domanda, lega: modulo.dataset.lega, lingua: lingua }) })
         .then(function (r) { return r.json(); })
         .then(function (r) {
-          attesa.textContent = r.risposta || t("chat_errore");
-          if (r.numeri_ok === false) riga("lui avviso", t("chat_avviso_numeri", { n: (r.numeri_non_trovati || []).join(", ") }));
+          testo.textContent = r.risposta || t("chat_errore");
+          if (r.numeri_ok === false) testo.appendChild(el("span", { "class": "avviso", testo: t("chat_avviso_numeri", { n: (r.numeri_non_trovati || []).join(", ") }) }));
         })
-        .catch(function () { attesa.textContent = t("chat_errore"); });
+        .catch(function () { testo.textContent = t("chat_errore"); });
     });
   }
 
   ricerca();
-  chat();
+  chiedi();
   applicaLingua();
 })();
