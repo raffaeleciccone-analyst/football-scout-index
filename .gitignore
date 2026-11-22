@@ -1,0 +1,6 @@
+__pycache__/
+.pytest_cache/
+.env
+dati/
+uscita/
+worker/node_modules/
