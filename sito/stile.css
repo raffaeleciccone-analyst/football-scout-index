@@ -198,3 +198,21 @@ td a:hover { text-decoration: underline; }
 }
 @media (prefers-reduced-motion: reduce) { .carta, .azione, .entra { transition: none; } .carta:hover, .azione:hover, .entra:hover { transform: none; } }
 .testo-lungo p { margin-left: 0; max-width: none; }
+
+/* chat dell'assistente */
+.chat-apri { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: 20px; z-index: 30; font: 700 16px var(--testo); padding: 12px 18px; border: 0; border-radius: 999px; background: var(--giallo); color: var(--notte); box-shadow: var(--ombra); cursor: pointer; }
+.chat { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: 20px; z-index: 31; width: min(420px, calc(100vw - 32px)); max-height: min(620px, 80vh); display: flex; flex-direction: column; background: var(--carta); border-radius: var(--r); box-shadow: 0 12px 40px -10px #0A1A4A99; overflow: hidden; }
+.chat-testa { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--notte); color: #fff; padding: 12px 14px; }
+.chat-testa h3 { margin: 0; font-size: 20px; }
+.chat-testa button { font: 600 14px var(--testo); background: none; color: #fff; border: 1px solid #ffffff66; border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+.chat-nota { font-size: 13px; color: var(--tenue); margin: 8px 14px 0; }
+.chat-storia { flex: 1; overflow-y: auto; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; }
+.chat-storia .tu, .chat-storia .lui { padding: 9px 12px; border-radius: var(--r); max-width: 90%; white-space: pre-wrap; }
+.chat-storia .tu { align-self: flex-end; background: var(--blu); color: #fff; }
+.chat-storia .lui { align-self: flex-start; background: var(--cielo); }
+.chat-storia .avviso { background: #FDE7EA; color: #8A0018; font-size: 14px; }
+.chat-modulo { display: flex; gap: 8px; padding: 10px 14px 14px; border-top: 1px solid var(--cielo); }
+.chat-modulo input { flex: 1; min-width: 0; font: 500 16px var(--testo); padding: 10px 12px; border: 2px solid var(--banda); border-radius: var(--r); }
+.chat-modulo button { font: 700 16px var(--testo); border: 0; border-radius: var(--r); padding: 10px 16px; background: var(--notte); color: #fff; cursor: pointer; }
+.nascosto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+@media (max-width: 700px) { .chat-apri, .chat { bottom: calc(84px + env(safe-area-inset-bottom, 0px)); } }

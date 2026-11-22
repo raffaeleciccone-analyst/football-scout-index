@@ -618,5 +618,41 @@
  "motivo_stagione_prima": {
   "it": "la stagione intera prima",
   "en": "the full previous season"
+ },
+ "chat_apri": {
+  "it": "Chiedi all'assistente",
+  "en": "Ask the assistant"
+ },
+ "chat_titolo": {
+  "it": "Chiedi su giocatori, previsioni e TPI",
+  "en": "Ask about players, forecasts and TPI"
+ },
+ "chat_nota": {
+  "it": "Risponde solo con i numeri di questo sito; ogni numero viene controllato. Niente notizie di mercato.",
+  "en": "It answers only with this site's numbers; every number is checked. No transfer news."
+ },
+ "chat_segnaposto": {
+  "it": "Es. chi sono i giovani da seguire?",
+  "en": "E.g. which young players should I watch?"
+ },
+ "chat_invia": {
+  "it": "Chiedi",
+  "en": "Ask"
+ },
+ "chat_attesa": {
+  "it": "Sto cercando nei dati…",
+  "en": "Looking in the data…"
+ },
+ "chat_avviso_numeri": {
+  "it": "Attenzione: in questa risposta ci sono numeri che non trovo nei dati del sito ({n}). Non fidarti di quei numeri.",
+  "en": "Careful: this answer contains numbers I can't find in the site's data ({n}). Don't trust those numbers."
+ },
+ "chat_errore": {
+  "it": "L'assistente non risponde in questo momento: riprova più tardi.",
+  "en": "The assistant is not answering right now: try again later."
+ },
+ "chat_chiudi": {
+  "it": "Chiudi",
+  "en": "Close"
  }
 }

@@ -1,0 +1,328 @@
+{
+ "env": {
+  "PROVIDER": "ollama",
+  "MODEL": "qwen2.5:3b"
+ },
+ "ok": 21,
+ "totale": 30,
+ "esiti": [
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "Qual è la previsione di Lautaro Martínez per la prossima stagione?",
+   "risposta": "Mi dispiace, ma non ho accesso a informazioni specifiche sulle previsioni futuri per nessun giocatore, inclusi Lautaro Martínez. Le previsioni di un giocatore dipendono spesso da statistiche passate, da condizioni fisiche e da altre informazioni specifiche. Non posso fare congetture su cosa possa accadere nel futuro basandomi sulle informazioni disponibili fino a questo momento. Per avere previsioni accurate, ti consiglio di consultare fonti ufficiali del club o statistiche sportive affidabili.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 38
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "Chi sono i giovani sottovalutati tra gli attaccanti?",
+   "risposta": "Non c'è nessun giocatore attaccante sottovalutato nella lista fornita. Tuttavia, ci sono giocatori sottovalutati tra i difensori. Ecco una lista di giocatori attaccanti sottovalutati nella tua lista:\n\n1. Tarik Muharemovic (Sassuolo): sottovalutato con 0 punti di prima e 2837 minuti gioca\n\n2. Federico Baschirotto (Cremonese): sottovalutato con 0 punti di prima e 2540 minuti gioca\n\nAltre sottovalutazioni si trovano principalmente tra i difensori, come ad esempio:\n\n- Honest Ahanor (Atalanta): sottovalutato con 0 punti di prima e 1368 minuti gioca\n- Niakhate Ndiaye (Parma Calcio 1913): sottovalutato con 0 punti di prima e 786 minuti gioca\n- Ignace Van der Brempt (Como): sottovalutato con 0 punti di prima e 915 minuti gioca\n\nPer trovare giocatori attaccanti sottovalutati, avresti bisogno di una lista più ampi e dettagliata di giocatori attaccanti.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 41
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "Quanti minuti ha giocato Bonny la stagione scorsa?",
+   "risposta": "Scusami, ma non ho i dati sul giocatore Bonny. Tutti i dati che ho sono per i giocatori di football (soccer) e non includono i dati specifici sulle loro presenze nel campionato precedente. Non posso rispondere con precisione alla tua domanda in base ai dati disponibili.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 26
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "Chi ha il TPI più alto tra i centrocampisti?",
+   "risposta": "Per determinare chi ha il TPI (Possibilità di Istruzione) più alto tra i centrocampisti, dovrò esaminare la lista di giocatori fornita. TPI è un termine poco comune e non sembra essere un indice standard utilizzato in calcio. Tuttavia, se consideriamo solo gli elementi forniti e rileviamo che non ci sono giocatori dichiarati come centrocampisti, non possiamo determinare chi ha il TPI più alto.\n\nSe intendi fare questa analisi per la stessa lista di giocatori ma considerando il valore di predizione (pred), posso esaminare ciò. La lista non contiene un parametro di TPI, quindi baserò la mia risposta sul pred.\n\nDalla lista fornita, il giocatore con il pred più alto è:\n\n{\"nome\":\"Samuele Angori\",\"squadra\":\"Pisa\",\"ruolo\":\"DIF\",\"eta\":22,\"pred\":0.15,\"lo\":0.03,\"hi\":0.3,\"prima\":0.13,\"minuti\":2619}\n\nTuttavia, come detto prima, non ci sono elementi di TPI nella lista fornita. Se hai un altro parametro o se \"pred\" è un altro tipo di indice utilizzato, potresti fornirmelo per ulteriori analisi.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 41
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "Confronta Malen e Krstovic.",
+   "risposta": "Per confrontare Malen e Krstovic, dovrei avere informazioni specifiche su loro, come le prestazioni in campo, le valutazioni o altre statistiche. Tuttavia, basandomi sui dati che hai fornito, ci sono alcuni punti di confronto:\n\n1. **Nome**: Malen (Cagliari) vs Krstovic (Genoa)\n2. **Ruolo**: Cada uno di loro è un difensore (DIF).\n3. **Età**: \n   - Malen (Cagliari) 21 anni\n   - Krstovic (Genoa) 27 anni\n\nMalen e Krstovic hanno la stessa età, quindi questo non offrono differenze significative per la base del confronto.\n\n4. **Predizione**: Entrambi hanno una stima di 0.16 per \"pred\". Questo è un indicatore non definito nel contesto fornito, quindi non posso dire nulla sull'importanza di questo valore per i due giocatori.\n\n5. **Minuti disputati**: \n   - Malen (Cagliari) 3087 minuti\n   - Krstovic (Genoa) 2273 minuti\n\nQuesto suggerisce che Malen è stato sul campo un po' più del tempo, ma si può osservare che Krstovic ha disputato più minuti nella partita di oggi, rispetto a Malen.\n\n6. **Sottovalutati**: Non sono stati specificati valutazioni o punteggi per entrambi, quindi non posso confrontare questi elementi.\n\n7. **Valutazione finale (prima)**: \n   - Malen (Cagliari) 0.16\n   - Krstovic (Genoa) 0.15\n\nQuesto indica che Krstovic ha una piccola valutazione più alta della media in questo contesto.\n\nIn sintesi, basato sulle informazioni fornite, Malen e Krstovic hanno una similarità di ruolo e età, ma la loro durata di campo e la valutazione finale sono diverse. Per una confrontazione più accurata, si richiedono informazioni più dettagliate su come si sono comportati in campo e sulla loro qualità.",
+   "numeri_ok": false,
+   "numeri_non_trovati": [
+    "21",
+    "27",
+    "3087",
+    "2273",
+    "0.16",
+    "0.15"
+   ],
+   "notizia_ok": true,
+   "secondi": 54
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "Quanti anni ha Samardzic e che previsione ha?",
+   "risposta": "Mi dispiace, non ho informazioni sull'allenatore Samardzic. Tutte le informazioni fornite nel dataset riguardano giocatori di calcio. Non c'è un elemento che si riferisce a un allenatore chiamato Samardzic. Potrebbe esserci un errore nel nome o nella ricerca. Ti consiglio di verificare la scritta o di fare una ricerca più accurata.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 7
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "La previsione in Serie A è affidabile?",
+   "risposta": "La previsione di predizione nella Serie A non è affidabile in modo significativo. Questi dati contengono valutazioni e previsioni che sono basate su fattori diversi, spesso su dati di passato o campionati precedenti. Non è garantito che questi valutamenti corrispondano esattamente alla performance futura dei giocatori.\n\nL'abilità di prevedere la performance futura di un giocatore è influenzata da fattori complessi, compresi:\n\n1. La tecnica e la condizione fisica specifica di ciascun giocatore\n2. La tecnica del suo allenatore e strategie di squadra\n3. Il calcolo di eventuali infortuni\n4. Il calcolo di eventi non controllabili come la performance della squadra di rivalsi\n5. E così via\n\nIl valore dei dati in questo elenco varia in base alla sua fonte e alla sua importanza. Alcuni valutazioni, come quelle di Pred, forniscono valori che si riferiscono al rischio che un giocatore non supererà un livello minimo predefinito (prezzo di prima) di presenza o di prestazione. Altri valutazioni, come quelle \"sottovalutato\" o \"sottovalutato\" (che spesso significa che il giocatore supera i livelli minimi predefiniti) sono basate su altre considerazioni.\n\nQuindi, se si considera la propria situazione, alcuni dati potrebbero essere più affidabili di altri, ma la generalizzazione di un singolo elenco di valutazioni come questa non sembra essere in grado di predire con un alto grado di accuratezza la performance futura di un giocatore nella Serie A.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 48
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "Dammi tre difensori con la previsione più alta.",
+   "risposta": "Ecco tre difensori con la previsione più alta (cioè il valore più alto nella chiave \"pred\") rispetto alla tua richiesta:\n\n1. Nicolás Valentini - Verona: Con una previsione (pred) di 0.11.\n2. Sebastian Walukiewicz - Sassuolo: Con una previsione (pred) di 0.09.\n3. Filippo Terracciano - Cremonese: Con una previsione (pred) di 0.1.\n\nQuesti difensori sono considerati i più in linea con la tua richiesta, avendo previsioni più alte rispetto ai colleghi elencati nel tuo elenco.",
+   "numeri_ok": false,
+   "numeri_non_trovati": [
+    "0.11"
+   ],
+   "notizia_ok": true,
+   "secondi": 31
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "notizia",
+   "domanda": "Yildiz rinnova con la Juventus?",
+   "risposta": "Mi dispiace, ma non ho informazioni specifiche sullo stato di Yildiz alla Juventus o sulla possibile rinnovazione del suo contratto. Yildiz è un nome molto comune e non si riferisce a un giocatore di calcio noto. Non posso fornire informazioni precise senza riferirmi a un nome o a un'informazione specifica e affidabile. Se potessi fornire ulteriori dettagli, sarei felice di cercare informazioni per te.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": false,
+   "secondi": 8
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "notizia",
+   "domanda": "Chi comprerà il Milan a gennaio?",
+   "risposta": "La domanda su chi comprerà il Milan a gennaio dipende da molteplici fattori, come l'attuale situazione dei giocatori, il budget disponibile e il mercato. Al momento non ci sono notizie ufficiali di possibili trasferimenti per il Milan. La decisione di quali giocatori acquistare dipenderà probabilmente dalle decisioni dei dirigenti del club e dalla disponibilità dei giocatori nel mercato gennaio.\n\nPer ottenere informazioni aggiornate e precise, ti consiglio di rivolgerti alla rete di informatori sportivi o alle stazioni di notizie sportive. Il mercato gennaio è noto per la sua attività, ma c'è sempre la possibilità che qualche grande club decida di agire per ottenere un giocatore speciale o per risolvere una situazione.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": false,
+   "secondi": 13
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "generale",
+   "domanda": "Chi è più forte tra Barella e Pedri?",
+   "risposta": "Scusami, ma non ho gli informazioni specifiche su Barella e Pedri per poter definire chi è più forte. Non ho detto prima in quale squadra giocassero o quali statistiche considerare per definire la forza di un giocatore di calcio. Ti consiglierei di cercare direttamente nel database delle statistiche del calcio o leggere recensioni professionali per capire chi è considerato più forte tra i due. Ciò potrebbe dipendere da vari fattori come il ruolo del giocatore, il livello di competizione e la qualità delle statistiche in quel contesto.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 10
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "What is Thuram's forecast?",
+   "risposta": "I don't have information about a player named Thuram in the data provided. The data appears to be about various defenders in Italian football, with details like their names, teams, ages, and prediction scores. Thuram is not mentioned in this list. Could you please provide more context or verify the player's name?",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 26
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "Which young players should a scout watch?",
+   "risposta": "When scouting for young players, it's important to consider factors such as their potential, recent performance, and the impact they have on the game. Here are a few young players from the provided data that scouts might want to watch:\n\n1. **Alberto Dossena (Cagliari)**: With a prediction of 0.13, a young age (27), and a decent performance (3087 minutes played), he has potential to develop further. His low prediction might be a red flag, but his playtime suggests he's making his mark.\n\n2. **Samuele Angori (Pisa)**: With a prediction of 0.15, young age (22), and over 2600 minutes played, he seems to be a promising young talent in Italian football. His consistent playtime might indicate his role as a valuable asset for his team.\n\n3. **Sam Beukema (Napoli)**: With a prediction of 0.13, a young age (27), and over 1600 minutes played, he is also a player to keep an eye on. His recent performance might indicate that he is developing at a fast pace.\n\n4. **Alessandro Buongiorno (Verona)**: With a prediction of 0.07, a young age (26), and over 2500 minutes played, he shows promise and is worth keeping an eye on for his future contributions.\n\n5. **Federico Baschirotto (Cremonese)**: With a prediction of 0.08, a young age (29), and over 2500 minutes played, he's another young player showing promise and should be monitored.\n\n6. **Simone Canestrelli (Pisa)**: With a prediction of 0.07, a young age (25), and over 3200 minutes played, he's a consistent performer who should be watched for further development.\n\nWhen scouting, it's also important to consider the team's overall setup, competition level, and tactical approach, as these can affect a player's development and success. Additionally, watching their performances against stronger teams or in crucial moments can provide more insight into their true potential.",
+   "numeri_ok": false,
+   "numeri_non_trovati": [
+    "3087",
+    "2600",
+    "1600",
+    "2500",
+    "2500"
+   ],
+   "notizia_ok": true,
+   "secondi": 52
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "notizia",
+   "domanda": "Is Lautaro injured right now?",
+   "risposta": "Based on the information provided in the data, Lautaro Valenti, who is listed as a defender for Verona, has a predicted value (pred) of 0.08, which suggests he is not injured. The \"minuti\" (minutes played) and \"prima\" (chances created) values also indicate that he has played some matches, which is consistent with being active and not injured.\n\nThere is no specific mention of an injury or mention of being \"sottovalutato\" (underrated), which might indicate he is not injured but is not highly rated. However, Lautaro's overall values do not suggest a severe injury.\n\nIn summary, based on the available data, Lautaro Valenti is not considered to be injured.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": false,
+   "secondi": 11
+  },
+  {
+   "lega": "serie_a",
+   "tipo": "numeri",
+   "domanda": "Quale squadra ha più giocatori sottovalutati?",
+   "risposta": "Nella lista fornita, la squadra che ha il maggior numero di giocatori sottovalutati è Genoa, con tre giocatori (Samuele Angori, Brooke Norton-Cuffy e Alberto Dossena) che sono sottovalutati.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 5
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "Qual è la previsione di Haaland?",
+   "risposta": "Mi dispiace, ma non riesco a trovare informazioni su una previsione per Haaland nel dataset fornito. Il dataset contiene informazioni sulle previsioni e sulle prestazioni dei giocatori in campionato, ma non specifica Haaland o una sua squadra. Se Hai un dettaglio aggiuntivo circa la squadra di Haaland, posso provare a cercare ulteriormente.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 27
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "Chi sono i tre attaccanti con la previsione più alta?",
+   "risposta": "Secondo i dati forniti, il giocatore con la previsione più alta (prima più alta) è André, un centrocampista per Wolverhampton Wanderers con una prima di 0.12. Non c'è un attaccante nella lista fornita che abbia una prima superiore a 0.12. Quindi, non ci sono tre giocatori attaccanti con la previsione più alta nell'elenco fornito.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 29
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "Quanto ha fatto Saka per 90 minuti la stagione scorsa?",
+   "risposta": "Mi dispiace, ma non ho le informazioni specifiche sul tempo di campo di Saka per un partita intera la stagione scorsa. La tua richiesta non è stata soddisfatta perché non ho i dati su Saka nel database attuale. Per ottenere queste informazioni precise, ti consiglierei di consultare la pagina ufficiale del club di Saka o un sito web di statistiche professionali come Sky Sports o FourFourTwo.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 28
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "Bruno Fernandes migliorerà?",
+   "risposta": "Per capire se Bruno Fernandes migliorerà, dovrei basarmi su vari fattori come la sua performance recente, la sua situazione contrattuale, la sua posizione sul campo e eventuali aggiornamenti sulle sue condizioni fisiche o mentali. Tuttavia, dato che non ho informazioni aggiornate sul suo stato attuale, non posso fare previsioni con precisione.\n\nBruno Fernandes è già un giocatore molto importante per il suo club, sia esso Manchester United o Sporting CP, e è noto per la sua capacità di crescere nel tempo. Ha sempre dato prove di un forte potenziale e si è consolidato come uno dei giocatori più influenti in Europa.\n\nTuttavia, per avere una valutazione più precisa, dovresti controllare i dati del suo nuovo campionato o stagione attuale, le opinioni dei coach e degli esperti, le sue statistiche di allenamento e di gara, e eventuali aggiornamenti sul suo contratto.\n\nSe vuoi informazioni più aggiornate, ti consiglio di consultare le fonti ufficiali del suo club o di leggere recensioni di esperti di calcio recenti.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 39
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "Qual è la forbice di Cherki?",
+   "risposta": "Mi dispiace, ma non ho le informazioni specifiche sulla \"forbice di Cherki\" presenti nei dati forniti. Il nome \"Cherki\" non appare nella lista dei giocatori elencati. Forse c'è un errore nella domanda o in parte della lista di giocatori. Se puoi fornire ulteriori dettagli o confermare il nome completo, sarò felice di aiutarti a trovare la risposta.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 28
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "Chi è il centrocampista con il TPI più alto?",
+   "risposta": "Per determinare il centrocampista con il TPI (Team Play Index) più alto, è necessario confrontare i valori \"pred\" forniti per i giocatori. Il valore più alto di \"pred\" generalmente indica il giocatore con il TPI più alto. \n\nRapido esaminando i valori \"pred\":\n\n- André: 0.12\n- Daniel Muñoz: 0.25\n- Marc Cucurella: 0.18\n- Mats Wieffer: 0.18\n- Cristian Romero: 0.18\n- Hugo Bueno: 0.16\n- Rayan Ait Nouri: 0.16\n- Lucas Digne: 0.15\n- Nicolò Savona: 0.15\n- Quilindschy Hartman: 0.14\n- Sepp van den Berg: 0.14\n- Lucas Pires: 0.1\n- Lucas Saliba: 0.12\n- Matijs de Ligt: 0.11\n- El Hadji Malick Diouf: 0.11\n- Konstantinos Mavropanos: 0.12\n- Michael Keane: 0.11\n- Ladislav Krejcí: 0.13\n- Djed Spence: 0.12\n- Santiago Bueno: 0.14\n- Alejandro Jiménez: 0.1\n- Jackson Tchatchoua: 0.11\n- David Møller Wolfe: 0.11\n- Kieran Trippier: 0.1\n- Joël Veltman: 0.11\n- Chadi Riad: 0.11\n- William Saliba: 0.08\n- Josh Laurent: 0.09\n- Kenny Tete: 0.1\n- Tosin Adarabioyo: 0.05\n- Kyle Walker-Peters: 0.09\n- Fabian Schär: 0.01\n- Trevoh Chalobah: 0.12\n- Jorge Cuenca: 0.05\n- Ayden Heaven: 0.04\n- Lutsharel Geertruida: 0.04\n- Bashir Humphreys: 0.05\n- Axel Tuanzebe: 0.07\n- Cristhian Mosquera: 0.03\n- Toti: 0.01\n\nBasandomi su questi valori, il giocatore con il pred più alto è Ayden Heaven (0.04), seguito da Cristhian Mosquera (0.03). Non c'è un giocatore con un pred più alto di questi due. Tuttavia, se consideriamo solo i giocatori con pred maggiore di 0, lo score più alto è di 0.09, rappresentato da Kieran Trippier e Josh Laurent.\n\nQuindi, basandoci sui valori disponibili, Kieran Trippier e Josh Laurent sarebbero considerati i giocatori con il pred più alto, con valori uguali.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 67
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "La lista dei sottovalutati in Premier è affidabile?",
+   "risposta": "Secondo la lista fornita, pare che alcuni giocatori siano considerati sottovalutati o in rischio di essere sottovalutati. Questo è generalmente basato sull'analisi dei punti predetti per il loro effetto sul campo (pred), che sembra essere un indicatore di potenziale prestazione. Tuttavia, si noti che la stima di sottovalutamento non è sempre accurata o universale:\n\n1. Alcuni giocatori con valori bassi di pred (come Maxime Estève) sono classificati come sottovalutati, ma hanno un po' di variazione nei valori del primo (prima) e secondo quadrante.\n2. Altri giocatori con valori superiori a 0.12 (come Cristiano Ronaldo o Kevin De Bruyne) sembrano non essere considerati sottovalutati, anche se possiedono valori di pred relativamente bassi.\n3. Alcuni giocatori con valori inferiori a 0.12 (come Maxime Estève) sembrano essere classificati come sottovalutati, a differenza di alcuni con valori altrettanto bassi (come Cristiano Ronaldo).\n\nIn conclusione, la lista dei sottovalutati potrebbe non essere completamente affidabile o precisa per tutti i giocatori. La veridicità di questo elenco dipende in larga misura dalla validità del metodo utilizzato per classificare i giocatori come sottovalutati e dal calcolo dei valori predetti. Si potrebbe voler confrontare questa lista con altre analisi o opinioni per valutare la sua fedeltà.",
+   "numeri_ok": false,
+   "numeri_non_trovati": [
+    "0.12",
+    "0.12"
+   ],
+   "notizia_ok": true,
+   "secondi": 24
+  },
+  {
+   "lega": "premier",
+   "tipo": "notizia",
+   "domanda": "Salah lascia il Liverpool?",
+   "risposta": "Secondo i dati forniti per i giocatori di Liverpool, non è indicato un giocatore chiamato Salah. Tutti i giocatori elencati sono relativi al Liverpool, ma i dati si riferiscono a giocatori che non lasciano l'allenatore Jürgen Klopp. Per essere sicuri, sarebbe necessario consultare una lista aggiornata per verificare se e quando Salah potrebbe lasciare il club. Non è mai stato annunciato un cambio di club per Salah o per altri giocatori del Liverpool secondo i dati forniti.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": false,
+   "secondi": 29
+  },
+  {
+   "lega": "premier",
+   "tipo": "notizia",
+   "domanda": "Who will Arsenal sign in January?",
+   "risposta": "I don't have real-time data or the ability to predict future events. The information you're asking about, such as which players Arsenal will sign in January, would typically be disclosed by the club through official announcements or by media reports. \n\nTo get the most accurate and up-to-date information, I recommend checking Arsenal's official website, following their social media channels, or monitoring reliable sports news outlets. They often provide details about their transfer activities.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": false,
+   "secondi": 6
+  },
+  {
+   "lega": "premier",
+   "tipo": "generale",
+   "domanda": "Is Haaland better than Mbappé?",
+   "risposta": "To determine whether Haaland is better than Mbappé, we would need to consider several factors such as individual performance metrics, team performance, position, and context. Here's a summary of their recent performances and attributes:\n\n**Mohammad Saleh Haaland (Haaland):**\n- Position: Forward\n- Club: Borussia Dortmund, currently at Salzburg\n- Recent Performance: While Haaland has been playing at a club level (Dortmund) and not at the highest competition level (La Liga, Ligue 1, Premier League), he has shown immense potential and has been a prolific goal-scorer. His recent performances have been marked by goal-scoring ability and dynamic play.\n\n**Kylian Mbappé:**\n- Position: Forward\n- Club: Paris Saint-Germain (PSG)\n- Recent Performance: Mbappé has been a key player for PSG, consistently delivering high quality performances and scoring crucial goals for the team. He has also demonstrated his adaptability and skill in different competitions, including La Liga and the Champions League. His versatility and impact on the game are often cited as his strengths.\n\n**Key Metrics to Consider:**\n- Goals and Assists: Both are highly goal-scorers, but their contributions are slightly different. Haaland has a strong record of goal-scoring, especially for a younger player, while Mbappé is well known for his all-around game, including assists and his ability to create scoring opportunities.\n- Versatility: Haaland is known for his attacking presence and goal-scoring ability, but Mbappé is renowned for his all-around game, including his ability to hold up the ball and assist from various positions.\n- Team Performance: Generally, Haaland plays in a system where he can be the focal point, while Mbappé often has more freedom to operate in PSG's fluid, attacking system.\n- Competition Level: Haaland has been at the highest level for Dortmund, while Mbappé is at the highest level for PSG, which is the highest competition in European football.\n\nIn summary, both Haaland and Mbappé are elite talents and would be considered as top-class players. Comparing them directly can be subjective. Their performances and attributes vary based on their positions and the systems they play in. Generally, they are considered equally impressive in their respective leagues and teams.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 32
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "What is Haaland's forecast range?",
+   "risposta": "There doesn't seem to be any information about a player named Haaland in the provided data. The data appears to be about Premier League footballers, but it does not include any player with the name \"Haaland\". Could you please provide more details or check if there's a mistake in the player's name?",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 5
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "Give me two defenders with a high forecast.",
+   "risposta": "Based on the data provided, two defenders with a high forecast (pred) are:\n\n1. **Ayden Heaven** from Manchester United. His forecast is 0.09, and while he is labeled as \"sottovalutato\" (under-rated) in the data, he has a positive forecast.\n\n2. **Ibrahima Konaté** from Liverpool. His forecast is 0.08, and he is not labeled as under-rated, which might indicate a more accurate forecast.\n\nGiven these two, Ayden Heaven has the highest positive forecast at 0.09. However, it's important to note that forecast accuracy can vary, and other defenders in the list may have similarly high but not explicitly stated forecasts.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 11
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "How old is Cherki and how many minutes did he play?",
+   "risposta": "Based on the data provided, there is no player named Cherki in the list. The data seems to be about different footballers and their predictions, but Cherki is not mentioned. If you have the correct player's name, I'd be happy to look up the information for you.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 5
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "Chi gioca nel Chelsea con la previsione più alta?",
+   "risposta": "Nello screenshot fornito, c'è solo un elemento che rappresenta il Chelsea, e il suo nome è Marc Cucurella. Tuttavia, il pred (previsione) è il più basso (0.18) tra tutti gli iniziati. Quindi, non ci sono giocatori con la previsione più alta nel Chelsea in questo elenco.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 6
+  },
+  {
+   "lega": "premier",
+   "tipo": "numeri",
+   "domanda": "Quanto vale la previsione contro la statistica semplice in Premier?",
+   "risposta": "Non ho informazioni dirette che possano essere direttamente correlate alla previsione contro la statistica semplice in Premier League, o in generale. Non ho dati su come valutare una previsione in termini di quanto \"contro la statistica semplice\" sia valutata. Questo tipo di valutazione è spesso utilizzato nell'industria del calcio per confrontare la previsione di un giocatore con le statistiche reali. Non ho sufficienti dati per fornirti una valutazione precisa. Se hai ulteriori dettagli o contesto su come valutare una previsione contro la statistica semplice, ti sarei grato per fornirmeli e potrei cercare di aiutarti meglio basandomi su quegli elementi.",
+   "numeri_ok": true,
+   "numeri_non_trovati": [],
+   "notizia_ok": true,
+   "secondi": 33
+  }
+ ]
+}

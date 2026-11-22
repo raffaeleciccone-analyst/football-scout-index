@@ -81,7 +81,7 @@ def _dati_lega(con, lega, stagione, prev, esclusi, verdetto, verdetto_costruzion
     for r in p.itertuples(index=False):
         g = giocatori.setdefault(int(r.giocatore_id), {"nome": nomi.get(r.giocatore_id, "?"), "ruolo": r.ruolo, "tpi": None})
         g["squadra_prima"] = squadra_base.get(r.giocatore_id)
-        g["previsione"] = {"pred": r.pred, "lo": r.lo, "hi": r.hi, "prima": r.out90, "minuti_prima": int(r.minuti),
+        g["previsione"] = {"pred": r.pred, "lo": max(0.0, r.lo), "hi": r.hi,   # un rendimento sotto zero non esiste "prima": r.out90, "minuti_prima": int(r.minuti),
                            "eta": r.eta, "motivi": list(r.motivi), "sottovalutato": r.giocatore_id in sotto,
                            "sfortuna90": sfortuna.get(r.giocatore_id), "pos_ruolo": int(r.posizione_ruolo)}
     # previsto contro reale: quanto sta facendo nella stagione prevista, fino a oggi (F10)
@@ -96,7 +96,7 @@ def _dati_lega(con, lega, stagione, prev, esclusi, verdetto, verdetto_costruzion
     if agg and agg.get("prev") is not None:
         for r in agg["prev"].itertuples(index=False):
             if int(r.giocatore_id) in giocatori:
-                giocatori[int(r.giocatore_id)]["aggiornata"] = {"pred": r.pred, "lo": r.lo, "hi": r.hi}
+                giocatori[int(r.giocatore_id)]["aggiornata"] = {"pred": r.pred, "lo": max(0.0, r.lo), "hi": r.hi}
     for r in esclusi[esclusi["lega"] == lega].itertuples(index=False):
         giocatori.setdefault(int(r.giocatore_id), {"nome": nomi.get(r.giocatore_id, "?"), "tpi": None})["motivo"] = r.motivo
     v = verdetto["leghe"][lega]
@@ -115,6 +115,26 @@ def _dati_lega(con, lega, stagione, prev, esclusi, verdetto, verdetto_costruzion
                      "costruzione": verdetto_costruzione["leghe"][lega]["mostra_previsione"] if verdetto_costruzione else None},
         "metodo": {"pesi_tpi": pesi, "soglia": C.SOGLIA_PREVISIONE, "metro": C.MINUTI_METRO,
                    "poco": C.MINUTI_POCO_CONSIDERATO, "eta_max": C.ETA_MAX_SOTTOVALUTATI}})
+
+
+def _per_assistente(dati):
+    """I dati che l'assistente vede (F20): tutti i giocatori con previsione, numeri arrotondati come sul sito."""
+    r2 = lambda x: None if x is None else round(x, 2)
+    v = dati["verdetto"]
+    giocatori = []
+    for g in dati["giocatori"].values():
+        p = g.get("previsione")
+        if not p:
+            continue
+        giocatori.append({k: x for k, x in {
+            "nome": g["nome"], "squadra": g.get("squadra") or g.get("squadra_prima"), "ruolo": g.get("ruolo"),
+            "eta": int(p["eta"]) if p.get("eta") else None, "tpi": r2(g.get("tpi")), "pred": r2(p["pred"]),
+            "lo": r2(p["lo"]), "hi": r2(p["hi"]), "prima": r2(p["prima"]), "minuti": p["minuti_prima"],
+            "sottovalutato": True if p.get("sottovalutato") else None}.items() if x is not None})
+    return {"lega": dati["lega"], "stagione_prevista": dati["stagione_prevista"],
+            "verdetto": {"mostra_previsione": v["mostra_previsione"], "mostra_sottovalutati": v["mostra_sottovalutati"],
+                         "mod": r2(v["rivali"]["grezzo"]["rho_modello"]), "grezzo": r2(v["rivali"]["grezzo"]["rho_rivale"])},
+            "giocatori": giocatori}
 
 
 def _scrivi_js(percorso, nome, dati):
@@ -137,11 +157,13 @@ def genera(con, cartella, stagioni_tpi, prev, esclusi, verdetto, verdetto_costru
         riassunto[lega] = dati["verdetto"]
         tutti[lega] = dati["giocatori"]
         _scrivi_js(uscita / "dati.js", "DATI", dati)
+        (uscita / "assistente.json").write_text(json.dumps(_per_assistente(dati), ensure_ascii=False), encoding="utf-8")
         _scrivi_js(uscita / "testi.js", "TESTI", testi)
         for f in FISSI:
             shutil.copy(SORGENTE / f, uscita / f)
         for pagina in PAGINE:
-            html = env.get_template(pagina).render(d=dati, v=dati["verdetto"], m=dati["metodo"], pagina=pagina)
+            html = env.get_template(pagina).render(d=dati, v=dati["verdetto"], m=dati["metodo"], pagina=pagina,
+                                                   assistente_url=C.ASSISTENTE_URL)
             (uscita / pagina).write_text(html, encoding="utf-8")
     home = cartella / "home"
     home.mkdir(parents=True, exist_ok=True)

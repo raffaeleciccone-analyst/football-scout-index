@@ -60,3 +60,7 @@ GRIGLIA_K = [0, 150, 300, 600, 1000, 1500, 2500, 4000]   # minuti di "media del 
 COPERTURA_MIN, COPERTURA_MAX = 0.70, 0.90                 # C11: forbice all'80%
 CONTROLLI_AGGIORNATA = [5, 10, 15, 19, 25, 30]            # F10: giornate in cui si prova la previsione aggiornata
 CONTESTO_PICCOLO = 8                      # C3c: sotto le 8 partite un contesto è "campione piccolo"
+
+# ---- Assistente (SPEC F17) ----
+import os as _os
+ASSISTENTE_URL = _os.environ.get("FSI_ASSISTENTE_URL", "")   # vuoto: la chat non compare (es. finché il Worker non c'è)

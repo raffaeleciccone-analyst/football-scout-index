@@ -227,7 +227,14 @@ football-scout-index/
       - **Costruzione**: non batte da nessuna parte.
       - Rapporto leggibile: `test.bat` → `uscita/rapporto_test.txt` nel Blocco note.
 - [ ] **3. Sito** (C17-C20) in `uscita/`, te lo apro in locale.
-- [ ] **4. Assistente** (C21-C24).
+- [x] **4. Assistente** (C21-C24) 22/11, 12 test (worker/test, fornitori finti).
+      - Worker Cloudflare in JavaScript; fornitore con `PROVIDER` (decisione dell'utente: ognuno nel suo formato):
+        `anthropic` con la libreria ufficiale (piano B del server se il modello rifiuta), `openai`, `gemini`, `ollama`.
+      - Al modello si mandano solo i nominati nella domanda, i primi 10 per ruolo e i giovani sottovalutati (F20):
+        con tutti i 352 il modello locale ci metteva più di 5 minuti.
+      - Controllo dei numeri **frase per frase**: se la frase nomina un giocatore, i numeri devono essere i suoi.
+      - Chat nel sito solo se `FSI_ASSISTENTE_URL` è impostato; `worker/locale.mjs` la fa girare sul PC con Ollama.
+      - Prova vera (C21, C22): 30 domande in `worker/domande_prova.json`, esito in `prove/assistente_<fornitore>.json`.
 - [x] **5. Controlli e raccolta** (C25-C27) 22/11, 10 test.
       - `controlli.py`: D1-D11 riscritte sullo schema nuovo (D3, D12 le garantiscono le chiavi; D8 non esiste più).
         Nei dati veri l'unico difetto è quello noto, **Juventus-Parma 2026-27** (D10). **D13 precisata**: con la storia

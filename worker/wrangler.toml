@@ -1,0 +1,19 @@
+# Worker dell'assistente (SPEC F17-F18). La chiave NON va qui: `npx wrangler secret put API_KEY`.
+name = "football-scout-index-assistente"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# Fornitore: anthropic | openai | gemini | ollama  — cambiarlo non richiede di toccare il codice (C23)
+PROVIDER = "anthropic"
+MODEL = "claude-opus-5-5"
+# BASE_URL = ""                     # solo per indirizzi diversi da quello del fornitore (es. Ollama o OpenRouter)
+DATI_URL = "https://raffaeleciccone-analyst.github.io/football-scout-index"   # dove stanno i file assistente.json
+LIMITE_GIORNALIERO = "200"           # tetto di domande al giorno per tutto il sito (C24)
+ORIGINE = "https://raffaeleciccone-analyst.github.io"
+
+# il contatore del tetto giornaliero: crearlo con `npx wrangler kv namespace create QUOTA` e incollare l'id
+# [[kv_namespaces]]
+# binding = "QUOTA"
+# id = ""

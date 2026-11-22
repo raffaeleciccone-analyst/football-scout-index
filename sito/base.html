@@ -32,6 +32,19 @@
 <main>
 {% block contenuto %}{% endblock %}
 </main>
+{% if d and assistente_url %}
+<button type="button" class="chat-apri" id="chat-apri" aria-expanded="false" aria-controls="chat">{{ t("chat_apri") }}</button>
+<section class="chat" id="chat" hidden data-url="{{ assistente_url }}" data-lega="{{ d.lega }}">
+  <div class="chat-testa">{{ t("chat_titolo", "h3") }}<button type="button" id="chat-chiudi">{{ t("chat_chiudi") }}</button></div>
+  {{ t("chat_nota", "p", "chat-nota") }}
+  <div class="chat-storia" id="chat-storia" aria-live="polite"></div>
+  <form class="chat-modulo" id="chat-modulo">
+    <label for="chat-domanda" class="nascosto">{{ t("chat_apri") }}</label>
+    <input id="chat-domanda" maxlength="600" autocomplete="off" data-tp="chat_segnaposto">
+    <button type="submit">{{ t("chat_invia") }}</button>
+  </form>
+</section>
+{% endif %}
 <footer class="piede"><div class="wrap">{{ t("piede", "p") }}</div></footer>
 <script src="testi.js"></script>
 <script src="dati.js"></script>
