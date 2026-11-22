@@ -159,5 +159,8 @@ if __name__ == "__main__":
     verdetto = json.loads((C.RADICE / "prove" / "vera_2024-25_2025-26.json").read_text(encoding="utf-8"))
     mod = P.stima(pd.concat([P.tabella(con, *c) for c in P.COPPIE], ignore_index=True), contesti=False)
     prev, esclusi = P.prevedi(con, mod, "2025-26")
+    # la previsione di agosto si scrive una volta (C14): se c'è già, vince il file
+    agosto = P.salva_agosto(prev, "2026-27", C.RADICE / "previsioni")
+    prev = pd.read_json(agosto, orient="records")
     print(genera(con, C.USCITA, {"serie_a": "2026-27", "premier": "2026-27"}, prev, esclusi, verdetto["output"],
                  verdetto.get("buildup"), stagione_prevista="2026-27"), file=sys.stderr)

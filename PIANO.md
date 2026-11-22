@@ -112,7 +112,10 @@ Tabelle (una riga = un fatto, la stagione è **sempre** una colonna, mai dedotta
     tagliata a k (non c'è ancora la "stagione prima" completa da affiancare). La soglia dei 450' si riduce in
     proporzione (450 × k / giornate) — `shortcut:` con la 2023-24 si affianca la stagione prima completa e la soglia
     torna 450'.
-  - **Infortuni**: fuori dal modello in questo giro (nessun dato 2024-25, vedi §9b).
+  - **Infortuni** *(22/11, dopo il download da Transfermarkt: 1.074 storie, stagioni 2021-22…2026-27)*: ingrediente
+    candidato = log(1 + giorni fuori nella stagione) + "storia mancante". **Regola fissata prima di vedere il risultato:**
+    entrano solo se, nella prova vera a finestra mobile, la ρ del modello migliora in **tutti e due** i campionati.
+    Esito in `prove/vera_infortuni.json`.
 
 ## 4. Sito (F11-F16, F19)
 - **Pagine statiche generate da Python**: i dati in JSON, l'HTML da modelli con jinja2 (già installato). Niente

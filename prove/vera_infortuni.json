@@ -1,0 +1,338 @@
+{
+ "senza": {
+  "misura": "output",
+  "infortuni": false,
+  "stato": "verificata (prova a finestra mobile su stagioni mai viste)",
+  "stimata_su": {
+   "2022-23 -> 2023-24": [
+    "2021-22 -> 2022-23"
+   ],
+   "2023-24 -> 2024-25": [
+    "2021-22 -> 2022-23",
+    "2022-23 -> 2023-24"
+   ],
+   "2024-25 -> 2025-26": [
+    "2021-22 -> 2022-23",
+    "2022-23 -> 2023-24",
+    "2023-24 -> 2024-25"
+   ]
+  },
+  "per_stagione": {
+   "2022-23 -> 2023-24": {
+    "premier": {
+     "n": 217,
+     "rho_modello": 0.8204526557589594,
+     "rho_grezzo": 0.7629182579611701
+    }
+   },
+   "2023-24 -> 2024-25": {
+    "premier": {
+     "n": 204,
+     "rho_modello": 0.8319525623537892,
+     "rho_grezzo": 0.8052493816742845
+    },
+    "serie_a": {
+     "n": 219,
+     "rho_modello": 0.7631542266957625,
+     "rho_grezzo": 0.7692106435728405
+    }
+   },
+   "2024-25 -> 2025-26": {
+    "premier": {
+     "n": 214,
+     "rho_modello": 0.8027336372068533,
+     "rho_grezzo": 0.758024138077273
+    },
+    "serie_a": {
+     "n": 210,
+     "rho_modello": 0.7438668009533489,
+     "rho_grezzo": 0.7048441995264918
+    }
+   }
+  },
+  "leghe": {
+   "premier": {
+    "n": 635,
+    "rivali": {
+     "grezzo": {
+      "n": 635,
+      "rho_modello": 0.8181756651687146,
+      "rho_rivale": 0.7748681911616763,
+      "diff_lo": 0.026908147292005503,
+      "diff_hi": 0.06175263369315501,
+      "batte": true
+     },
+     "minuti": {
+      "n": 635,
+      "rho_modello": 0.8181756651687146,
+      "rho_rivale": 0.011644113118866123,
+      "diff_lo": 0.7379231598198015,
+      "diff_hi": 0.8705219082712494,
+      "batte": true
+     },
+     "tpi": {
+      "n": 214,
+      "rho_modello": 0.8027336372068533,
+      "rho_rivale": 0.3661488163932519,
+      "diff_lo": 0.34433203210521074,
+      "diff_hi": 0.5248288954882868,
+      "batte": true
+     },
+     "tpi_pro": {
+      "n": 214,
+      "rho_modello": 0.8027336372068533,
+      "rho_rivale": 0.33131693089284986,
+      "diff_lo": 0.37338310152525767,
+      "diff_hi": 0.5695690582291769,
+      "batte": true
+     }
+    },
+    "sottovalutati": {
+     "n": 88,
+     "rho_modello": 0.6528773289618877,
+     "rho_rivale": 0.6260817736185382,
+     "diff_lo": -0.07251949199271425,
+     "diff_hi": 0.12399884848680293,
+     "batte": false,
+     "rivale": "output grezzo",
+     "gruppo_minuti": [
+      450,
+      1500
+     ],
+     "eta_massima": 25
+    },
+    "forbice": {
+     "copertura": 0.7748031496062993,
+     "mostra": true
+    },
+    "mostra_previsione": true,
+    "mostra_sottovalutati": false
+   },
+   "serie_a": {
+    "n": 429,
+    "rivali": {
+     "grezzo": {
+      "n": 429,
+      "rho_modello": 0.7537128294791964,
+      "rho_rivale": 0.7377025940396629,
+      "diff_lo": -0.00825133413663219,
+      "diff_hi": 0.040805530105462284,
+      "batte": false
+     },
+     "minuti": {
+      "n": 429,
+      "rho_modello": 0.7537128294791964,
+      "rho_rivale": -0.059806645050997254,
+      "diff_lo": 0.7250489154005877,
+      "diff_hi": 0.8956604658722606,
+      "batte": true
+     },
+     "tpi": {
+      "n": 209,
+      "rho_modello": 0.7505687570879385,
+      "rho_rivale": 0.4611817331293078,
+      "diff_lo": 0.19956853672780034,
+      "diff_hi": 0.3806985660254081,
+      "batte": true
+     },
+     "tpi_pro": {
+      "n": 207,
+      "rho_modello": 0.7470562429837488,
+      "rho_rivale": 0.5383920958079313,
+      "diff_lo": 0.13199804522233052,
+      "diff_hi": 0.2924360077874445,
+      "batte": true
+     }
+    },
+    "sottovalutati": {
+     "n": 77,
+     "rho_modello": 0.7392421234526497,
+     "rho_rivale": 0.6159188606557027,
+     "diff_lo": 0.01834250192099922,
+     "diff_hi": 0.2387910751160662,
+     "batte": true,
+     "rivale": "output grezzo",
+     "gruppo_minuti": [
+      450,
+      1500
+     ],
+     "eta_massima": 25
+    },
+    "forbice": {
+     "copertura": 0.8065268065268065,
+     "mostra": true
+    },
+    "mostra_previsione": false,
+    "mostra_sottovalutati": true
+   }
+  }
+ },
+ "con": {
+  "misura": "output",
+  "infortuni": true,
+  "stato": "verificata (prova a finestra mobile su stagioni mai viste)",
+  "stimata_su": {
+   "2022-23 -> 2023-24": [
+    "2021-22 -> 2022-23"
+   ],
+   "2023-24 -> 2024-25": [
+    "2021-22 -> 2022-23",
+    "2022-23 -> 2023-24"
+   ],
+   "2024-25 -> 2025-26": [
+    "2021-22 -> 2022-23",
+    "2022-23 -> 2023-24",
+    "2023-24 -> 2024-25"
+   ]
+  },
+  "per_stagione": {
+   "2022-23 -> 2023-24": {
+    "premier": {
+     "n": 217,
+     "rho_modello": 0.817901887005172,
+     "rho_grezzo": 0.7629182579611701
+    }
+   },
+   "2023-24 -> 2024-25": {
+    "premier": {
+     "n": 204,
+     "rho_modello": 0.8326833508845085,
+     "rho_grezzo": 0.8052493816742845
+    },
+    "serie_a": {
+     "n": 219,
+     "rho_modello": 0.7662081414877696,
+     "rho_grezzo": 0.7692106435728405
+    }
+   },
+   "2024-25 -> 2025-26": {
+    "premier": {
+     "n": 214,
+     "rho_modello": 0.8009936602881799,
+     "rho_grezzo": 0.758024138077273
+    },
+    "serie_a": {
+     "n": 210,
+     "rho_modello": 0.7413924972035704,
+     "rho_grezzo": 0.7048441995264918
+    }
+   }
+  },
+  "leghe": {
+   "premier": {
+    "n": 635,
+    "rivali": {
+     "grezzo": {
+      "n": 635,
+      "rho_modello": 0.8169523722239883,
+      "rho_rivale": 0.7748681911616763,
+      "diff_lo": 0.02527568584015705,
+      "diff_hi": 0.06035282636094884,
+      "batte": true
+     },
+     "minuti": {
+      "n": 635,
+      "rho_modello": 0.8169523722239883,
+      "rho_rivale": 0.011644113118866123,
+      "diff_lo": 0.7359283394483581,
+      "diff_hi": 0.8692495416789632,
+      "batte": true
+     },
+     "tpi": {
+      "n": 214,
+      "rho_modello": 0.8009936602881799,
+      "rho_rivale": 0.3661488163932519,
+      "diff_lo": 0.3427765177279984,
+      "diff_hi": 0.5252364150601753,
+      "batte": true
+     },
+     "tpi_pro": {
+      "n": 214,
+      "rho_modello": 0.8009936602881799,
+      "rho_rivale": 0.33131693089284986,
+      "diff_lo": 0.3706577163987242,
+      "diff_hi": 0.5678043425882199,
+      "batte": true
+     }
+    },
+    "sottovalutati": {
+     "n": 88,
+     "rho_modello": 0.6617966428995841,
+     "rho_rivale": 0.6260817736185382,
+     "diff_lo": -0.06546093635860119,
+     "diff_hi": 0.1371409918664216,
+     "batte": false,
+     "rivale": "output grezzo",
+     "gruppo_minuti": [
+      450,
+      1500
+     ],
+     "eta_massima": 25
+    },
+    "forbice": {
+     "copertura": 0.7763779527559055,
+     "mostra": true
+    },
+    "mostra_previsione": true,
+    "mostra_sottovalutati": false
+   },
+   "serie_a": {
+    "n": 429,
+    "rivali": {
+     "grezzo": {
+      "n": 429,
+      "rho_modello": 0.7540606233066931,
+      "rho_rivale": 0.7377025940396629,
+      "diff_lo": -0.007926957417128054,
+      "diff_hi": 0.040942953697129296,
+      "batte": false
+     },
+     "minuti": {
+      "n": 429,
+      "rho_modello": 0.7540606233066931,
+      "rho_rivale": -0.059806645050997254,
+      "diff_lo": 0.7254889163439652,
+      "diff_hi": 0.8961386527401641,
+      "batte": true
+     },
+     "tpi": {
+      "n": 209,
+      "rho_modello": 0.74804167807252,
+      "rho_rivale": 0.4611817331293078,
+      "diff_lo": 0.1949956983312453,
+      "diff_hi": 0.3781690791168015,
+      "batte": true
+     },
+     "tpi_pro": {
+      "n": 207,
+      "rho_modello": 0.7443943215500046,
+      "rho_rivale": 0.5383920958079313,
+      "diff_lo": 0.12936942737242535,
+      "diff_hi": 0.2917823922099678,
+      "batte": true
+     }
+    },
+    "sottovalutati": {
+     "n": 77,
+     "rho_modello": 0.7370645002223949,
+     "rho_rivale": 0.6159188606557027,
+     "diff_lo": 0.016776518317787845,
+     "diff_hi": 0.23846552516543165,
+     "batte": true,
+     "rivale": "output grezzo",
+     "gruppo_minuti": [
+      450,
+      1500
+     ],
+     "eta_massima": 25
+    },
+    "forbice": {
+     "copertura": 0.7925407925407926,
+     "mostra": true
+    },
+    "mostra_previsione": false,
+    "mostra_sottovalutati": true
+   }
+  }
+ }
+}

@@ -164,6 +164,18 @@
     "mostra_previsione": false,
     "mostra_sottovalutati": true
    }
+  },
+  "infortuni_provati": true,
+  "infortuni": false,
+  "infortuni_esito": {
+   "senza": {
+    "premier": 0.8181756651687146,
+    "serie_a": 0.7537128294791964
+   },
+   "con": {
+    "premier": 0.8169523722239883,
+    "serie_a": 0.7540606233066931
+   }
   }
  },
  "buildup": {
