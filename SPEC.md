@@ -38,8 +38,10 @@ Si riscrive **tutto da zero**, pulito, in una repository nuova.
   ogni 90 minuti. Esempio: oggi 0,40 → "l'anno prossimo 0,45". Ingredienti grezzi (output per 90, età, minuti,
   tendenza, infortuni...), **pesi stimati dai dati**, mai scelti a mano.
 - F3. **Sottovalutati** (la lettura per lo scout, decisione del 22/11): fra chi ha giocato **poco** (da 450' a
-  meno di 1500' ✱ nella stagione di partenza), i giocatori con il **rendimento previsto più alto** (F2), per ruolo.
-  Accanto, l'età (un giovane con pochi minuti è il caso tipico). Viene da F2, non è un secondo modello.
+  meno di 1500' ✱ nella stagione di partenza) ed è **giovane** (fino a 25 anni ✱ a fine stagione; età
+  sconosciuta = fuori, e lo si dice), i giocatori con il **rendimento previsto più alto** (F2), per ruolo.
+  *(Limite d'età deciso il 22/11: senza, in cima finivano Dybala e Pedro, che giocano poco per età, non perché
+  nessuno li conosca.)* Viene da F2, non è un secondo modello.
 - F3b. **Sfortunati sotto porta** (solo descrizione, mai previsione): chi ha avuto molti più xG che gol (xG senza
   rigori − gol senza rigori, per 90). La pagina lo dice: "descrizione della stagione, non una previsione".
   *(Il 22/11 si è misurato che la vecchia lista "crescita prevista" coincideva con questa idea e non batteva la
@@ -133,16 +135,18 @@ Ogni criterio diventa almeno un test. ✱ = soglie proposte da me.
   reale supera quella del rivale, e l'intervallo bootstrap al 90% della differenza sta tutto sopra zero.
 - C9. **F2 e F4**: rivale = il dato grezzo della stagione prima (output per 90 / buildup per 90). Se un modello
   finto che copia il grezzo viene messo alla prova → "non batte", e la pagina mostra il grezzo con quella scritta.
-- C10. **F3 (sottovalutati)**: la prova si fa **solo sul gruppo con pochi minuti** (450'-1499' nella stagione di
-  partenza): lì la previsione deve battere l'output grezzo (come C8). Se non batte → la lista non si mostra e la
-  pagina dice perché. Un giocatore con 1500' non entra mai nella lista.
+- C10. **F3 (sottovalutati)**: la prova si fa **solo sul gruppo** dei giovani con pochi minuti (450'-1499', fino a
+  25 anni): lì la previsione deve battere l'output grezzo (come C8). Se non batte → la lista non si mostra e la
+  pagina dice perché. Un giocatore con 1500', o con 26 anni, o senza età nota non entra mai nella lista.
 - C10b. **F3b**: la lista è ordinata per (xG senza rigori − gol senza rigori) per 90, solo chi ha i 450'; ogni
   pagina che la mostra ha la scritta "descrizione, non previsione".
 - C11. ✱ **Forbice all'80%**: sulla stagione di prova, fra il 70% e il 90% dei giocatori finisce dentro la sua
   forbice; altrimenti la forbice non si mostra.
 - C12. La pagina del metodo mostra, sugli stessi giocatori e stessa stagione: modello, output grezzo, minuti,
   TPI, TPI Pro, con ρ e intervallo.
-- C13. **Finché c'è una sola coppia di stagioni** (2024-25 → 2025-26) ogni previsione è marcata "prototipo,
+- C13. *(22/11)* La prova vera è **a finestra mobile**: ogni stagione di prova si prevede con un modello stimato
+  solo sulle coppie che vengono prima (oggi: Premier 3 stagioni di prova, Serie A 2, con le stagioni dell'archivio).
+  **Finché c'è una sola coppia di stagioni** (2024-25 → 2025-26) ogni previsione è marcata "prototipo,
   non verificato"; la parola "verificata" compare solo con una prova su una stagione mai vista.
 - C14. **Agosto ferma**: rigiro il calcolo alla giornata 12 → la previsione di agosto è identica.
   Giornata la cui prova non è passata → "troppo presto per aggiornare"; giornata 19 → prova dichiarata nel metodo.

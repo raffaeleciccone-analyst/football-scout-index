@@ -101,6 +101,16 @@ def test_c08_batte_vuol_dire_intervallo_tutto_sopra_zero():
     assert not P.batte(stessa, stessa, reale)["batte"]          # C9: un modello che copia il rivale non batte
 
 
+def test_c08_con_piu_stagioni_l_ordine_si_misura_dentro_ogni_stagione():
+    rng = np.random.default_rng(2)
+    reale = rng.normal(size=400)
+    stagione = np.repeat(["a", "b"], 200)
+    spostata = reale + np.where(stagione == "a", 5.0, 0.0)          # stesso ordine, livello diverso fra stagioni
+    rivale = reale + rng.normal(scale=0.5, size=400)
+    assert P.batte(spostata, rivale, reale, stagione)["batte"]
+    assert P.batte(spostata, rivale, reale, stagione)["rho_modello"] == pytest.approx(1.0)
+
+
 def test_c09_la_regola_dura_decide_cosa_si_mostra(verdetto):
     for lega, v in verdetto["leghe"].items():
         assert v["mostra_previsione"] == v["rivali"]["grezzo"]["batte"], lega
@@ -110,13 +120,15 @@ def test_c10_sottovalutati_provati_solo_su_chi_gioca_poco(verdetto):
     for v in verdetto["leghe"].values():
         s = v["sottovalutati"]
         assert s["gruppo_minuti"] == [config.SOGLIA_PREVISIONE, config.MINUTI_POCO_CONSIDERATO]
+        assert s["eta_massima"] == config.ETA_MAX_SOTTOVALUTATI
         assert v["mostra_sottovalutati"] == s["batte"] and s["rivale"] == "output grezzo"
         assert 0 < s["n"] < v["n"]
 
 
-def test_c10_con_1500_minuti_non_e_mai_sottovalutato():
-    prev = pd.DataFrame({"giocatore_id": [1, 2, 3], "lega": "serie_a", "ruolo": "ATT",
-                         "minuti": [1499, 1500, 600], "pred": [0.5, 0.9, 0.4]})
+def test_c10_con_1500_minuti_o_26_anni_non_e_mai_sottovalutato():
+    prev = pd.DataFrame({"giocatore_id": [1, 2, 3, 4, 5], "lega": "serie_a", "ruolo": "ATT",
+                         "minuti": [1499, 1500, 600, 800, 800], "eta": [25.9, 21.0, 19.0, 26.0, np.nan],
+                         "pred": [0.5, 0.9, 0.4, 0.8, 0.8]})
     assert list(P.sottovalutati(prev)["giocatore_id"]) == [1, 3]
 
 
@@ -204,8 +216,12 @@ def test_c05_tolgo_la_stagione_di_prova_i_pesi_non_cambiano(riassunta):
     assert prima == pytest.approx(dopo)
 
 
-def test_c13_la_prova_vera_e_verificata(riassunta):
-    v = P.prova_vera(riassunta, [("2023-24", "2024-25")], "2024-25", "2025-26")
+def test_c13_la_prova_vera_e_a_finestra_mobile(riassunta):
+    v = P.prova_vera(riassunta, P.COPPIE)
     assert v["stato"].startswith("verificata") and set(v["leghe"]) == {"serie_a", "premier"}
+    # ogni stagione di prova usa solo le coppie che vengono prima
+    for prova, stimata_su in v["stimata_su"].items():
+        assert stimata_su and all(c.split(" -> ")[1] <= prova.split(" -> ")[0] for c in stimata_su), prova
+    assert set(v["per_stagione"]) >= {"2023-24 -> 2024-25", "2024-25 -> 2025-26"}
     for x in v["leghe"].values():
         assert x["mostra_previsione"] == x["rivali"]["grezzo"]["batte"]

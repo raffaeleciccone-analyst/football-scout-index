@@ -103,6 +103,9 @@ def _reale(con, stagione):
     """Rendimento reale di una stagione, sommando Serie A e Premier (la chiave è l'id Understat)."""
     r = pd.read_sql("SELECT giocatore_id, minuti, gol_senza_rigori, xa, xg_buildup FROM righe "
                     "WHERE stagione = ? AND minuti >= 1", con, params=[stagione])
+    if r.empty:   # stagione presa dall'archivio (solo totali)
+        r = pd.read_sql("SELECT giocatore_id, minuti, gol_senza_rigori, xa, xg_buildup FROM stagioni_riassunte "
+                        "WHERE stagione = ? AND minuti >= 1", con, params=[stagione])
     g = r.groupby("giocatore_id")
     m = g["minuti"].sum()
     return pd.DataFrame({"min_dopo": m, "y_output": (g["gol_senza_rigori"].sum() + g["xa"].sum()) / m * 90,
@@ -113,7 +116,10 @@ def tabella(con, base, dopo, fino_a_giornata=None, misura="output") -> pd.DataFr
     parti = []
     for lega in C.LEGHE:
         ingr = ingredienti(con, lega, base, fino_a_giornata)
-        parti.append(ammessi(ingr, _soglia(con, lega, base, fino_a_giornata))[0])
+        if len(ingr):   # es. Serie A 2022-23: non c'è (l'archivio ha solo mezza stagione)
+            parti.append(ammessi(ingr, _soglia(con, lega, base, fino_a_giornata))[0])
+    if not parti:
+        return pd.DataFrame()
     t = pd.concat(parti, ignore_index=True).merge(_reale(con, dopo), left_on="giocatore_id", right_index=True,
                                                   how="left")
     t["y"] = t[f"y_{misura}"]
@@ -215,19 +221,38 @@ def fuori_campione(tab, misura="output", contesti=True) -> pd.DataFrame:
 
 
 # ---------------------------------------------------------------- la prova
-def batte(pred, rivale, reale, n=2000, seed=0) -> dict:
-    """C8: batte se l'intervallo 5°-95° della differenza di ρ (bootstrap appaiato) sta tutto sopra zero."""
-    pred, rivale, reale = map(np.asarray, (pred, rivale, reale))
-    idx = np.random.default_rng(seed).integers(0, len(reale), size=(n, len(reale)))
-
-    def rho(a):   # Spearman riga per riga sui campioni ricampionati
-        ra, rr = rankdata(a[idx], axis=1), rankdata(reale[idx], axis=1)
-        ra, rr = ra - ra.mean(1, keepdims=True), rr - rr.mean(1, keepdims=True)
+def _rho_righe(a, r):
+    """Spearman riga per riga (ogni riga è un campione ricampionato)."""
+    ra, rr = rankdata(a, axis=1), rankdata(r, axis=1)
+    ra, rr = ra - ra.mean(1, keepdims=True), rr - rr.mean(1, keepdims=True)
+    with np.errstate(invalid="ignore", divide="ignore"):
         return (ra * rr).sum(1) / np.sqrt((ra ** 2).sum(1) * (rr ** 2).sum(1))
-    diff = rho(pred) - rho(rivale)
+
+
+def batte(pred, rivale, reale, gruppi=None, n=2000, seed=0) -> dict:
+    """C8: batte se l'intervallo 5°-95° della differenza di ρ (bootstrap appaiato) sta tutto sopra zero.
+
+    Con più stagioni di prova (`gruppi`) la ρ si misura dentro ogni stagione e si fa la media pesata: l'ordine
+    dei giocatori conta dentro una stagione, non fra stagioni previste da modelli diversi.
+    """
+    pred, rivale, reale = map(np.asarray, (pred, rivale, reale))
+    gruppi = np.zeros(len(reale)) if gruppi is None else np.asarray(gruppi)
+    rng = np.random.default_rng(seed)
+    pesi, d_boot, r_mod, r_riv = [], [], [], []
+    for g in pd.unique(gruppi):
+        m = gruppi == g
+        if m.sum() < 5:   # troppo pochi per una ρ
+            continue
+        p, q, y = pred[m], rivale[m], reale[m]
+        idx = rng.integers(0, m.sum(), size=(n, m.sum()))
+        d_boot.append(_rho_righe(p[idx], y[idx]) - _rho_righe(q[idx], y[idx]))
+        r_mod.append(spearmanr(p, y).statistic)
+        r_riv.append(spearmanr(q, y).statistic)
+        pesi.append(m.sum())
+    w = np.array(pesi) / sum(pesi)
+    diff = np.nansum(np.array(d_boot) * w[:, None], axis=0)
     lo, hi = np.percentile(diff, [5, 95])
-    return {"n": len(reale), "rho_modello": float(spearmanr(pred, reale).statistic),
-            "rho_rivale": float(spearmanr(rivale, reale).statistic),
+    return {"n": len(reale), "rho_modello": float(np.dot(w, r_mod)), "rho_rivale": float(np.dot(w, r_riv)),
             "diff_lo": float(lo), "diff_hi": float(hi), "batte": bool(lo > 0)}
 
 
@@ -241,14 +266,17 @@ def mostra_forbice(cop) -> bool:
 
 def _tpi_pro(base):
     if base != "2024-25" or not RIVALI_TPI_PRO.exists():
-        return pd.DataFrame(columns=["lega", "giocatore_id", "tpi_pro"])
+        return pd.DataFrame({"lega": pd.Series(dtype=str), "giocatore_id": pd.Series(dtype="int64"),
+                             "tpi_pro": pd.Series(dtype=float)})
     return pd.read_csv(RIVALI_TPI_PRO)[["lega", "giocatore_id", "tpi_pro"]]
 
 
 def _valuta(tab, previsioni, base, misura, fino_a_giornata) -> dict:
     """Verdetto per lega: rivali (C8, C12), sottovalutati (C10), forbice (C11), cosa si mostra (C9)."""
     ev = (tab["min_dopo"] >= C.MINUTI_METRO) & tab["y"].notna()
-    t = tab[ev].join(previsioni).merge(_tpi_pro(base), on=["lega", "giocatore_id"], how="left")
+    t = tab[ev].join(previsioni)
+    if "tpi_pro" not in t:
+        t = t.merge(_tpi_pro(base), on=["lega", "giocatore_id"], how="left")
     grezzo = "out90" if misura == "output" else "buildup90"
     rivali = {"grezzo": grezzo, "minuti": "minuti"}
     if misura == "output" and fino_a_giornata is None:
@@ -258,10 +286,12 @@ def _valuta(tab, previsioni, base, misura, fino_a_giornata) -> dict:
         v = {"n": len(b), "rivali": {}}
         for nome, col in rivali.items():
             s = b[b[col].notna()]
-            v["rivali"][nome] = batte(s["pred"], s[col], s["y"])
-        poco = b[(b["minuti"] >= C.SOGLIA_PREVISIONE) & (b["minuti"] < C.MINUTI_POCO_CONSIDERATO)]
-        v["sottovalutati"] = batte(poco["pred"], poco[grezzo], poco["y"]) | {
-            "rivale": "output grezzo", "gruppo_minuti": [C.SOGLIA_PREVISIONE, C.MINUTI_POCO_CONSIDERATO]}
+            if len(s) >= 30:   # TPI e TPI Pro esistono solo per alcune stagioni di prova
+                v["rivali"][nome] = batte(s["pred"], s[col], s["y"], s.get("prova"))
+        poco = b[_poco_considerati(b)]
+        v["sottovalutati"] = batte(poco["pred"], poco[grezzo], poco["y"], poco.get("prova")) | {
+            "rivale": "output grezzo", "gruppo_minuti": [C.SOGLIA_PREVISIONE, C.MINUTI_POCO_CONSIDERATO],
+            "eta_massima": C.ETA_MAX_SOTTOVALUTATI}
         cop = copertura(b["y"], b["lo"], b["hi"])
         v["forbice"] = {"copertura": cop, "mostra": mostra_forbice(cop)}
         v["mostra_previsione"] = v["rivali"]["grezzo"]["batte"]
@@ -286,18 +316,40 @@ def prova(con, base, dopo, misura="output", fino_a_giornata=None) -> dict:
             "leghe": leghe}
 
 
-def prova_vera(con, addestramento, base, dopo, misura="output") -> dict:
-    """Stima su coppie di stagioni passate, prova su una coppia che la stima non ha mai visto (C5, C13).
+COPPIE = [("2021-22", "2022-23"), ("2022-23", "2023-24"), ("2023-24", "2024-25"), ("2024-25", "2025-26")]
 
-    Contesti fuori: scartati dal prototipo, e la stagione riassunta 2023-24 non li ha.
+
+def prova_vera(con, coppie, misura="output") -> dict:
+    """Prova a finestra mobile (C13): ogni coppia si prevede con un modello stimato solo sulle coppie prima.
+
+    I verdetti per lega mettono insieme tutte le stagioni di prova. Contesti fuori: scartati dal prototipo,
+    e le stagioni dell'archivio non li hanno.
+    shortcut: chi è in due stagioni di prova conta due volte nel bootstrap (intervallo un po' ottimista);
+    con più stagioni, ricampionare per giocatore.
     """
-    stimata = pd.concat([tabella(con, a, d, misura=misura) for a, d in addestramento], ignore_index=True)
-    mod = stima(stimata, misura, contesti=False)
-    tab = tabella(con, base, dopo, misura=misura)
-    leghe = _valuta(tab, applica(mod, tab), base, misura, None)
-    return {"addestramento": [f"{a} -> {d}" for a, d in addestramento], "base": base, "dopo": dopo,
-            "misura": misura, "stato": "verificata (prova su una stagione mai vista)", "K": mod["K"],
-            "pesi": {k: float(v) for k, v in mod["pesi"].items()}, "leghe": leghe}
+    tabelle = {c: tabella(con, *c, misura=misura) for c in coppie}
+    parti, stimata_su, per_stagione = [], {}, {}
+    for i, (base, dopo) in enumerate(coppie):
+        prima = [c for c in coppie[:i] if len(tabelle[c])]
+        tab = tabelle[(base, dopo)]
+        if not prima or tab.empty:
+            continue
+        mod = stima(pd.concat([tabelle[c] for c in prima], ignore_index=True), misura, contesti=False)
+        nome = f"{base} -> {dopo}"
+        stimata_su[nome] = [f"{a} -> {d}" for a, d in prima]
+        t = tab.join(applica(mod, tab)).merge(_tpi_pro(base), on=["lega", "giocatore_id"], how="left")
+        t["prova"] = f"{base} -> {dopo}"
+        ev = t[(t["min_dopo"] >= C.MINUTI_METRO) & t["y"].notna()]
+        grezzo = "out90" if misura == "output" else "buildup90"
+        per_stagione[nome] = {l: {"n": len(b), "rho_modello": float(spearmanr(b["pred"], b["y"]).statistic),
+                                  "rho_grezzo": float(spearmanr(b[grezzo], b["y"]).statistic)}
+                              for l, b in ev.groupby("lega")}
+        parti.append(t)
+    tutte = pd.concat(parti, ignore_index=True)
+    previsioni = tutte[["pred", "lo", "hi", "rm", "motivi"]]
+    leghe = _valuta(tutte.drop(columns=previsioni.columns), previsioni, None, misura, None)
+    return {"misura": misura, "stato": "verificata (prova a finestra mobile su stagioni mai viste)",
+            "stimata_su": stimata_su, "per_stagione": per_stagione, "leghe": leghe}
 
 
 # ---------------------------------------------------------------- la previsione pubblicata
@@ -324,9 +376,15 @@ def prevedi(con, mod, base):
     return p, pd.concat(esclusi + [nuovi], ignore_index=True)
 
 
+def _poco_considerati(t):
+    """F3: da 450' a meno di 1500', fino a 25 anni compiuti (età sconosciuta = fuori)."""
+    return ((t["minuti"] >= C.SOGLIA_PREVISIONE) & (t["minuti"] < C.MINUTI_POCO_CONSIDERATO)
+            & (t["eta"] < C.ETA_MAX_SOTTOVALUTATI + 1))
+
+
 def sottovalutati(prev) -> pd.DataFrame:
-    """F3: forti ma poco considerati = rendimento previsto più alto fra chi ha giocato da 450' a meno di 1500'."""
-    poco = prev[(prev["minuti"] >= C.SOGLIA_PREVISIONE) & (prev["minuti"] < C.MINUTI_POCO_CONSIDERATO)]
+    """F3: forti ma poco considerati = rendimento previsto più alto fra i giovani con pochi minuti."""
+    poco = prev[_poco_considerati(prev)]
     return poco.sort_values(["lega", "ruolo", "pred"], ascending=[True, True, False]).reset_index(drop=True)
 
 
@@ -363,5 +421,5 @@ if __name__ == "__main__":
     esito["aggiornata"] = prove_aggiornata(con, "2024-25", "2025-26")
     (cartella / "prototipo_2024-25_2025-26.json").write_text(json.dumps(esito, indent=1, ensure_ascii=False),
                                                              encoding="utf-8")
-    vera = {m: prova_vera(con, [("2023-24", "2024-25")], "2024-25", "2025-26", m) for m in ("output", "buildup")}
+    vera = {m: prova_vera(con, COPPIE, m) for m in ("output", "buildup")}
     (cartella / "vera_2024-25_2025-26.json").write_text(json.dumps(vera, indent=1, ensure_ascii=False), encoding="utf-8")

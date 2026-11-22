@@ -12,7 +12,11 @@ import urllib.request
 from fsi import config, db
 
 # copie complete a stagione finita (controllate il 22/11/2026: 380 partite, ~580 giocatori)
-COPIE = {("serie_a", "2023-24"): "https://web.archive.org/web/20250617140613id_/https://understat.com/league/Serie_A/2023",
+# Serie A 2022-23: l'archivio ha solo copie fino a marzo 2023 (270 partite su 380), quindi manca.
+COPIE = {("serie_a", "2021-22"): "https://web.archive.org/web/20250916043854id_/https://understat.com/league/Serie_A/2021",
+         ("premier", "2021-22"): "https://web.archive.org/web/20250617130344id_/https://understat.com/league/EPL/2021",
+         ("premier", "2022-23"): "https://web.archive.org/web/20250916035035id_/https://understat.com/league/EPL/2022",
+         ("serie_a", "2023-24"): "https://web.archive.org/web/20250617140613id_/https://understat.com/league/Serie_A/2023",
          ("premier", "2023-24"): "https://web.archive.org/web/20250324124159id_/https://understat.com/league/EPL/2023"}
 RUOLO = {"GK": "POR", "D": "DIF", "M": "CEN", "F": "ATT"}   # prima lettera della posizione Understat di stagione
 

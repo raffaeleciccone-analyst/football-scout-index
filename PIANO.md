@@ -210,6 +210,19 @@ football-scout-index/
         ruolo pesano pochissimo; tendenza a zero (la 2023-24 non ce l'ha). Il guadagno viene dall'usare gli xG
         (più stabili dei gol) e dal tirare verso la media chi ha giocato poco.
       - la previsione aggiornata resta prototipo (servono le partite della 2023-24 per tagliarla a giornata k).
+- [x] **2c. PROVA VERA A FINESTRA MOBILE** 22/11: archivio anche per 2021-22 (A e PL) e 2022-23 (solo PL: la Serie A
+      2022-23 nell'archivio arriva solo a marzo). Ogni stagione prevista con un modello stimato solo sulle coppie
+      prima; la ρ si misura **dentro ogni stagione** e si fa la media pesata (mescolare stagioni previste da modelli
+      diversi era ingiusto per il modello: corretto, con test).
+      - **Premier** (3 stagioni di prova, 635 giocatori): 0,818 contro 0,775 (+0,027…+0,062) → **batte**.
+        Per stagione: 2023-24 0,82/0,76 · 2024-25 0,83/0,81 · 2025-26 0,80/0,76.
+      - **Serie A** (2 stagioni, 429): 0,754 contro 0,738 (−0,008…+0,041) → **non batte ancora**. Motivo: la 2024-25 è
+        prevista con un modello che non ha mai visto la Serie A (manca la 2022-23): 0,763 contro 0,769. Con la sola
+        2025-26 batteva. Quando Understat torna e dà la Serie A 2022-23, si rifà.
+      - **Sottovalutati** (giovani fino a 25 anni, 450'-1499'): Serie A **batte** (77: 0,739 contro 0,616); Premier no
+        (88: 0,653 contro 0,626).
+      - **Costruzione**: non batte da nessuna parte.
+      - Rapporto leggibile: `test.bat` → `uscita/rapporto_test.txt` nel Blocco note.
 - [ ] **3. Sito** (C17-C20) in `uscita/`, te lo apro in locale.
 - [ ] **4. Assistente** (C21-C24).
 - [ ] **5. Controlli e raccolta** (C25-C27) sulle partite salvate.
