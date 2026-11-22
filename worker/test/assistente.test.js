@@ -64,6 +64,12 @@ test("C23 openai: formato Chat Completions", async () => {
   assert.equal(reg[0].url, "https://x/v1/chat/completions");
   assert.equal(reg[0].corpo.messages[0].role, "system");
 });
+test("C23 groq: formato Chat Completions al suo indirizzo", async () => {
+  const reg = [];
+  await chiamaModello({ PROVIDER: "groq", MODEL: "m", API_KEY: "k" }, "sis", "dom", { fetch: fetchFinto(reg, { choices: [{ message: { content: "ciao" } }] }) });
+  assert.equal(reg[0].url, "https://api.groq.com/openai/v1/chat/completions");
+  assert.equal(reg[0].headers.authorization, "Bearer k");
+});
 test("C23 gemini: formato generateContent, chiave nell'intestazione", async () => {
   const reg = [];
   const t = await chiamaModello({ PROVIDER: "gemini", MODEL: "g", API_KEY: "k" }, "sis", "dom",

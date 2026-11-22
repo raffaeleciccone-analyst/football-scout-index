@@ -96,6 +96,10 @@ const ADATTATORI = {
       { model: env.MODEL, messages: [{ role: "system", content: sistema }, { role: "user", content: domanda }] });
     return r.choices[0].message.content;
   },
+  // Groq: il suo formato nativo è Chat Completions (lo stesso di OpenAI), con il suo indirizzo
+  async groq(env, sistema, domanda, deps) {
+    return ADATTATORI.openai({ ...env, BASE_URL: env.BASE_URL || "https://api.groq.com/openai/v1" }, sistema, domanda, deps);
+  },
   async gemini(env, sistema, domanda, deps) {
     const base = env.BASE_URL || "https://generativelanguage.googleapis.com/v1beta";
     const r = await postJson(deps.fetch, `${base}/models/${env.MODEL}:generateContent`, { "x-goog-api-key": env.API_KEY },
@@ -111,7 +115,7 @@ const ADATTATORI = {
 };
 export async function chiamaModello(env, sistema, domanda, deps = {}) {
   const adattatore = ADATTATORI[env.PROVIDER];
-  if (!adattatore) throw new Error(`PROVIDER sconosciuto: ${env.PROVIDER} (anthropic, openai, gemini, ollama)`);
+  if (!adattatore) throw new Error(`PROVIDER sconosciuto: ${env.PROVIDER} (anthropic, openai, groq, gemini, ollama)`);
   return adattatore(env, sistema, domanda, { fetch: globalThis.fetch, ...deps });
 }
 
