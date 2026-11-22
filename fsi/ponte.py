@@ -31,14 +31,16 @@ def _leggi(con, sql):
         return pd.DataFrame(cur.fetchall(), columns=nomi)
 
 
-def _ruoli_pubblicati(lega) -> dict[tuple[str, int], str]:
-    """(stagione, id vecchio) -> ruolo, dal payload più completo di ogni stagione.
+def _ruoli_pubblicati(lega) -> tuple[dict[tuple[str, int], str], dict[str, int]]:
+    """(stagione, id vecchio) -> ruolo, dal payload più completo di ogni stagione; e i minuti minimi in classifica.
 
     shortcut: il ruolo vero viene dalle posizioni Understat partita per partita, che il MySQL non ha
     (stavano solo nella cache di soccerdata, ripulita a ogni giro). Fino alla raccolta nuova si usa il
-    ruolo pubblicato dal motore vecchio, e per chi non era in classifica quello dell'anagrafica.
+    ruolo pubblicato dal motore vecchio, e quello dell'anagrafica SOLO per chi aveva troppo pochi minuti per
+    entrare nella classifica vecchia: chi aveva i minuti e non c'è era stato escluso apposta (portiere o senza
+    ruolo; es. Montipò, portiere, che l'anagrafica dà DIF).
     """
-    migliore: dict[str, list] = {}
+    migliore: dict[str, tuple] = {}   # stagione -> (giornate, giocatori): vince la fotografia più avanti
     for f in PAYLOAD[lega].glob("payload*.json"):
         try:
             d = json.loads(f.read_text(encoding="utf-8"))
@@ -46,9 +48,13 @@ def _ruoli_pubblicati(lega) -> dict[tuple[str, int], str]:
             continue
         if not isinstance(d, dict) or not d.get("stagione") or not isinstance(d.get("players"), list):
             continue
-        if len(d["players"]) > len(migliore.get(d["stagione"], [])):
-            migliore[d["stagione"]] = d["players"]
-    return {(st, int(p["id"])): p["ruolo"] for st, ps in migliore.items() for p in ps if p.get("ruolo")}
+        chiave = (d.get("n_giornate") or 0, len(d["players"]))
+        if chiave > migliore.get(d["stagione"], ((0, 0), []))[0]:
+            migliore[d["stagione"]] = (chiave, d["players"])
+    migliore = {st: ps for st, (_, ps) in migliore.items()}
+    ruoli = {(st, int(p["id"])): p["ruolo"] for st, ps in migliore.items() for p in ps if p.get("ruolo")}
+    minimi = {st: min(p["minuti"] for p in ps) for st, ps in migliore.items()}
+    return ruoli, minimi
 
 
 def copia(lega: str, con_nuovo) -> dict[str, int]:
@@ -87,15 +93,16 @@ def copia(lega: str, con_nuovo) -> dict[str, int]:
     usati = gioc[gioc["id"].isin(gp["giocatore_id"])]
     giocatori = pd.DataFrame({
         "giocatore_id": usati["understat_id"].astype(int),
-        "nome": (usati["nome"].fillna("") + " " + usati["cognome"].fillna("")).str.strip(),
+        "nome": usati["nome"].fillna(usati["cognome"]),   # "nome" contiene già nome e cognome
         "data_nascita": usati["data_nascita"].astype("string")})
 
-    pubblicati = _ruoli_pubblicati(lega)
+    pubblicati, minimi = _ruoli_pubblicati(lega)
     anagrafica = gioc.set_index("id")["ruolo"]
+    minuti = gp.groupby(["season", "giocatore_id"])["minuti"].sum()
     ruoli = []
-    for (stagione, gid_vecchio) in gp[["season", "giocatore_id"]].drop_duplicates().itertuples(index=False):
+    for (stagione, gid_vecchio), m in minuti.items():
         ruolo, fonte = pubblicati.get((stagione, int(gid_vecchio))), "motore vecchio"
-        if ruolo is None:
+        if ruolo is None and m < minimi.get(stagione, float("inf")):
             ruolo, fonte = anagrafica.get(gid_vecchio), "anagrafica"
         if ruolo in ("POR", "DIF", "CEN", "ATT"):
             ruoli.append((lega, stagione, int(uid[gid_vecchio]), ruolo, fonte))
@@ -124,6 +131,10 @@ def copia(lega: str, con_nuovo) -> dict[str, int]:
     con_nuovo.executemany("INSERT OR REPLACE INTO id_vecchi VALUES (?, ?, ?)",
                           [(lega, int(i), int(u)) for i, u in uid.dropna().items()])
     con_nuovo.commit()
+    for f in (MOTORE / "dati_esterni").glob("xg_concessi_*.json"):   # es. xg_concessi_serie_a_2025-26.json
+        nome_lega, stagione = f.stem.removeprefix("xg_concessi_").rsplit("_", 1)
+        if nome_lega == lega:
+            db.carica_difese(con_nuovo, lega, stagione, f)
     return {"partite": len(partite), "righe": len(righe), "giocatori": len(giocatori),
             "ruoli": len(ruoli), "infortuni": len(infortuni)}
 

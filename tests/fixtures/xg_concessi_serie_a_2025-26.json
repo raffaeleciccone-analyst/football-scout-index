@@ -1,0 +1,117 @@
+{
+ "_provenienza": {
+  "fonte": "Sportmonks via heXI (sola lettura)",
+  "file": "C:\\dev\\heXI\\data\\raw\\external\\sportmonks\\_raw_lineups\\lineups_SA_2025_2026.json",
+  "type_id": 5304,
+  "season": "2025-26",
+  "partite_nel_feed": 380,
+  "partite_con_xg": 380,
+  "nota": "xG di squadra = somma dell'xG dei suoi giocatori nella partita; xG concessi = quelli creati dall'avversario. Il feed non espone un xG di squadra gia' aggregato.",
+  "alias_nomi": {
+   "Hellas Verona": "Verona",
+   "Parma": "Parma Calcio 1913"
+  }
+ },
+ "squadre": {
+  "Inter": {
+   "xg_concessi_tot": 34.282,
+   "partite": 38,
+   "xg_concessi_pg": 0.9022
+  },
+  "Como": {
+   "xg_concessi_tot": 34.625,
+   "partite": 38,
+   "xg_concessi_pg": 0.9112
+  },
+  "Juventus": {
+   "xg_concessi_tot": 37.476,
+   "partite": 38,
+   "xg_concessi_pg": 0.9862
+  },
+  "Roma": {
+   "xg_concessi_tot": 37.68,
+   "partite": 38,
+   "xg_concessi_pg": 0.9916
+  },
+  "Napoli": {
+   "xg_concessi_tot": 40.393,
+   "partite": 38,
+   "xg_concessi_pg": 1.063
+  },
+  "Bologna": {
+   "xg_concessi_tot": 42.75,
+   "partite": 38,
+   "xg_concessi_pg": 1.125
+  },
+  "Atalanta": {
+   "xg_concessi_tot": 44.701,
+   "partite": 38,
+   "xg_concessi_pg": 1.1763
+  },
+  "AC Milan": {
+   "xg_concessi_tot": 47.229,
+   "partite": 38,
+   "xg_concessi_pg": 1.2429
+  },
+  "Verona": {
+   "xg_concessi_tot": 49.162,
+   "partite": 38,
+   "xg_concessi_pg": 1.2937
+  },
+  "Lazio": {
+   "xg_concessi_tot": 51.819,
+   "partite": 38,
+   "xg_concessi_pg": 1.3636
+  },
+  "Cagliari": {
+   "xg_concessi_tot": 53.347,
+   "partite": 38,
+   "xg_concessi_pg": 1.4039
+  },
+  "Fiorentina": {
+   "xg_concessi_tot": 54.474,
+   "partite": 38,
+   "xg_concessi_pg": 1.4335
+  },
+  "Sassuolo": {
+   "xg_concessi_tot": 54.884,
+   "partite": 38,
+   "xg_concessi_pg": 1.4443
+  },
+  "Udinese": {
+   "xg_concessi_tot": 55.636,
+   "partite": 38,
+   "xg_concessi_pg": 1.4641
+  },
+  "Genoa": {
+   "xg_concessi_tot": 56.087,
+   "partite": 38,
+   "xg_concessi_pg": 1.476
+  },
+  "Torino": {
+   "xg_concessi_tot": 56.429,
+   "partite": 38,
+   "xg_concessi_pg": 1.485
+  },
+  "Lecce": {
+   "xg_concessi_tot": 57.986,
+   "partite": 38,
+   "xg_concessi_pg": 1.526
+  },
+  "Parma Calcio 1913": {
+   "xg_concessi_tot": 59.155,
+   "partite": 38,
+   "xg_concessi_pg": 1.5567
+  },
+  "Pisa": {
+   "xg_concessi_tot": 60.008,
+   "partite": 38,
+   "xg_concessi_pg": 1.5792
+  },
+  "Cremonese": {
+   "xg_concessi_tot": 60.539,
+   "partite": 38,
+   "xg_concessi_pg": 1.5931
+  }
+ }
+}

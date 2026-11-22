@@ -35,6 +35,7 @@ def riempi_da_grezzi(con, lega="serie_a", stagione="2025-26"):
     gioc = pd.read_csv(GREZZI / "giocatori.csv")
     con.executemany("INSERT INTO giocatori (giocatore_id, nome) VALUES (?, ?)",
                     [(int(g), str(n)) for g, n in zip(gioc["giocatore_id"], gioc["nome"])])
+    db.carica_difese(con, lega, stagione, FIXTURES / "xg_concessi_serie_a_2025-26.json")
     con.commit()
 
 
@@ -49,7 +50,9 @@ def con(tmp_path):
 @pytest.fixture(scope="session")
 def fotografia():
     d = json.loads((FIXTURES / "fotografia_serie_a_2025-26.json").read_text(encoding="utf-8"))
-    return pd.DataFrame(d["giocatori"]).set_index("id")
+    foto = pd.DataFrame(d["giocatori"]).set_index("id")
+    foto["tpi"] = foto["tpi"].map(lambda t: t["totale"])
+    return foto
 
 
 @pytest.fixture(scope="session")

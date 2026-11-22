@@ -1,4 +1,5 @@
 """Fase 1 — TPI descrittivo: SPEC F1, F1b; criteri C1, C2, C3, C3b."""
+import re
 from pathlib import Path
 
 import pytest
@@ -14,7 +15,7 @@ def test_c01_tpi_uguale_alla_fotografia(con, fotografia):
     assert set(nuovo.index) == set(fotografia.index), "non sono gli stessi 354 giocatori"
     unito = nuovo.join(fotografia, rsuffix="_foto")
     assert (unito["tpi"] - unito["tpi_foto"]).abs().max() <= 0.01
-    assert spearmanr(unito["tpi"], unito["tpi_foto"]).statistic == pytest.approx(1.0)
+    assert round(spearmanr(unito["tpi"], unito["tpi_foto"]).statistic, 3) == 1.0   # "Spearman 1,000" (C1)
     assert (unito["ruolo"] == unito["ruolo_foto"]).all()
     for z in ZETA:
         assert unito[z].isna().equals(unito[f"{z}_foto"].isna()), f"{z}: assenti diversi"
@@ -37,7 +38,8 @@ def test_c03_ogni_peso_in_un_posto_solo(con, monkeypatch):
     fsi = Path(config.__file__).parent
     altri = [p.read_text(encoding="utf-8") for p in fsi.glob("*.py") if p.name != "config.py"]
     for nome, peso in config.PESI_TPI.items():
-        assert not any(f"{peso}" in testo for testo in altri if f'"{nome}"' in testo), f"peso di {nome} ripetuto"
+        numero = re.compile(rf"(?<![\d.]){re.escape(str(peso))}(?!\d)")
+        assert not any(numero.search(t) for t in altri if f'"{nome}"' in t), f"peso di {nome} ripetuto fuori da config"
     prima = tpi.classifica(con, "serie_a", "2025-26").set_index("giocatore_id")["tpi"]
     monkeypatch.setitem(config.PESI_TPI, "output", 0.0)
     dopo = tpi.classifica(con, "serie_a", "2025-26").set_index("giocatore_id")["tpi"]

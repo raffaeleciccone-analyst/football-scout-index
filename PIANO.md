@@ -171,7 +171,7 @@ football-scout-index/
 
 ## 9. Fasi
 - [x] **0. Scheletro** (22/11): repository git, schema SQLite, ponte dal MySQL, fixtures (grezzi 2025-26, rivali, cache).
-- [ ] **1. TPI** (C1-C3): uguale alla fotografia.
+- [x] **1. TPI** (C1-C3b) 22/11: uguale alla fotografia (scarto ≤ 0,0009 anche sui 5 contesti); regola dei contesti in SPEC_CONTESTI.md; domande Q-C1, Q-C2 aperte.
 - [ ] **2. Previsione prototipo** (C4-C16) sulla coppia 24-25 → 25-26, marcata "prototipo". Primo verdetto: batte o no?
 - [ ] **3. Sito** (C17-C20) in `uscita/`, te lo apro in locale.
 - [ ] **4. Assistente** (C21-C24).
@@ -185,6 +185,10 @@ football-scout-index/
   (stavano solo nella cache di soccerdata, ripulita a ogni giro). Il ponte usa il ruolo pubblicato dal motore vecchio
   per chi era in classifica (~350 a stagione) e quello dell'anagrafica per gli altri (54-77 dei giocatori con ≥450'
   per stagione). La raccolta nuova salverà la posizione in ogni riga e la regola si rifarà da lì.
+  *(fase 1)* L'anagrafica si usa **solo** per chi aveva troppo pochi minuti per la classifica vecchia: chi aveva i
+  minuti e non c'era era stato escluso apposta (es. **Montipò, portiere, che l'anagrafica dà DIF**: entrava fra i
+  difensori e spostava la media del ruolo, scarto fino a 0,33). I ruoli si prendono dalla fotografia di fine
+  stagione, non dalla più lunga (la giornata 33 aveva 355 giocatori).
 - **Infortuni**: la storia c'è solo per Serie A 2025-26 e 2026-27 e Premier 2026-27. **Per la 2024-25 non c'è
   niente**, quindi nella coppia 24-25 → 25-26 l'ingrediente "infortuni" non si può usare. Si recupera solo scaricando
   la storia infortuni per giocatore da Transfermarkt (lavoro in più, da decidere nella fase 2).

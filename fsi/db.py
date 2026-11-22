@@ -25,6 +25,10 @@ CREATE TABLE IF NOT EXISTS ruoli (
     lega TEXT NOT NULL, stagione TEXT NOT NULL, giocatore_id INTEGER NOT NULL,
     ruolo TEXT NOT NULL CHECK (ruolo IN ('POR', 'DIF', 'CEN', 'ATT')), fonte TEXT NOT NULL,
     PRIMARY KEY (lega, stagione, giocatore_id));
+CREATE TABLE IF NOT EXISTS difese (
+    lega TEXT NOT NULL, stagione TEXT NOT NULL, squadra TEXT NOT NULL,
+    xg_concessi_pg REAL NOT NULL, fonte TEXT NOT NULL,
+    PRIMARY KEY (lega, stagione, squadra));
 CREATE TABLE IF NOT EXISTS infortuni (
     giocatore_id INTEGER NOT NULL, stagione TEXT NOT NULL, inizio TEXT NOT NULL,
     rientro TEXT, giorni_fuori INTEGER, tipo TEXT,
@@ -47,3 +51,14 @@ def righe(con, lega: str, stagione: str, fino_a_giornata: int | None = None) -> 
         sql += " AND p.giornata <= ?"
         parametri.append(fino_a_giornata)
     return pd.read_sql(sql, con, params=parametri)
+
+
+def carica_difese(con, lega: str, stagione: str, percorso) -> int:
+    """xG concessi a partita da un file heXI/Sportmonks (formato di estrai_xg_concessi_hexi.py del motore vecchio)."""
+    import json
+    d = json.loads(open(percorso, encoding="utf-8").read())
+    fonte = d.get("_provenienza", {}).get("fonte", str(percorso))
+    righe = [(lega, stagione, nome, v["xg_concessi_pg"], fonte) for nome, v in d["squadre"].items()]
+    con.executemany("INSERT OR REPLACE INTO difese VALUES (?, ?, ?, ?, ?)", righe)
+    con.commit()
+    return len(righe)
