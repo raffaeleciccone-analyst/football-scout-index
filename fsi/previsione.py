@@ -19,13 +19,21 @@ from fsi import config as C
 from fsi import db, tpi
 
 RIVALI_TPI_PRO = Path(__file__).resolve().parent.parent / "tests" / "fixtures" / "rivali_2024-25.csv"
-INGREDIENTI_MOTIVO = ["rendimento", "minuti", "eta", "tendenza", "contesti"]
+INGREDIENTI_MOTIVO = ["rendimento", "minuti", "eta", "tendenza", "contesti", "infortuni"]
 # shortcut: niente valore di mercato, servono foto datate ad agosto; se le si salva per 2 stagioni, riprovare.
-# shortcut: niente infortuni, la 2024-25 non ne ha (PIANO §9b); con la storia da Transfermarkt, riprovare.
 
 
 def _per90(righe, colonne):
     return righe[colonne].sum(axis=1).groupby(righe["giocatore_id"]).sum()
+
+
+def _infortuni(con, ids, stagione, fino_al):
+    """Giorni di infortunio nella stagione, solo per infortuni iniziati entro `fino_al` (C4); e chi non ha storia."""
+    inf = pd.read_sql("SELECT giocatore_id, giorni_fuori FROM infortuni WHERE stagione = ? AND inizio <= ?", con,
+                      params=[stagione, fino_al.date().isoformat()])
+    scaricati = {g for (g,) in con.execute("SELECT giocatore_id FROM infortuni_scaricati")}
+    giorni = inf.groupby("giocatore_id")["giorni_fuori"].sum().reindex(ids).fillna(0.0)
+    return giorni.to_numpy(), (~ids.isin(scaricati)).astype(float).to_numpy()
 
 
 def _ingredienti_riassunti(con, lega, stagione) -> pd.DataFrame:
@@ -43,6 +51,7 @@ def _ingredienti_riassunti(con, lega, stagione) -> pd.DataFrame:
     fine = pd.Timestamp(f"{int(stagione[:4]) + 1}-05-31")
     t["eta"] = (fine - pd.to_datetime(nascita["data_nascita"].reindex(t.index), errors="coerce")).dt.days / 365.25
     t["tpi"], t["ctx_top6"], t["ctx_casa"] = np.nan, 0.0, 0.0
+    t["giorni_inf"], t["inf_manca"] = _infortuni(con, t.index.to_series(), stagione, fine)
     t.insert(0, "lega", lega)
     return t.rename_axis("giocatore_id").reset_index().sort_values("giocatore_id").reset_index(drop=True)
 
@@ -80,6 +89,7 @@ def ingredienti(con, lega, stagione, fino_a_giornata=None) -> pd.DataFrame:
     piv = ctx.pivot(index="giocatore_id", columns="contesto", values="tpi")
     t["ctx_top6"] = (piv["vs_top6"] - piv["totale"]).reindex(t.index).fillna(0.0)
     t["ctx_casa"] = (piv["casa"] - piv["trasferta"]).reindex(t.index).fillna(0.0)
+    t["giorni_inf"], t["inf_manca"] = _infortuni(con, t.index.to_series(), stagione, fine)
     t.insert(0, "lega", lega)
     return t.rename_axis("giocatore_id").reset_index().sort_values("giocatore_id").reset_index(drop=True)
 
@@ -129,10 +139,11 @@ def tabella(con, base, dopo, fino_a_giornata=None, misura="output") -> pd.DataFr
 
 
 # ---------------------------------------------------------------- il modello
-def _gruppi(misura, contesti):
+def _gruppi(misura, contesti, infortuni=False):
     g = {"rendimento": ["out_t", "xgxa_t"] if misura == "output" else ["build_t"],
          "minuti": ["log_minuti"], "eta": ["eta", "eta2", "eta_manca"], "tendenza": ["tendenza"],
-         "contesti": ["ctx_top6", "ctx_casa"] if contesti else []}
+         "contesti": ["ctx_top6", "ctx_casa"] if contesti else [],
+         "infortuni": ["log_giorni_inf", "inf_manca"] if infortuni else []}
     return g, [c for cols in g.values() for c in cols] + ["ruolo_CEN", "ruolo_DIF", "premier"]
 
 
@@ -155,13 +166,14 @@ def _matrice(mod, t):
     X["eta2"] = (X["eta"] - mod["eta_media"]) ** 2
     X["tendenza"] = t["tendenza"]
     X["ctx_top6"], X["ctx_casa"] = t["ctx_top6"], t["ctx_casa"]
+    X["log_giorni_inf"], X["inf_manca"] = np.log1p(t["giorni_inf"]), t["inf_manca"]
     X["ruolo_CEN"] = (t["ruolo"] == "CEN").astype(float)
     X["ruolo_DIF"] = (t["ruolo"] == "DIF").astype(float)
     X["premier"] = (t["lega"] == "premier").astype(float)
     return X[mod["colonne"]], chiave
 
 
-def stima(tab, misura="output", contesti=True):
+def stima(tab, misura="output", contesti=True, infortuni=False):
     """Stima i pesi su chi ha il rendimento reale misurabile (≥ 900' nella stagione dopo)."""
     tr = tab[(tab["min_dopo"] >= C.MINUTI_METRO) & tab["y"].notna()]
     base = "out90" if misura == "output" else "buildup90"
@@ -169,7 +181,7 @@ def stima(tab, misura="output", contesti=True):
     medie = {c: tr.groupby(chiave)[c].mean() for c in ("out90", "xgxa90", "buildup90")}
     # K della regressione verso la media: quello che, da solo, prevede meglio (è anche il rivale di C10)
     errori = {k: ((_tirato(tr[base], tr["minuti"], chiave, medie[base], k) - tr["y"]) ** 2).mean() for k in C.GRIGLIA_K}
-    gruppi, colonne = _gruppi(misura, contesti)
+    gruppi, colonne = _gruppi(misura, contesti, infortuni)
     mod = {"misura": misura, "K": min(errori, key=errori.get), "medie": medie, "eta_media": tr["eta"].mean(),
            "gruppi": gruppi, "colonne": colonne}
     X, chiave = _matrice(mod, tr)
@@ -319,7 +331,7 @@ def prova(con, base, dopo, misura="output", fino_a_giornata=None) -> dict:
 COPPIE = [("2021-22", "2022-23"), ("2022-23", "2023-24"), ("2023-24", "2024-25"), ("2024-25", "2025-26")]
 
 
-def prova_vera(con, coppie, misura="output") -> dict:
+def prova_vera(con, coppie, misura="output", infortuni=False) -> dict:
     """Prova a finestra mobile (C13): ogni coppia si prevede con un modello stimato solo sulle coppie prima.
 
     I verdetti per lega mettono insieme tutte le stagioni di prova. Contesti fuori: scartati dal prototipo,
@@ -334,7 +346,8 @@ def prova_vera(con, coppie, misura="output") -> dict:
         tab = tabelle[(base, dopo)]
         if not prima or tab.empty:
             continue
-        mod = stima(pd.concat([tabelle[c] for c in prima], ignore_index=True), misura, contesti=False)
+        mod = stima(pd.concat([tabelle[c] for c in prima], ignore_index=True), misura, contesti=False,
+                    infortuni=infortuni)
         nome = f"{base} -> {dopo}"
         stimata_su[nome] = [f"{a} -> {d}" for a, d in prima]
         t = tab.join(applica(mod, tab)).merge(_tpi_pro(base), on=["lega", "giocatore_id"], how="left")
@@ -348,7 +361,8 @@ def prova_vera(con, coppie, misura="output") -> dict:
     tutte = pd.concat(parti, ignore_index=True)
     previsioni = tutte[["pred", "lo", "hi", "rm", "motivi"]]
     leghe = _valuta(tutte.drop(columns=previsioni.columns), previsioni, None, misura, None)
-    return {"misura": misura, "stato": "verificata (prova a finestra mobile su stagioni mai viste)",
+    return {"misura": misura, "infortuni": infortuni,
+            "stato": "verificata (prova a finestra mobile su stagioni mai viste)",
             "stimata_su": stimata_su, "per_stagione": per_stagione, "leghe": leghe}
 
 

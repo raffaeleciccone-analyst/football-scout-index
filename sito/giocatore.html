@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block contenuto %}
+{{ t("titolo_giocatore", "h1") }}
+<label class="cerca"><input id="cerca" type="search" list="nomi" autocomplete="off" data-tp="cerca_segnaposto"></label>
+<datalist id="nomi"></datalist>
+<div id="scheda" class="scheda" aria-live="polite"></div>
+{% endblock %}

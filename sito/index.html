@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block contenuto %}
+{{ t("titolo_classifica", "h1") }}
+{{ t("spiega_tpi", "p", stagione=d.stagione) }}
+<div class="schede-ruolo" role="tablist">
+  <button type="button" role="tab" data-ruolo="ATT">{{ t("ruolo_ATT") }}</button>
+  <button type="button" role="tab" data-ruolo="CEN">{{ t("ruolo_CEN") }}</button>
+  <button type="button" role="tab" data-ruolo="DIF">{{ t("ruolo_DIF") }}</button>
+</div>
+<div id="classifica" class="tabella"></div>
+{% endblock %}

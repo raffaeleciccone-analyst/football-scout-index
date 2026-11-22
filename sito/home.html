@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block contenuto %}
+<section class="apertura">
+  {{ t("home_titolo", "h1") }}
+  {{ t("home_sottotitolo", "p") }}
+</section>
+<section class="porte">
+  {% for lega, v in leghe.items() %}
+  {% set g = v.rivali.grezzo %}
+  <a class="porta {{ 'batte' if v.mostra_previsione else 'no' }}" href="../{{ lega }}/index.html">
+    {{ t("lega_" ~ lega, "h2") }}
+    {% if v.mostra_previsione %}{{ t("home_verdetto_batte", "p", mod=g.rho_modello, grezzo=g.rho_rivale) }}
+    {% else %}{{ t("home_verdetto_non_batte", "p", mod=g.rho_modello, grezzo=g.rho_rivale) }}{% endif %}
+    <span class="duello" aria-hidden="true">
+      <span class="barra modello" style="--v: {{ g.rho_modello }}"></span>
+      <span class="barra grezzo" style="--v: {{ g.rho_rivale }}"></span>
+    </span>
+    {{ t("home_entra", "span") }}
+  </a>
+  {% endfor %}
+</section>
+{{ t("home_come_si_legge", "p") }}
+{% endblock %}

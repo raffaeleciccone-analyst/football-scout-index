@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block contenuto %}
+{% set g = v.rivali.grezzo %}
+{% set s = v.sottovalutati %}
+{{ t("titolo_previsione", "h1", stagione=d.stagione_prevista) }}
+{{ t("stato_verificata" if v.verificata else "stato_prototipo", "p") }}
+{{ t("spiega_previsione", "p", stagione=d.stagione_prevista, soglia=m.soglia) }}
+{% if v.mostra_previsione %}
+  {{ t("previsione_batte", "p", mod=g.rho_modello, grezzo=g.rho_rivale) }}
+  {% if v.mostra_forbice %}{{ t("spiega_forbice", "p", copertura=(v.copertura * 100) | round | int ~ "%") }}{% endif %}
+{% else %}
+  {{ t("previsione_non_batte", "p", mod=g.rho_modello, grezzo=g.rho_rivale) }}
+{% endif %}
+<div class="schede-ruolo" role="tablist">
+  <button type="button" role="tab" data-ruolo="ATT">{{ t("ruolo_ATT") }}</button>
+  <button type="button" role="tab" data-ruolo="CEN">{{ t("ruolo_CEN") }}</button>
+  <button type="button" role="tab" data-ruolo="DIF">{{ t("ruolo_DIF") }}</button>
+</div>
+<div id="previsione" class="tabella"></div>
+
+<section class="blocco">
+  {{ t("sottovalutati_titolo", "h2") }}
+  {{ t("sottovalutati_spiega", "p", eta=m.eta_max, poco=m.poco) }}
+  {% if v.mostra_sottovalutati %}
+    {{ t("sottovalutati_batte", "p", mod=s.rho_modello, grezzo=s.rho_rivale) }}
+    <div id="sottovalutati" class="tabella"></div>
+  {% else %}
+    {{ t("sottovalutati_non_batte", "p", mod=s.rho_modello, grezzo=s.rho_rivale) }}
+  {% endif %}
+</section>
+
+<section class="blocco">
+  {{ t("sfortunati_titolo", "h2") }}
+  {{ t("sfortunati_nota", "p") }}
+  <div id="sfortunati" class="tabella"></div>
+</section>
+{% endblock %}

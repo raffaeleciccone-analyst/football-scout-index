@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS righe (
     xg REAL, xg_senza_rigori REAL, xa REAL, xg_buildup REAL, xg_chain REAL,
     PRIMARY KEY (lega, partita_id, giocatore_id));
 CREATE TABLE IF NOT EXISTS giocatori (
-    giocatore_id INTEGER PRIMARY KEY, nome TEXT NOT NULL, data_nascita TEXT);
+    giocatore_id INTEGER PRIMARY KEY, nome TEXT NOT NULL, data_nascita TEXT, tm_id INTEGER);
 CREATE TABLE IF NOT EXISTS ruoli (
     lega TEXT NOT NULL, stagione TEXT NOT NULL, giocatore_id INTEGER NOT NULL,
     ruolo TEXT NOT NULL CHECK (ruolo IN ('POR', 'DIF', 'CEN', 'ATT')), fonte TEXT NOT NULL,
@@ -34,6 +34,8 @@ CREATE TABLE IF NOT EXISTS infortuni (
     giocatore_id INTEGER NOT NULL, stagione TEXT NOT NULL, inizio TEXT NOT NULL,
     rientro TEXT, giorni_fuori INTEGER, tipo TEXT,
     PRIMARY KEY (giocatore_id, inizio));
+CREATE TABLE IF NOT EXISTS infortuni_scaricati (
+    giocatore_id INTEGER PRIMARY KEY, tm_id INTEGER NOT NULL, scaricato_il TEXT NOT NULL);
 """
 
 

@@ -1,0 +1,113 @@
+/* Football Scout Index — taccuino tecnico: verde petrolio = previsione, ambra = statistica semplice. */
+:root {
+  --carta: #EEF2F5;
+  --foglio: #FFFFFF;
+  --inchiostro: #152238;
+  --tenue: #5B6B80;
+  --linea: #CDD6E0;
+  --previsione: #1F7A7A;
+  --previsione-chiara: #BFE0DD;
+  --grezzo: #B7791F;
+  --giu: #9AA6B5;
+  --testo: "Archivo", "Segoe UI", system-ui, sans-serif;
+  --lettura: "Source Serif 4", Georgia, serif;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--carta); color: var(--inchiostro);
+  font: 400 1rem/1.5 var(--testo); font-variant-numeric: tabular-nums;
+}
+main { max-width: 68rem; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+a { color: inherit; text-decoration-color: var(--previsione); text-underline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--previsione); outline-offset: 2px; }
+
+.testata {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.5rem;
+  padding: .75rem 1rem; background: var(--inchiostro); color: #fff;
+}
+.marchio { font-weight: 800; font-stretch: 115%; text-decoration: none; letter-spacing: -.01em; }
+.menu { display: flex; flex-wrap: wrap; gap: .25rem 1rem; }
+.menu a { text-decoration: none; opacity: .75; padding: .25rem 0; border-bottom: 2px solid transparent; }
+.menu a[aria-current="page"] { opacity: 1; border-color: var(--previsione-chiara); }
+.lega { margin-left: auto; font-stretch: 85%; opacity: .8; }
+.lingua { display: flex; }
+.lingua button {
+  font: inherit; font-size: .8rem; color: #fff; background: transparent; border: 1px solid #ffffff55;
+  padding: .2rem .5rem; cursor: pointer;
+}
+.lingua button[aria-pressed="true"] { background: #fff; color: var(--inchiostro); }
+
+h1 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); line-height: 1.15; font-weight: 750; font-stretch: 90%; margin: .5rem 0 1rem; max-width: 24ch; }
+h2 { font-size: 1.3rem; font-weight: 700; font-stretch: 95%; margin: 2rem 0 .5rem; }
+h3 { font-size: 1.05rem; margin: 1.5rem 0 .5rem; }
+p { max-width: 70ch; }
+
+/* home: il verdetto è il titolo, ogni campionato è una porta */
+.apertura h1 { max-width: 26ch; font-size: clamp(1.8rem, 4.5vw, 3rem); }
+.apertura p { color: var(--tenue); font-size: 1.1rem; }
+.porte { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 1rem; margin: 2rem 0; }
+.porta {
+  display: block; text-decoration: none; background: var(--foglio); padding: 1.25rem 1.25rem 1rem;
+  border-left: 6px solid var(--previsione);
+}
+.porta.no { border-left-color: var(--grezzo); }
+.porta h2 { margin: 0 0 .5rem; font-size: 1.6rem; font-stretch: 110%; }
+.porta > span:last-child { color: var(--previsione); font-weight: 600; }
+.duello { display: grid; gap: 4px; margin: .75rem 0 1rem; }
+.barra { display: block; height: 10px; width: calc(var(--v) * 100%); }
+.barra.modello { background: var(--previsione); }
+.barra.grezzo { background: var(--grezzo); }
+
+/* tabelle */
+.schede-ruolo { display: flex; gap: .5rem; margin: 1rem 0; flex-wrap: wrap; }
+.schede-ruolo button {
+  font: inherit; background: transparent; border: 1px solid var(--linea); padding: .35rem .9rem; cursor: pointer; color: var(--inchiostro);
+}
+.schede-ruolo button[aria-selected="true"] { background: var(--inchiostro); color: #fff; border-color: var(--inchiostro); }
+.tabella { overflow-x: auto; background: var(--foglio); }
+table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+th { text-align: left; font-weight: 600; color: var(--tenue); font-size: .85rem; padding: .6rem .75rem; border-bottom: 2px solid var(--linea); }
+td { padding: .45rem .75rem; border-bottom: 1px solid var(--carta); vertical-align: middle; }
+td.n { text-align: right; }
+td.forte { font-weight: 700; color: var(--previsione); }
+.blocco { margin-top: 2.5rem; }
+
+/* la forbice */
+.forbice { width: 220px; height: 18px; display: block; }
+.forbice .banda { fill: var(--previsione-chiara); }
+.forbice .punto { fill: var(--previsione); }
+.forbice .tacca { stroke: var(--grezzo); stroke-width: 2.5; }
+
+/* scheda giocatore */
+.cerca input { font: inherit; padding: .6rem .8rem; width: min(100%, 26rem); border: 2px solid var(--linea); background: var(--foglio); }
+.scheda { background: var(--foglio); padding: 1rem 1.25rem; margin-top: 1rem; min-height: 4rem; }
+.scheda h2 { margin-top: .25rem; font-size: 1.8rem; font-stretch: 110%; }
+.sotto { color: var(--tenue); }
+.grande { font-size: 1.2rem; font-weight: 600; }
+.riquadro.previsto { border-left: 4px solid var(--previsione); padding: .25rem 0 .5rem 1rem; }
+.segno { color: var(--previsione); font-weight: 700; }
+.dimensioni, .contesti { list-style: none; padding: 0; margin: 0; display: grid; gap: .35rem; }
+.dimensioni li { display: grid; grid-template-columns: minmax(10rem, 16rem) 1fr 3.5rem; align-items: center; gap: .75rem; }
+.dimensioni b { text-align: right; }
+.zbar { height: 8px; width: calc(var(--z) * 100%); max-width: 100%; }
+.zbar.su { background: var(--previsione); }
+.zbar.giu { background: var(--giu); }
+.contesti li { display: grid; grid-template-columns: minmax(10rem, 16rem) 4rem 1fr; gap: .75rem; }
+.andamento { width: 100%; max-width: 560px; height: 90px; }
+.andamento path { fill: none; stroke: var(--previsione); stroke-width: 2; }
+
+/* metodo */
+.testo-lungo p, .testo-lungo li { font-family: var(--lettura); font-size: 1.08rem; line-height: 1.65; }
+.rivali li.batte strong { color: var(--previsione); }
+.rivali li.no strong { color: var(--grezzo); }
+.pesi { columns: 2 14rem; }
+
+.piede { max-width: 68rem; margin: 0 auto; padding: 1rem; color: var(--tenue); font-size: .85rem; }
+
+@media (max-width: 40rem) {
+  .lega { margin-left: 0; }
+  .dimensioni li, .contesti li { grid-template-columns: 1fr 3.5rem; }
+  .zbar { grid-column: 1 / -1; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

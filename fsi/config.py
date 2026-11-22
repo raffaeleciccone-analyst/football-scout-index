@@ -59,3 +59,4 @@ MINUTI_METRO = 900                        # rendimento reale misurabile solo da 
 GRIGLIA_K = [0, 150, 300, 600, 1000, 1500, 2500, 4000]   # minuti di "media del ruolo" provati per il tiraggio
 COPERTURA_MIN, COPERTURA_MAX = 0.70, 0.90                 # C11: forbice all'80%
 CONTROLLI_AGGIORNATA = [5, 10, 15, 19, 25, 30]            # F10: giornate in cui si prova la previsione aggiornata
+CONTESTO_PICCOLO = 8                      # C3c: sotto le 8 partite un contesto è "campione piccolo"

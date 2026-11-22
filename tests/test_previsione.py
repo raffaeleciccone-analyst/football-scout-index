@@ -52,6 +52,16 @@ def test_c04_la_previsione_aggiornata_non_vede_le_giornate_dopo(vero):
     pd.testing.assert_frame_equal(prima, dopo)
 
 
+def test_c04_gli_infortuni_dopo_la_giornata_non_contano(vero):
+    prima = P.ingredienti(vero, "serie_a", "2026-27", fino_a_giornata=5)
+    gid = int(prima.iloc[0]["giocatore_id"])
+    vero.execute("SAVEPOINT s")
+    vero.execute("INSERT OR REPLACE INTO infortuni VALUES (?, '2026-27', '2027-03-01', '2027-05-01', 61, 'prova')", (gid,))
+    dopo = P.ingredienti(vero, "serie_a", "2026-27", fino_a_giornata=5)
+    vero.execute("ROLLBACK TO s")
+    pd.testing.assert_frame_equal(prima, dopo)
+
+
 # ---- C5: pesi stimati, prova su giocatori mai visti ----
 def test_c05_la_previsione_di_prova_non_usa_il_risultato_del_giocatore(tab):
     oof = P.fuori_campione(tab)

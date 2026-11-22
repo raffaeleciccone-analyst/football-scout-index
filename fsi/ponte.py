@@ -63,7 +63,7 @@ def copia(lega: str, con_nuovo) -> dict[str, int]:
         squadre = _leggi(vecchio, "SELECT id, nome FROM squadre").set_index("id")["nome"]
         cal = _leggi(vecchio, "SELECT * FROM calendario")
         gp = _leggi(vecchio, "SELECT * FROM giocatore_partita")
-        gioc = _leggi(vecchio, "SELECT id, nome, cognome, ruolo, data_nascita, understat_id FROM giocatori")
+        gioc = _leggi(vecchio, "SELECT id, nome, cognome, ruolo, data_nascita, understat_id, tm_id FROM giocatori")
         inf = _leggi(vecchio, "SELECT * FROM t_infortuni")
     finally:
         vecchio.close()
@@ -94,7 +94,7 @@ def copia(lega: str, con_nuovo) -> dict[str, int]:
     giocatori = pd.DataFrame({
         "giocatore_id": usati["understat_id"].astype(int),
         "nome": usati["nome"].fillna(usati["cognome"]),   # "nome" contiene già nome e cognome
-        "data_nascita": usati["data_nascita"].astype("string")})
+        "data_nascita": usati["data_nascita"].astype("string"), "tm_id": usati["tm_id"]})
 
     pubblicati, minimi = _ruoli_pubblicati(lega)
     anagrafica = gioc.set_index("id")["ruolo"]
@@ -121,9 +121,11 @@ def copia(lega: str, con_nuovo) -> dict[str, int]:
     con_nuovo.executemany("INSERT OR REPLACE INTO ruoli VALUES (?, ?, ?, ?, ?)", ruoli)
     # un giocatore può stare in tutte e due le leghe: si tiene una riga sola, la data di nascita nota vince
     for r in giocatori.itertuples(index=False):
-        con_nuovo.execute("INSERT INTO giocatori VALUES (?, ?, ?) ON CONFLICT(giocatore_id) DO UPDATE SET "
-                          "data_nascita = COALESCE(giocatori.data_nascita, excluded.data_nascita)",
-                          (r.giocatore_id, r.nome, None if pd.isna(r.data_nascita) else r.data_nascita))
+        con_nuovo.execute("INSERT INTO giocatori VALUES (?, ?, ?, ?) ON CONFLICT(giocatore_id) DO UPDATE SET "
+                          "data_nascita = COALESCE(giocatori.data_nascita, excluded.data_nascita), "
+                          "tm_id = COALESCE(giocatori.tm_id, excluded.tm_id)",
+                          (r.giocatore_id, r.nome, None if pd.isna(r.data_nascita) else r.data_nascita,
+                           None if pd.isna(r.tm_id) else int(r.tm_id)))
     con_nuovo.executemany("INSERT OR REPLACE INTO infortuni VALUES (?, ?, ?, ?, ?, ?)",
                           [tuple(None if pd.isna(v) else v for v in r) for r in infortuni.itertuples(index=False)])
     con_nuovo.execute("CREATE TABLE IF NOT EXISTS id_vecchi (lega TEXT, id_vecchio INTEGER, giocatore_id INTEGER, "

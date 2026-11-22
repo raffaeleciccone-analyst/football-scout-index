@@ -43,7 +43,10 @@ Chiude i punti che SPEC_INDICE C13 lasciava aperti (trovati dalla ricostruzione 
 - Poi gli stessi passaggi del totale: riporto verso la media del ruolo *del contesto* con la confidenza del
   totale → × peso del ruolo → × penalità di disponibilità.
 - ⚠ **Regola nascosta 3 → TOLTA (Q-C2 = B)**: sotto le 4 presenze il contesto non ha TPI e non entra nella media
-  del ruolo. Effetto misurato: prime 6 si muove al massimo di 0,003, casa e trasferta per niente. Com'era: chi ha **meno di 4 presenze** in un contesto riceve lo stesso un TPI di quel contesto,
+  del ruolo. Effetto misurato: prime 6 si muove al massimo di 0,003, casa e trasferta per niente.
+  *Conseguenza trovata il 22/11:* vale anche per il **totale**. A inizio stagione chi supera la soglia dei minuti con
+  meno di 4 partite (2026-27, giornata 9: 8 giocatori, es. Locatelli 270' in 3) non ha TPI e non è in classifica;
+  il motore vecchio gli dava un TPI di sola finalizzazione e forma. Com'era: chi ha **meno di 4 presenze** in un contesto riceve lo stesso un TPI di quel contesto,
   fatto solo di finalizzazione e forma (le uniche dimensioni presenti), ed entra nella media del ruolo usata per
   il riporto.
 
